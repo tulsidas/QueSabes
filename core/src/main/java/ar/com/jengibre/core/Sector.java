@@ -1,5 +1,8 @@
 package ar.com.jengibre.core;
 
+import static playn.core.PlayN.graphics;
+import playn.core.Image;
+import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.util.Clock;
 import ar.com.jengibre.core.etapas.Etapa;
@@ -9,28 +12,27 @@ public class Sector {
 
    private Etapa etapa;
 
+   private ImageLayer layer;
+
    public Sector() {
       etapa = new Idle(this);
+      layer = graphics().createImageLayer(draw());
    }
 
    public Layer.HasSize layer() {
-      // private CanvasImage cImg;
-      // cImg = graphics().createImage(800, 400);
-      // cImg.canvas().drawImage(bgImage, 0, 0);
-      // cImg.canvas().setStrokeColor(Colors.RED);
-      // cImg.canvas().setStrokeWidth(rnd.getInRange(2, 5));
-      // cImg.canvas().drawLine(0, 0, cImg.width() / 2, cImg.height() / 2);
-      // cImg.canvas().setStrokeColor(Colors.BLUE);
-      // cImg.canvas().drawLine(cImg.width() / 2, cImg.height() / 2,
-      // cImg.width(), 0);
-      // cImg.canvas().setFillColor(Colors.YELLOW);
-      // cImg.canvas().fillCircle(rnd.getInRange(0, 800), rnd.getInRange(0,
-      // 400), 50);
-      // cImg.canvas().drawImage(hulk, rnd.getInRange(0, 800), rnd.getInRange(0,
-      // 400));
-      // return graphics().createImageLayer(cImg);
+      return layer;
+   }
 
-      return etapa.layer();
+   public void clicked(float x, float y) {
+      etapa.clicked(x, y);
+   }
+
+   public Image draw() {
+      return etapa.draw();
+   }
+
+   public void repaint() {
+      layer.setImage(draw());
    }
 
    public void update(int delta) {

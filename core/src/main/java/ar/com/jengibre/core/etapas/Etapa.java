@@ -2,7 +2,7 @@ package ar.com.jengibre.core.etapas;
 
 import java.util.Random;
 
-import playn.core.Layer;
+import playn.core.Image;
 import playn.core.util.Clock;
 import tripleplay.anim.Animator;
 import tripleplay.util.Randoms;
@@ -23,9 +23,15 @@ public abstract class Etapa {
       anim = new Animator();
    }
 
-   public abstract Layer.HasSize layer();
+   public abstract Image draw();
+
+   public abstract void clicked(float x, float y);
 
    public abstract void update(int delta);
+
+   public void repaint() {
+      sector.repaint();
+   }
 
    public abstract void doPaint(Clock clock);
 
@@ -34,4 +40,5 @@ public abstract class Etapa {
 
       doPaint(clock);
    }
+
 }

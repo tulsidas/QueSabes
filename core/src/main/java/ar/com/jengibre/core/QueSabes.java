@@ -3,15 +3,17 @@ package ar.com.jengibre.core;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
+import static playn.core.PlayN.pointer;
 import playn.core.Game;
 import playn.core.Image;
-import playn.core.ImageLayer;
 import playn.core.Key;
 import playn.core.Keyboard;
-import playn.core.Layer;
 import playn.core.Keyboard.Event;
+import playn.core.Layer;
+import playn.core.Pointer;
 import playn.core.util.Clock;
 import pythagoras.f.FloatMath;
+import pythagoras.f.Point;
 
 public class QueSabes extends Game.Default {
 
@@ -21,39 +23,42 @@ public class QueSabes extends Game.Default {
 
    private Sector norte, sur, este, oeste;
 
+   public static Image bgImage, bgIdle, hulk;
+
    public QueSabes() {
       super(UPDATE_RATE); // call update every 33ms (30 times per second)
    }
 
    @Override
    public void init() {
+      graphics().rootLayer().removeAll();
+
+      bgImage = assets().getImageSync("images/bg.png");
+      bgIdle = assets().getImageSync("images/idle.png");
+      hulk = assets().getImageSync("images/hulk.png");
+
       norte = new Sector();
       sur = new Sector();
       este = new Sector();
       oeste = new Sector();
 
-      Image bgImage = assets().getImageSync("images/bg.png");
-      Image hulk = assets().getImageSync("images/hulk.png");
+      float gw = graphics().width();
+      float gh = graphics().height();
 
       Layer.HasSize lnorte = norte.layer();
-      lnorte.setOrigin(lnorte.width() / 2, lnorte.height());
       lnorte.setRotation(FloatMath.PI);
-      graphics().rootLayer().addAt(lnorte, graphics().width() / 2, 0);
+      graphics().rootLayer().addAt(lnorte, gw, gh / 2);
+
+      Layer.HasSize loeste = oeste.layer();
+      loeste.setRotation(FloatMath.PI / 2);
+      graphics().rootLayer().addAt(loeste, gw / 2, 0);
 
       Layer.HasSize lsur = sur.layer();
-      lsur.setOrigin(lsur.width() / 2, lsur.height());
-      graphics().rootLayer().addAt(lsur, graphics().width() / 2, graphics().height());
+      graphics().rootLayer().addAt(lsur, 0, gh / 2);
 
-      // ImageLayer este = graphics().createImageLayer(img);
-      // este.setOrigin(este.width() / 2, este.height());
-      // este.setRotation(FloatMath.PI / 2);
-      // graphics().rootLayer().addAt(este, 0, graphics().height() / 2);
-      //
-      // ImageLayer oeste = graphics().createImageLayer(img);
-      // oeste.setOrigin(oeste.width() / 2, oeste.height());
-      // oeste.setRotation(-FloatMath.PI / 2);
-      // graphics().rootLayer().addAt(oeste, graphics().width(),
-      // graphics().height() / 2);
+      Layer.HasSize leste = este.layer();
+      leste.setRotation(FloatMath.PI * 1.5F);
+      graphics().rootLayer().addAt(leste, gw / 2, gh);
 
       // RELOAD HOOK
       keyboard().setListener(new Keyboard.Adapter() {
@@ -67,6 +72,35 @@ public class QueSabes extends Game.Default {
       });
       // RELOAD HOOK
 
+      pointer().setListener(new Pointer.Adapter() {
+         @Override
+         public void onPointerEnd(Pointer.Event event) {
+            float x = event.x();
+            float y = event.y();
+            Sector sector;
+
+            if (x >= y) {
+               if (Math.abs(x - graphics().width() / 2) >= Math.abs(y - graphics().height() / 2)) {
+                  sector = este;
+               }
+               else {
+                  sector = norte;
+               }
+            }
+            else {
+               if (Math.abs(x - graphics().width() / 2) >= Math.abs(y - graphics().height() / 2)) {
+                  sector = oeste;
+               }
+               else {
+                  sector = sur;
+               }
+            }
+
+            Layer layer = sector.layer();
+            Point tf = layer.transform().inverseTransform(new Point(x, y), new Point());
+            sector.clicked(tf.x, tf.y);
+         }
+      });
    }
 
    @Override
@@ -75,8 +109,8 @@ public class QueSabes extends Game.Default {
 
       norte.update(delta);
       sur.update(delta);
-      // este.update(delta);
-      // oeste.update(delta);
+      este.update(delta);
+      oeste.update(delta);
    }
 
    @Override
@@ -85,7 +119,7 @@ public class QueSabes extends Game.Default {
 
       norte.paint(clock);
       sur.paint(clock);
-      // este.paint(clock);
-      // oeste.paint(clock);
+      este.paint(clock);
+      oeste.paint(clock);
    }
 }

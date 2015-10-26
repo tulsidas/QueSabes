@@ -1,6 +1,6 @@
 package ar.com.jengibre.core.etapas;
 
-import playn.core.Layer;
+import playn.core.Image;
 import playn.core.util.Clock;
 import ar.com.jengibre.core.Sector;
 
@@ -10,7 +10,7 @@ public class Ruleta extends Etapa {
    }
 
    @Override
-   public Layer.HasSize layer() {
+   public Image draw() {
       return null;
    }
 
@@ -22,4 +22,7 @@ public class Ruleta extends Etapa {
    public void doPaint(Clock clock) {
    }
 
+   @Override
+   public void clicked(float x, float y) {
+   }
 }
