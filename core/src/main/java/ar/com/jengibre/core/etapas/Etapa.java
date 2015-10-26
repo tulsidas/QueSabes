@@ -29,16 +29,7 @@ public abstract class Etapa {
 
    public abstract void update(int delta);
 
-   public void repaint() {
-      sector.repaint();
-   }
-
-   public abstract void doPaint(Clock clock);
-
    public void paint(Clock clock) {
       anim.paint(clock);
-
-      doPaint(clock);
    }
-
 }

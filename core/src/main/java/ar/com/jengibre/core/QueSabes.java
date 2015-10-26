@@ -17,7 +17,7 @@ import pythagoras.f.Point;
 
 public class QueSabes extends Game.Default {
 
-   private static final int UPDATE_RATE = 33;
+   private static final int UPDATE_RATE = 40;
 
    private Clock.Source clock = new Clock.Source(UPDATE_RATE);
 
@@ -26,7 +26,7 @@ public class QueSabes extends Game.Default {
    public static Image bgImage, bgIdle, hulk;
 
    public QueSabes() {
-      super(UPDATE_RATE); // call update every 33ms (30 times per second)
+      super(UPDATE_RATE); // 24 FPS
    }
 
    @Override

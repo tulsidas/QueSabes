@@ -6,14 +6,15 @@ import static playn.core.PlayN.graphics;
 import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.Image;
-import playn.core.util.Clock;
 import ar.com.jengibre.core.Sector;
 
 public class Idle extends Etapa {
 
-   private boolean repaint = false;
+   private float hulkx, hulky;
 
-   private long t;
+   private int t = 0;
+
+   private int segundos = 0;
 
    public Idle(Sector sector) {
       super(sector);
@@ -25,37 +26,24 @@ public class Idle extends Etapa {
       Canvas c = cImg.canvas();
 
       c.drawImage(bgIdle, 0, 0);
-      // c.setStrokeColor(Colors.RED);
-      // c.setStrokeWidth(rnd.getInRange(2, 5));
-      // c.drawLine(0, 0, cImg.width() / 2, cImg.height() / 2);
-      // c.setStrokeColor(Colors.BLUE);
-      // c.drawLine(cImg.width() / 2, cImg.height() / 2, cImg.width(), 0);
-      // c.setFillColor(Colors.YELLOW);
-      // c.fillCircle(rnd.getInRange(0, 800), rnd.getInRange(0, 400), 50);
-      c.drawImage(hulk, rnd.getInRange(0, 800), rnd.getInRange(0, 400));
+      c.drawImage(hulk, hulkx, hulky);
+      c.drawText("" + segundos, 300, 300);
 
       return cImg;
    }
 
    @Override
    public void update(int delta) {
-      // t += delta;
-      // if (t > 10_000) {
-      // t = 0;
-      // repaint = true;
-      // }
-   }
-
-   @Override
-   public void doPaint(Clock clock) {
-      if (repaint) {
-         repaint();
-         repaint = false;
+      t += delta;
+      if (t > 1000) {
+         segundos++;
+         t = 0;
       }
    }
 
    @Override
    public void clicked(float x, float y) {
-      repaint = true;
+      hulkx = rnd.getInRange(0, 800);
+      hulky = rnd.getInRange(0, 400);
    }
 }

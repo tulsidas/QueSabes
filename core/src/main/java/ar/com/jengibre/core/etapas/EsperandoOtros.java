@@ -1,7 +1,6 @@
 package ar.com.jengibre.core.etapas;
 
 import playn.core.Image;
-import playn.core.util.Clock;
 import ar.com.jengibre.core.Sector;
 
 public class EsperandoOtros extends Etapa {
@@ -16,10 +15,6 @@ public class EsperandoOtros extends Etapa {
 
    @Override
    public void update(int delta) {
-   }
-
-   @Override
-   public void doPaint(Clock clock) {
    }
 
    @Override

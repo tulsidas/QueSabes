@@ -1,7 +1,6 @@
 package ar.com.jengibre.core;
 
 import static playn.core.PlayN.graphics;
-import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.util.Clock;
@@ -16,7 +15,7 @@ public class Sector {
 
    public Sector() {
       etapa = new Idle(this);
-      layer = graphics().createImageLayer(draw());
+      layer = graphics().createImageLayer();
    }
 
    public Layer.HasSize layer() {
@@ -27,19 +26,13 @@ public class Sector {
       etapa.clicked(x, y);
    }
 
-   public Image draw() {
-      return etapa.draw();
-   }
-
-   public void repaint() {
-      layer.setImage(draw());
-   }
-
    public void update(int delta) {
       etapa.update(delta);
    }
 
    public void paint(Clock clock) {
       etapa.paint(clock);
+
+      layer.setImage(etapa.draw());
    }
 }
