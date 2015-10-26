@@ -23,7 +23,7 @@ public class QueSabes extends Game.Default {
 
    private Sector norte, sur, este, oeste;
 
-   public static Image bgImage, bgIdle, hulk;
+   public static Image bgImage, bgIdle, btnEmpezar, btnEsperando;
 
    public QueSabes() {
       super(UPDATE_RATE); // 24 FPS
@@ -35,7 +35,8 @@ public class QueSabes extends Game.Default {
 
       bgImage = assets().getImageSync("images/bg.png");
       bgIdle = assets().getImageSync("images/idle.png");
-      hulk = assets().getImageSync("images/hulk.png");
+      btnEmpezar = assets().getImageSync("images/btnEmpezar.png");
+      btnEsperando = assets().getImageSync("images/btnEsperando.png");
 
       norte = new Sector();
       sur = new Sector();
@@ -111,6 +112,9 @@ public class QueSabes extends Game.Default {
       sur.update(delta);
       este.update(delta);
       oeste.update(delta);
+
+      // controlador para el inicio del juego
+      StartupLatch.update(delta);
    }
 
    @Override
