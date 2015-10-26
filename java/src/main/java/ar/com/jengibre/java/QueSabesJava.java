@@ -11,6 +11,8 @@ public class QueSabesJava {
       JavaPlatform.Config config = new JavaPlatform.Config();
 
       // config.fullscreen = true;
+      config.width = 800;
+      config.height = 800;
 
       JavaPlatform.register(config);
       PlayN.run(new QueSabes());

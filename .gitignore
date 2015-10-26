@@ -1,0 +1,6 @@
+.project
+.settings
+android
+core/target
+java/target
+assets/target
