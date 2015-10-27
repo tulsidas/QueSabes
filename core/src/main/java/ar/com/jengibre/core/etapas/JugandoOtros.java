@@ -1,6 +1,7 @@
 package ar.com.jengibre.core.etapas;
 
-import playn.core.Image;
+import static ar.com.jengibre.core.QueSabes.bgIdle;
+import playn.core.Canvas;
 import ar.com.jengibre.core.Sector;
 
 public class JugandoOtros extends Etapa {
@@ -9,8 +10,9 @@ public class JugandoOtros extends Etapa {
    }
 
    @Override
-   public Image draw() {
-      return null;
+   public void draw(Canvas c) {
+      c.drawImage(bgIdle, 0, 0);
+      c.drawText("Partido en progreso, esperar", 300, 200);
    }
 
    @Override

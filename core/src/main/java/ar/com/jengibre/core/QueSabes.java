@@ -23,7 +23,7 @@ public class QueSabes extends Game.Default {
 
    private Sector norte, sur, este, oeste;
 
-   public static Image bgImage, bgIdle, btnEmpezar, btnEsperando;
+   public static Image bgImage, bgIdle, bgRuleta, btnEmpezar, btnEsperando;
 
    public QueSabes() {
       super(UPDATE_RATE); // 24 FPS
@@ -35,6 +35,7 @@ public class QueSabes extends Game.Default {
 
       bgImage = assets().getImageSync("images/bg.png");
       bgIdle = assets().getImageSync("images/idle.png");
+      bgRuleta = assets().getImageSync("images/ruleta.png");
       btnEmpezar = assets().getImageSync("images/btnEmpezar.png");
       btnEsperando = assets().getImageSync("images/btnEsperando.png");
 

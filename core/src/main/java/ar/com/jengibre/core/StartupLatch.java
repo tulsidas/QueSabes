@@ -1,5 +1,8 @@
 package ar.com.jengibre.core;
 
+/**
+ * todo estático, viene a ser un Object de Scala
+ */
 public class StartupLatch {
 
    private static int milisHastaElComienzo;

@@ -1,6 +1,7 @@
 package ar.com.jengibre.core.etapas;
 
-import playn.core.Image;
+import static ar.com.jengibre.core.QueSabes.bgRuleta;
+import playn.core.Canvas;
 import ar.com.jengibre.core.Sector;
 
 public class Ruleta extends Etapa {
@@ -9,8 +10,9 @@ public class Ruleta extends Etapa {
    }
 
    @Override
-   public Image draw() {
-      return null;
+   public void draw(Canvas c) {
+      c.drawImage(bgRuleta, 0, 0);
+      c.drawText("RULETA", 300, 200);
    }
 
    @Override

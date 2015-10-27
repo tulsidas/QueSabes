@@ -1,6 +1,6 @@
 package ar.com.jengibre.core.etapas;
 
-import playn.core.Image;
+import playn.core.Canvas;
 import ar.com.jengibre.core.Sector;
 
 public class Pregunta extends Etapa {
@@ -9,8 +9,7 @@ public class Pregunta extends Etapa {
    }
 
    @Override
-   public Image draw() {
-      return null;
+   public void draw(Canvas c) {
    }
 
    @Override

@@ -1,7 +1,10 @@
 package ar.com.jengibre.core.etapas;
 
-import playn.core.Image;
+import static ar.com.jengibre.core.QueSabes.bgIdle;
+import static ar.com.jengibre.core.QueSabes.btnEsperando;
+import playn.core.Canvas;
 import ar.com.jengibre.core.Sector;
+import ar.com.jengibre.core.StartupLatch;
 
 public class EsperandoOtros extends Etapa {
    public EsperandoOtros(Sector sector) {
@@ -9,12 +12,18 @@ public class EsperandoOtros extends Etapa {
    }
 
    @Override
-   public Image draw() {
-      return null;
+   public void draw(Canvas c) {
+      c.drawImage(bgIdle, 0, 0);
+
+      c.drawImageCentered(btnEsperando, 400, 200);
+      c.drawText("" + StartupLatch.segundosHastaElComienzo(), 300, 300);
    }
 
    @Override
    public void update(int delta) {
+      if (StartupLatch.empezoElJuego()) {
+         sector.empezoJuego();
+      }
    }
 
    @Override

@@ -2,19 +2,11 @@ package ar.com.jengibre.core.etapas;
 
 import static ar.com.jengibre.core.QueSabes.bgIdle;
 import static ar.com.jengibre.core.QueSabes.btnEmpezar;
-import static ar.com.jengibre.core.QueSabes.btnEsperando;
-import static playn.core.PlayN.graphics;
 import playn.core.Canvas;
-import playn.core.CanvasImage;
-import playn.core.Image;
-import playn.core.Path;
-import tripleplay.util.Colors;
 import ar.com.jengibre.core.Sector;
 import ar.com.jengibre.core.StartupLatch;
 
 public class Idle extends Etapa {
-
-   private boolean listo;
 
    public Idle(Sector sector) {
       super(sector);
@@ -23,14 +15,14 @@ public class Idle extends Etapa {
    }
 
    @Override
-   public Image draw() {
-      CanvasImage cImg = graphics().createImage(800, 400);
-      Canvas c = cImg.canvas();
-
+   public void draw(Canvas c) {
       c.drawImage(bgIdle, 0, 0);
+      c.drawImageCentered(btnEmpezar, 400, 200);
+
+      /*
       if (listo) {
          if (StartupLatch.empezoElJuego()) {
-            sector.empezarJuego();
+            // sector.empezarJuego();
          }
          else {
             c.drawImageCentered(btnEsperando, 400, 200);
@@ -45,20 +37,18 @@ public class Idle extends Etapa {
             c.drawImageCentered(btnEmpezar, 400, 200);
          }
       }
-
-      return cImg;
+      */
    }
 
    @Override
    public void update(int delta) {
+      if (StartupLatch.empezoElJuego()) {
+         sector.jugandoOtros();
+      }
    }
 
    @Override
    public void clicked(float x, float y) {
-      if (!listo) {
-         listo = true;
-
-         StartupLatch.sectorListoParaEmpezar();
-      }
+      sector.empezarJuego();
    }
 }
