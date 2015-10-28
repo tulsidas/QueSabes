@@ -1,9 +1,7 @@
 package ar.com.jengibre.core;
 
 import static playn.core.PlayN.graphics;
-import playn.core.CanvasImage;
-import playn.core.ImageLayer;
-import playn.core.Layer;
+import playn.core.GroupLayer;
 import playn.core.util.Clock;
 import ar.com.jengibre.core.etapas.EsperandoOtros;
 import ar.com.jengibre.core.etapas.Etapa;
@@ -15,18 +13,20 @@ public class Sector {
 
    private Etapa etapa;
 
-   private ImageLayer layer;
+   private GroupLayer layer;
 
    public static final int WIDTH = 800;
 
    public static final int HEIGHT = 400;
 
    public Sector() {
+      layer = graphics().createGroupLayer();
+
       etapa = new Idle(this);
-      layer = graphics().createImageLayer();
+      // etapa = new Ruleta(this);
    }
 
-   public Layer.HasSize layer() {
+   public GroupLayer layer() {
       return layer;
    }
 
@@ -40,11 +40,6 @@ public class Sector {
 
    public void paint(Clock clock) {
       etapa.paint(clock);
-
-      CanvasImage cImg = graphics().createImage(WIDTH, HEIGHT);
-      cImg.canvas().clear();
-      etapa.draw(cImg.canvas());
-      layer.setImage(cImg);
    }
 
    /**

@@ -1,6 +1,6 @@
 package ar.com.jengibre.core.etapas;
 
-import playn.core.Canvas;
+import playn.core.util.Clock;
 import ar.com.jengibre.core.Sector;
 
 public class Bonus extends Etapa {
@@ -10,7 +10,9 @@ public class Bonus extends Etapa {
    }
 
    @Override
-   public void draw(Canvas c) {
+   public void doPaint(Clock clock) {
+      // TODO Auto-generated method stub
+
    }
 
    @Override

@@ -1,6 +1,6 @@
 package ar.com.jengibre.core.etapas;
 
-import playn.core.Canvas;
+import playn.core.util.Clock;
 import ar.com.jengibre.core.Sector;
 
 public class Fin extends Etapa {
@@ -9,7 +9,7 @@ public class Fin extends Etapa {
    }
 
    @Override
-   public void draw(Canvas c) {
+   public void doPaint(Clock clock) {
    }
 
    @Override

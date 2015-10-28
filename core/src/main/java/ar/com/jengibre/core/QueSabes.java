@@ -5,6 +5,7 @@ import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.pointer;
 import playn.core.Game;
+import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.Key;
 import playn.core.Keyboard;
@@ -47,18 +48,18 @@ public class QueSabes extends Game.Default {
       float gw = graphics().width();
       float gh = graphics().height();
 
-      Layer.HasSize lnorte = norte.layer();
+      GroupLayer lnorte = norte.layer();
       lnorte.setRotation(FloatMath.PI);
       graphics().rootLayer().addAt(lnorte, gw, gh / 2);
 
-      Layer.HasSize loeste = oeste.layer();
+      GroupLayer loeste = oeste.layer();
       loeste.setRotation(FloatMath.PI / 2);
       graphics().rootLayer().addAt(loeste, gw / 2, 0);
 
-      Layer.HasSize lsur = sur.layer();
+      GroupLayer lsur = sur.layer();
       graphics().rootLayer().addAt(lsur, 0, gh / 2);
 
-      Layer.HasSize leste = este.layer();
+      GroupLayer leste = este.layer();
       leste.setRotation(FloatMath.PI * 1.5F);
       graphics().rootLayer().addAt(leste, gw / 2, gh);
 
