@@ -8,10 +8,10 @@ import tripleplay.anim.Animator;
 import tripleplay.util.Randoms;
 import ar.com.jengibre.core.Sector;
 
-// Idle -> EsperandoOtros -> Ruleta -> Pregunta -> Bonus
+// Idle -> EsperandoOtros -> [Ruleta -> Pregunta -> Bonus]* -> Fin
 // Idle -> EsperandoOtros -> JugandoOtros
 
-public abstract class Etapa {
+public abstract class AbstractEtapa {
    protected Sector sector;
 
    protected Animator anim;
@@ -20,7 +20,7 @@ public abstract class Etapa {
 
    protected GroupLayer layer;
 
-   public Etapa(Sector sector) {
+   public AbstractEtapa(Sector sector) {
       this.sector = sector;
       this.layer = sector.layer();
       layer.removeAll(); // TODO chequear

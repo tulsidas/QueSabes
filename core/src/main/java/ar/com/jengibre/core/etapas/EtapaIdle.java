@@ -1,5 +1,6 @@
 package ar.com.jengibre.core.etapas;
 
+
 import static ar.com.jengibre.core.QueSabes.bgIdle;
 import static ar.com.jengibre.core.QueSabes.btnEmpezar;
 import static playn.core.PlayN.graphics;
@@ -8,9 +9,9 @@ import playn.core.util.Clock;
 import ar.com.jengibre.core.Sector;
 import ar.com.jengibre.core.StartupLatch;
 
-public class Idle extends Etapa {
+public class EtapaIdle extends AbstractEtapa {
 
-   public Idle(Sector sector) {
+   public EtapaIdle(Sector sector) {
       super(sector);
 
       // TODO animar btnEmpezar y/o ponerle onda
@@ -31,12 +32,11 @@ public class Idle extends Etapa {
 
    @Override
    public void doPaint(Clock clock) {
-      // nada que animar
+      // nada que hacer
    }
 
    @Override
    public void clicked(float x, float y) {
-      // FIXME sector.empezarJuego();
-      anim.shake(layer);
+      sector.empezarJuego();
    }
 }

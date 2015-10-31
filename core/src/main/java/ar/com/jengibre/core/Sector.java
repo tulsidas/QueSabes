@@ -3,15 +3,15 @@ package ar.com.jengibre.core;
 import static playn.core.PlayN.graphics;
 import playn.core.GroupLayer;
 import playn.core.util.Clock;
-import ar.com.jengibre.core.etapas.EsperandoOtros;
-import ar.com.jengibre.core.etapas.Etapa;
-import ar.com.jengibre.core.etapas.Idle;
-import ar.com.jengibre.core.etapas.JugandoOtros;
-import ar.com.jengibre.core.etapas.Ruleta;
+import ar.com.jengibre.core.etapas.EtapaEsperandoOtros;
+import ar.com.jengibre.core.etapas.AbstractEtapa;
+import ar.com.jengibre.core.etapas.EtapaJugandoOtros;
+import ar.com.jengibre.core.etapas.EtapaPregunta;
+import ar.com.jengibre.core.etapas.EtapaRuleta;
 
 public class Sector {
 
-   private Etapa etapa;
+   private AbstractEtapa etapa;
 
    private GroupLayer layer;
 
@@ -22,8 +22,9 @@ public class Sector {
    public Sector() {
       layer = graphics().createGroupLayer();
 
-      etapa = new Idle(this);
-      // etapa = new Ruleta(this);
+      // etapa = new Idle(this);
+      // etapa = new EtapaRuleta(this);
+      etapa = new EtapaPregunta(this, 1);
    }
 
    public GroupLayer layer() {
@@ -47,20 +48,27 @@ public class Sector {
     */
    public void empezarJuego() {
       StartupLatch.sectorListoParaEmpezar();
-      etapa = new EsperandoOtros(this);
+      etapa = new EtapaEsperandoOtros(this);
    }
 
    /**
     * EsperandoOtros -> Ruleta
     */
    public void empezoJuego() {
-      etapa = new Ruleta(this);
+      etapa = new EtapaRuleta(this);
    }
 
    /**
     * EsperandoOtros -> JugandoOtros
     */
    public void jugandoOtros() {
-      etapa = new JugandoOtros(this);
+      etapa = new EtapaJugandoOtros(this);
+   }
+
+   /**
+    * Ruleta -> Pregunta
+    */
+   public void mostrarPregunta(int personaje) {
+      etapa = new EtapaPregunta(this, personaje);
    }
 }

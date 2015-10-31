@@ -26,7 +26,8 @@ public class StartupLatch {
       sectoresListos++;
 
       if (milisHastaElComienzo == -1) {
-         milisHastaElComienzo = 10_000;
+         // FIXME milisHastaElComienzo = 10_000;
+         milisHastaElComienzo = 2_000;
       }
    }
 

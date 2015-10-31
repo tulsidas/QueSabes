@@ -2,11 +2,17 @@ package ar.com.jengibre.core;
 
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.json;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.pointer;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import playn.core.Game;
 import playn.core.GroupLayer;
 import playn.core.Image;
+import playn.core.Json;
 import playn.core.Key;
 import playn.core.Keyboard;
 import playn.core.Keyboard.Event;
@@ -24,7 +30,11 @@ public class QueSabes extends Game.Default {
 
    private Sector norte, sur, este, oeste;
 
-   public static Image bgImage, bgIdle, bgRuleta, btnEmpezar, btnEsperando;
+   public static List<Pregunta> preguntas;
+
+   public static Image bgIdle, bgRuleta, bgPregunta, btnEmpezar, btnEsperando;
+
+   public static Image p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12;
 
    public QueSabes() {
       super(UPDATE_RATE); // 24 FPS
@@ -34,11 +44,47 @@ public class QueSabes extends Game.Default {
    public void init() {
       graphics().rootLayer().removeAll();
 
-      bgImage = assets().getImageSync("images/bg.png");
       bgIdle = assets().getImageSync("images/idle.png");
       bgRuleta = assets().getImageSync("images/ruleta.png");
+      bgPregunta = assets().getImageSync("images/pregunta.png");
       btnEmpezar = assets().getImageSync("images/btnEmpezar.png");
       btnEsperando = assets().getImageSync("images/btnEsperando.png");
+
+      try {
+         preguntas = new ArrayList<>();
+         Json.Array arrayPreguntas = json().parseArray(assets().getTextSync("preguntas/preguntas.json"));
+
+         for (int i = 0; i < arrayPreguntas.length(); i++) {
+            Json.Object obj = arrayPreguntas.getObject(i);
+
+            String pregunta = obj.getString("pregunta");
+            Json.Array arrayRespuestas = obj.getArray("respuestas");
+            List<String> respuestas = new ArrayList<>();
+
+            for (int j = 0; j < arrayRespuestas.length(); j++) {
+               respuestas.add(arrayRespuestas.getString(i));
+            }
+
+            preguntas.add(new Pregunta(pregunta, respuestas));
+         }
+      }
+      catch (Exception e) {
+         System.err.println(e);
+         System.exit(1);
+      }
+
+      p1 = assets().getImageSync("images/personaje1.png");
+      p2 = assets().getImageSync("images/personaje2.png");
+      p3 = assets().getImageSync("images/personaje3.png");
+      p4 = assets().getImageSync("images/personaje4.png");
+      p5 = assets().getImageSync("images/personaje5.png");
+      p6 = assets().getImageSync("images/personaje6.png");
+      p7 = assets().getImageSync("images/personaje7.png");
+      p8 = assets().getImageSync("images/personaje8.png");
+      p9 = assets().getImageSync("images/personaje9.png");
+      p10 = assets().getImageSync("images/personaje10.png");
+      p11 = assets().getImageSync("images/personaje11.png");
+      p12 = assets().getImageSync("images/personaje12.png");
 
       norte = new Sector();
       sur = new Sector();

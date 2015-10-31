@@ -2,8 +2,8 @@ package ar.com.jengibre.core.etapas;
 
 import ar.com.jengibre.core.Sector;
 
-public class JugandoOtros extends Etapa {
-   public JugandoOtros(Sector sector) {
+public class EtapaJugandoOtros extends AbstractEtapa {
+   public EtapaJugandoOtros(Sector sector) {
       super(sector);
       // c.drawImage(bgIdle, 0, 0);
       // c.drawText("Partido en progreso, esperar", 300, 200);
