@@ -18,7 +18,7 @@ public class EtapaIdle extends AbstractEtapa {
 
       CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
       cImg.canvas().drawImage(bgIdle, 0, 0);
-      cImg.canvas().drawImageCentered(btnEmpezar, 400, 200);
+      cImg.canvas().drawImageCentered(btnEmpezar, 500, 200);
 
       layer.add(graphics().createImageLayer(cImg));
    }

@@ -1,5 +1,6 @@
 package ar.com.jengibre.core;
 
+
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.json;
@@ -19,7 +20,6 @@ import playn.core.Keyboard.Event;
 import playn.core.Layer;
 import playn.core.Pointer;
 import playn.core.util.Clock;
-import pythagoras.f.FloatMath;
 import pythagoras.f.Point;
 
 public class QueSabes extends Game.Default {
@@ -28,7 +28,9 @@ public class QueSabes extends Game.Default {
 
    private Clock.Source clock = new Clock.Source(UPDATE_RATE);
 
-   private Sector norte, sur, este, oeste;
+   // private Sector norte, sur, este, oeste;
+
+   private Sector sur;
 
    public static List<Pregunta> preguntas;
 
@@ -62,7 +64,7 @@ public class QueSabes extends Game.Default {
             List<String> respuestas = new ArrayList<>();
 
             for (int j = 0; j < arrayRespuestas.length(); j++) {
-               respuestas.add(arrayRespuestas.getString(i));
+               respuestas.add(arrayRespuestas.getString(j));
             }
 
             preguntas.add(new Pregunta(pregunta, respuestas));
@@ -86,28 +88,29 @@ public class QueSabes extends Game.Default {
       p11 = assets().getImageSync("images/personaje11.png");
       p12 = assets().getImageSync("images/personaje12.png");
 
-      norte = new Sector();
+      // norte = new Sector();
       sur = new Sector();
-      este = new Sector();
-      oeste = new Sector();
+      // este = new Sector();
+      // oeste = new Sector();
 
-      float gw = graphics().width();
-      float gh = graphics().height();
+      // float gw = graphics().width();
+      // float gh = graphics().height();
 
-      GroupLayer lnorte = norte.layer();
-      lnorte.setRotation(FloatMath.PI);
-      graphics().rootLayer().addAt(lnorte, gw, gh / 2);
+      // GroupLayer lnorte = norte.layer();
+      // lnorte.setRotation(FloatMath.PI);
+      // graphics().rootLayer().addAt(lnorte, gw, gh / 2);
 
-      GroupLayer loeste = oeste.layer();
-      loeste.setRotation(FloatMath.PI / 2);
-      graphics().rootLayer().addAt(loeste, gw / 2, 0);
+      // GroupLayer loeste = oeste.layer();
+      // loeste.setRotation(FloatMath.PI / 2);
+      // graphics().rootLayer().addAt(loeste, gw / 2, 0);
 
       GroupLayer lsur = sur.layer();
-      graphics().rootLayer().addAt(lsur, 0, gh / 2);
+      // graphics().rootLayer().addAt(lsur, 0, gh / 2);
+      graphics().rootLayer().addAt(lsur, 0, 0);
 
-      GroupLayer leste = este.layer();
-      leste.setRotation(FloatMath.PI * 1.5F);
-      graphics().rootLayer().addAt(leste, gw / 2, gh);
+      // GroupLayer leste = este.layer();
+      // leste.setRotation(FloatMath.PI * 1.5F);
+      // graphics().rootLayer().addAt(leste, gw / 2, gh);
 
       // RELOAD HOOK
       keyboard().setListener(new Keyboard.Adapter() {
@@ -128,22 +131,24 @@ public class QueSabes extends Game.Default {
             float y = event.y();
             Sector sector;
 
-            if (x >= y) {
-               if (Math.abs(x - graphics().width() / 2) >= Math.abs(y - graphics().height() / 2)) {
-                  sector = este;
-               }
-               else {
-                  sector = norte;
-               }
-            }
-            else {
-               if (Math.abs(x - graphics().width() / 2) >= Math.abs(y - graphics().height() / 2)) {
-                  sector = oeste;
-               }
-               else {
-                  sector = sur;
-               }
-            }
+            // if (x >= y) {
+            // if (Math.abs(x - graphics().width() / 2) >= Math.abs(y -
+            // graphics().height() / 2)) {
+            // sector = este;
+            // }
+            // else {
+            // sector = norte;
+            // }
+            // }
+            // else {
+            // if (Math.abs(x - graphics().width() / 2) >= Math.abs(y -
+            // graphics().height() / 2)) {
+            // sector = oeste;
+            // }
+            // else {
+            sector = sur;
+            // }
+            // }
 
             Layer layer = sector.layer();
             Point tf = layer.transform().inverseTransform(new Point(x, y), new Point());
@@ -156,10 +161,10 @@ public class QueSabes extends Game.Default {
    public void update(int delta) {
       clock.update(delta);
 
-      norte.update(delta);
+      // norte.update(delta);
       sur.update(delta);
-      este.update(delta);
-      oeste.update(delta);
+      // este.update(delta);
+      // oeste.update(delta);
 
       // controlador para el inicio del juego
       StartupLatch.update(delta);
@@ -169,9 +174,9 @@ public class QueSabes extends Game.Default {
    public void paint(float alpha) {
       clock.paint(alpha);
 
-      norte.paint(clock);
+      // norte.paint(clock);
       sur.paint(clock);
-      este.paint(clock);
-      oeste.paint(clock);
+      // este.paint(clock);
+      // oeste.paint(clock);
    }
 }
