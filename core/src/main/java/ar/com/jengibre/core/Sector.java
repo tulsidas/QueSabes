@@ -23,16 +23,21 @@ public class Sector {
       layer = graphics().createGroupLayer();
 
       // etapa = new EtapaIdle(this);
-      // etapa = new EtapaRuleta(this);
-      etapa = new EtapaPregunta(this, 1);
+      etapa = new EtapaRuleta(this);
+      // etapa = new EtapaPregunta(this, 1);
+      // etapa = new EtapaBonus(this);
    }
 
    public GroupLayer layer() {
       return layer;
    }
 
-   public void clicked(float x, float y) {
-      etapa.clicked(x, y);
+   public void onPointerStart(float x, float y) {
+      etapa.onPointerStart(x, y);
+   }
+
+   public void onPointerEnd(float x, float y) {
+      etapa.onPointerEnd(x, y);
    }
 
    public void update(int delta) {
@@ -54,7 +59,7 @@ public class Sector {
    /**
     * EsperandoOtros -> Ruleta
     */
-   public void empezoJuego() {
+   public void ruleta() {
       etapa = new EtapaRuleta(this);
    }
 
@@ -68,7 +73,7 @@ public class Sector {
    /**
     * Ruleta -> Pregunta
     */
-   public void mostrarPregunta(int personaje) {
+   public void pregunta(int personaje) {
       etapa = new EtapaPregunta(this, personaje);
    }
 }

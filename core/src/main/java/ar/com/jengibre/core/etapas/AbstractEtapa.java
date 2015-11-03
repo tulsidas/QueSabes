@@ -28,8 +28,6 @@ public abstract class AbstractEtapa {
       anim = new Animator();
    }
 
-   public abstract void clicked(float x, float y);
-
    public abstract void update(int delta);
 
    public void paint(Clock clock) {
@@ -38,4 +36,11 @@ public abstract class AbstractEtapa {
 
    public abstract void doPaint(Clock clock);
 
+   public void onPointerStart(float x, float y) {
+      // por default NOOP
+   }
+
+   public void onPointerEnd(float x, float y) {
+      // por default NOOP
+   }
 }

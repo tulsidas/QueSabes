@@ -64,6 +64,9 @@ public class EtapaPregunta extends AbstractEtapa {
                   Align.CENTER, Colors.ORANGE));
       respuesta3.setInteractive(true);
       layer.addAt(respuesta3, 350, yRespuestas.remove(0));
+
+      // timeout que avanza el juego por si abandonan o tardan mucho
+      // anim.delay(TIMEOUT).then().action(() -> timeout = true);
    }
 
    @Override
@@ -75,7 +78,7 @@ public class EtapaPregunta extends AbstractEtapa {
    }
 
    @Override
-   public void clicked(float x, float y) {
+   public void onPointerEnd(float x, float y) {
       Layer hit = layer.hitTest(new Point(x, y));
 
       if (hit == respuesta1) {

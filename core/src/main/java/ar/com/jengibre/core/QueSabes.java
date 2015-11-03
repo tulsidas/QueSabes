@@ -1,6 +1,5 @@
 package ar.com.jengibre.core;
 
-
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.json;
@@ -34,7 +33,9 @@ public class QueSabes extends Game.Default {
 
    public static List<Pregunta> preguntas;
 
-   public static Image bgIdle, bgRuleta, bgPregunta, btnEmpezar, btnEsperando;
+   public static Image bgIdle, bgRuleta, bgPregunta, bgBonus;
+
+   public static Image btnEmpezar, btnEsperando, pelota;
 
    public static Image p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12;
 
@@ -49,8 +50,12 @@ public class QueSabes extends Game.Default {
       bgIdle = assets().getImageSync("images/idle.png");
       bgRuleta = assets().getImageSync("images/ruleta.png");
       bgPregunta = assets().getImageSync("images/pregunta.png");
+      bgBonus = assets().getImageSync("images/bonus.png");
+
       btnEmpezar = assets().getImageSync("images/btnEmpezar.png");
       btnEsperando = assets().getImageSync("images/btnEsperando.png");
+
+      pelota = assets().getImageSync("images/pelota.png");
 
       try {
          preguntas = new ArrayList<>();
@@ -126,33 +131,25 @@ public class QueSabes extends Game.Default {
 
       pointer().setListener(new Pointer.Adapter() {
          @Override
-         public void onPointerEnd(Pointer.Event event) {
+         public void onPointerStart(playn.core.Pointer.Event event) {
             float x = event.x();
             float y = event.y();
-            Sector sector;
-
-            // if (x >= y) {
-            // if (Math.abs(x - graphics().width() / 2) >= Math.abs(y -
-            // graphics().height() / 2)) {
-            // sector = este;
-            // }
-            // else {
-            // sector = norte;
-            // }
-            // }
-            // else {
-            // if (Math.abs(x - graphics().width() / 2) >= Math.abs(y -
-            // graphics().height() / 2)) {
-            // sector = oeste;
-            // }
-            // else {
-            sector = sur;
-            // }
-            // }
+            Sector sector = getSector(x, y);
 
             Layer layer = sector.layer();
             Point tf = layer.transform().inverseTransform(new Point(x, y), new Point());
-            sector.clicked(tf.x, tf.y);
+            sector.onPointerStart(tf.x, tf.y);
+         }
+
+         @Override
+         public void onPointerEnd(Pointer.Event event) {
+            float x = event.x();
+            float y = event.y();
+            Sector sector = getSector(x, y);
+
+            Layer layer = sector.layer();
+            Point tf = layer.transform().inverseTransform(new Point(x, y), new Point());
+            sector.onPointerEnd(tf.x, tf.y);
          }
       });
    }
@@ -178,5 +175,26 @@ public class QueSabes extends Game.Default {
       sur.paint(clock);
       // este.paint(clock);
       // oeste.paint(clock);
+   }
+
+   private Sector getSector(float x, float y) {
+      // if (x >= y) {
+      // if (Math.abs(x - graphics().width() / 2) >= Math.abs(y -
+      // graphics().height() / 2)) {
+      // return este;
+      // }
+      // else {
+      // return norte;
+      // }
+      // }
+      // else {
+      // if (Math.abs(x - graphics().width() / 2) >= Math.abs(y -
+      // graphics().height() / 2)) {
+      // return oeste;
+      // }
+      // else {
+      return sur;
+      // }
+      // }
    }
 }

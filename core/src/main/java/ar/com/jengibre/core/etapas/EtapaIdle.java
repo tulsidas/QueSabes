@@ -1,6 +1,5 @@
 package ar.com.jengibre.core.etapas;
 
-
 import static ar.com.jengibre.core.QueSabes.bgIdle;
 import static ar.com.jengibre.core.QueSabes.btnEmpezar;
 import static playn.core.PlayN.graphics;
@@ -36,7 +35,7 @@ public class EtapaIdle extends AbstractEtapa {
    }
 
    @Override
-   public void clicked(float x, float y) {
+   public void onPointerEnd(float x, float y) {
       sector.empezarJuego();
    }
 }

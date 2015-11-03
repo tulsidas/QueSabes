@@ -20,11 +20,7 @@ public class EtapaEsperandoOtros extends AbstractEtapa {
    @Override
    public void update(int delta) {
       if (StartupLatch.empezoElJuego()) {
-         sector.empezoJuego();
+         sector.ruleta();
       }
-   }
-
-   @Override
-   public void clicked(float x, float y) {
    }
 }

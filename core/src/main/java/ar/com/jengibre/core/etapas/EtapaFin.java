@@ -15,8 +15,4 @@ public class EtapaFin extends AbstractEtapa {
    @Override
    public void update(int delta) {
    }
-
-   @Override
-   public void clicked(float x, float y) {
-   }
 }

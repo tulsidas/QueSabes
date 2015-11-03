@@ -44,8 +44,8 @@ public class EtapaRuleta extends AbstractEtapa {
       for (int i = 0; i < personajes.size(); i++) {
          ImageLayer p = personajes.get(i);
 
-         p.setTranslation(400, 400);
-         p.setOrigin(p.width() / 2, -p.height() / 3);
+         p.setTranslation(550, 550);
+         p.setOrigin(p.width() / 2, -p.height());
          layer.add(p);
 
          anim.delay(i * DELAY).then().repeat(p).tweenRotation(p).to(2 * PI + p.rotation())
@@ -63,16 +63,15 @@ public class EtapaRuleta extends AbstractEtapa {
    @Override
    public void update(int delta) {
       if (timeout) {
-         clicked(0, 0);
+         onPointerEnd(0, 0);
          timeout = false;
       }
    }
 
    @Override
-   public void clicked(float x, float y) {
+   public void onPointerEnd(float x, float y) {
       if (elegido == -1) {
          elegido = rnd.getInRange(0, personajes.size());
-         System.out.println(elegido);
 
          anim.clear();
 
@@ -96,7 +95,7 @@ public class EtapaRuleta extends AbstractEtapa {
 
          // FIXME animar el elegido, etc
 
-         anim.delay(duration + 1000).then().action(() -> sector.mostrarPregunta(elegido));
+         anim.delay(duration + 1000).then().action(() -> sector.pregunta(elegido));
       }
    }
 }
