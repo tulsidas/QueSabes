@@ -11,12 +11,12 @@ public class QueSabesJava {
       JavaPlatform.Config config = new JavaPlatform.Config();
 
       // config.fullscreen = true;
-      // config.width = 800;
-      // config.height = 800;
       config.width = 1080;
       config.height = 540;
 
-      JavaPlatform.register(config);
+      JavaPlatform platform = JavaPlatform.register(config);
+      platform.graphics().registerFont("Benton", "fonts/BentonSans-Book.otf");
+
       PlayN.run(new QueSabes());
    }
 }

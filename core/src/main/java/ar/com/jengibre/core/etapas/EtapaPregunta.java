@@ -6,6 +6,7 @@ import static playn.core.PlayN.graphics;
 import java.util.List;
 
 import playn.core.CanvasImage;
+import playn.core.Font;
 import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.TextFormat;
@@ -28,18 +29,19 @@ public class EtapaPregunta extends AbstractEtapa {
    public EtapaPregunta(Sector sector, int personaje) {
       super(sector);
 
-      List<Float> ANCHOS = Lists.newArrayList(100F, 150F, 300F);
+      List<Float> ANCHOS = Lists.newArrayList(150F, 200F, 250F, 300F, 350F, 400F, 450F, 500F, 550F, 600F);
 
       Pregunta pregunta = QueSabes.preguntas.get(personaje);
 
       CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
       cImg.canvas().drawImage(bgPregunta, 0, 0);
 
-      TextFormat format = new TextFormat().withAntialias(false);
+      Font font = graphics().createFont("Benton", Font.Style.PLAIN, 22);
+      TextFormat format = new TextFormat().withAntialias(false).withFont(font);
 
       TextBlock texto = new TextBlock(triangularTexto(pregunta.getPregunta(), format, ANCHOS).toArray(
             new TextLayout[] {}));
-      texto.fill(cImg.canvas(), Align.CENTER, 390, 100);
+      texto.fill(cImg.canvas(), Align.CENTER, 240, 100);
 
       layer.add(graphics().createImageLayer(cImg));
 
