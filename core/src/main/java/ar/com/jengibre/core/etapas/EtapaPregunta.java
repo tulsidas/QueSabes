@@ -37,11 +37,12 @@ public class EtapaPregunta extends AbstractEtapa {
       cImg.canvas().drawImage(bgPregunta, 0, 0);
 
       Font font = graphics().createFont("Benton", Font.Style.PLAIN, 22);
-      TextFormat format = new TextFormat().withAntialias(false).withFont(font);
+      TextFormat format = new TextFormat().withAntialias(true).withFont(font);
 
       TextBlock texto = new TextBlock(triangularTexto(pregunta.getPregunta(), format, ANCHOS).toArray(
             new TextLayout[] {}));
-      texto.fill(cImg.canvas(), Align.CENTER, 240, 100);
+      cImg.canvas().setFillColor(Colors.WHITE);
+      texto.fill(cImg.canvas(), Align.CENTER, (Sector.WIDTH - texto.textWidth()) / 2, 100);
 
       layer.add(graphics().createImageLayer(cImg));
 
