@@ -1,8 +1,12 @@
 package ar.com.jengibre.core;
 
 import static playn.core.PlayN.graphics;
+
+import java.util.Random;
+
 import playn.core.GroupLayer;
 import playn.core.util.Clock;
+import tripleplay.util.Randoms;
 import ar.com.jengibre.core.etapas.AbstractEtapa;
 import ar.com.jengibre.core.etapas.EtapaEsperandoOtros;
 import ar.com.jengibre.core.etapas.EtapaJugandoOtros;
@@ -15,17 +19,27 @@ public class Sector {
 
    private GroupLayer layer;
 
-   public static final int WIDTH = 1080;
+   public static final int WIDTH = 960;
 
    public static final int HEIGHT = 540;
 
    public Sector() {
-      layer = graphics().createGroupLayer();
+      reload();
+   }
+
+   public void reload() {
+      if (layer == null) {
+         layer = graphics().createGroupLayer(WIDTH, HEIGHT);
+      }
+      else {
+         layer.removeAll();
+      }
 
       // etapa = new EtapaIdle(this);
-      etapa = new EtapaRuleta(this);
-      // etapa = new EtapaPregunta(this, 1);
+      // etapa = new EtapaRuleta(this);
+      etapa = new EtapaPregunta(this, Randoms.with(new Random()).getInRange(1, 9));
       // etapa = new EtapaBonus(this);
+      // etapa = new EtapaTest(this);
    }
 
    public GroupLayer layer() {

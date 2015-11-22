@@ -1,7 +1,6 @@
 package ar.com.jengibre.core.etapas;
 
 import static ar.com.jengibre.core.QueSabes.bgIdle;
-import static ar.com.jengibre.core.QueSabes.btnEmpezar;
 import static playn.core.PlayN.graphics;
 import playn.core.CanvasImage;
 import playn.core.util.Clock;
@@ -13,11 +12,9 @@ public class EtapaIdle extends AbstractEtapa {
    public EtapaIdle(Sector sector) {
       super(sector);
 
-      // TODO animar btnEmpezar y/o ponerle onda
-
       CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
       cImg.canvas().drawImage(bgIdle, 0, 0);
-      cImg.canvas().drawImageCentered(btnEmpezar, 500, 200);
+      cImg.canvas().drawText("Tocá para empezar a jugar", 500, 200);
 
       layer.add(graphics().createImageLayer(cImg));
    }

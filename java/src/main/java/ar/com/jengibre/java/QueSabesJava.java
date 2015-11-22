@@ -11,8 +11,10 @@ public class QueSabesJava {
       JavaPlatform.Config config = new JavaPlatform.Config();
 
       // config.fullscreen = true;
-      config.width = 1080;
+      config.width = 960;
       config.height = 540;
+      // config.width = 1920;
+      // config.height = 1080;
 
       JavaPlatform platform = JavaPlatform.register(config);
       platform.graphics().registerFont("Benton", "fonts/BentonSans-Book.otf");

@@ -10,7 +10,6 @@ import playn.core.Font;
 import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.TextFormat;
-import playn.core.TextLayout;
 import playn.core.TextWrap;
 import playn.core.util.Clock;
 import playn.core.util.TextBlock;
@@ -21,6 +20,7 @@ import ar.com.jengibre.core.Pregunta;
 import ar.com.jengibre.core.QueSabes;
 import ar.com.jengibre.core.Sector;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 public class EtapaPregunta extends AbstractEtapa {
@@ -29,44 +29,49 @@ public class EtapaPregunta extends AbstractEtapa {
    public EtapaPregunta(Sector sector, int personaje) {
       super(sector);
 
-      List<Float> ANCHOS = Lists.newArrayList(150F, 200F, 250F, 300F, 350F, 400F, 450F, 500F, 550F, 600F);
-
       Pregunta pregunta = QueSabes.preguntas.get(personaje);
 
       CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
       cImg.canvas().drawImage(bgPregunta, 0, 0);
+      cImg.canvas().setStrokeColor(Colors.YELLOW);
+      cImg.canvas().setStrokeWidth(2);
+      cImg.canvas().strokeRect(100, 80, 750, 375);
 
-      Font font = graphics().createFont("Benton", Font.Style.PLAIN, 22);
+      Font font = graphics().createFont("Benton", Font.Style.PLAIN, 30);
       TextFormat format = new TextFormat().withAntialias(true).withFont(font);
 
-      TextBlock texto = new TextBlock(triangularTexto(pregunta.getPregunta(), format, ANCHOS).toArray(
-            new TextLayout[] {}));
+      TextBlock texto = new TextBlock(graphics().layoutText(
+      /*pregunta.getPregunta()*/Strings.repeat("0", 296), format, new TextWrap(750)));
       cImg.canvas().setFillColor(Colors.WHITE);
       texto.fill(cImg.canvas(), Align.CENTER, (Sector.WIDTH - texto.textWidth()) / 2, 100);
 
       layer.add(graphics().createImageLayer(cImg));
 
-      List<Float> yRespuestas = Lists.newArrayList(380F, 400F, 420F);
-      rnd.shuffle(yRespuestas);
+      List<Point> posRespuestas = Lists.newArrayList(new Point(150, 350), new Point(300, 380), new Point(450,
+            410));
+      rnd.shuffle(posRespuestas);
 
       TextWrap wrap = new TextWrap(400);
       respuesta1 = graphics().createImageLayer(
-            new TextBlock(graphics().layoutText(pregunta.getRespuestas().get(0), format, wrap)).toImage(
-                  Align.CENTER, Colors.BLUE));
+            new TextBlock(graphics().layoutText("· " + pregunta.getRespuestas().get(0), format, wrap))
+                  .toImage(Align.CENTER, Colors.WHITE));
       respuesta1.setInteractive(true);
-      layer.addAt(respuesta1, 350, yRespuestas.remove(0));
+      Point p = posRespuestas.remove(0);
+      layer.addAt(respuesta1, p.x, p.y);
 
       respuesta2 = graphics().createImageLayer(
-            new TextBlock(graphics().layoutText(pregunta.getRespuestas().get(1), format, wrap)).toImage(
-                  Align.CENTER, Colors.PINK));
+            new TextBlock(graphics().layoutText("· " + pregunta.getRespuestas().get(1), format, wrap))
+                  .toImage(Align.CENTER, Colors.WHITE));
       respuesta2.setInteractive(true);
-      layer.addAt(respuesta2, 350, yRespuestas.remove(0));
+      p = posRespuestas.remove(0);
+      layer.addAt(respuesta2, p.x, p.y);
 
       respuesta3 = graphics().createImageLayer(
-            new TextBlock(graphics().layoutText(pregunta.getRespuestas().get(2), format, wrap)).toImage(
-                  Align.CENTER, Colors.ORANGE));
+            new TextBlock(graphics().layoutText("· " + pregunta.getRespuestas().get(2), format, wrap))
+                  .toImage(Align.CENTER, Colors.WHITE));
       respuesta3.setInteractive(true);
-      layer.addAt(respuesta3, 350, yRespuestas.remove(0));
+      p = posRespuestas.remove(0);
+      layer.addAt(respuesta3, p.x, p.y);
 
       // timeout que avanza el juego por si abandonan o tardan mucho
       // anim.delay(TIMEOUT).then().action(() -> timeout = true);
@@ -92,23 +97,6 @@ public class EtapaPregunta extends AbstractEtapa {
       }
       else if (hit == respuesta3) {
          System.out.println("r3");
-      }
-   }
-
-   private List<TextLayout> triangularTexto(String texto, TextFormat format, List<Float> anchos) {
-      TextLayout[] layouts = graphics().layoutText(texto, format, new TextWrap(anchos.remove(0)));
-
-      if (anchos.size() == 0) {
-         return Lists.newArrayList(layouts);
-      }
-      else {
-         // me quedo con la primer linea nomas
-         TextLayout linea = layouts[0];
-         List<TextLayout> ret = Lists.newArrayList(linea);
-
-         ret.addAll(triangularTexto(texto.substring(linea.text().length()), format, anchos));
-
-         return ret;
       }
    }
 }

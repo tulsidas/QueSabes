@@ -32,6 +32,8 @@ public abstract class AbstractEtapa {
 
    public void paint(Clock clock) {
       anim.paint(clock);
+      
+      doPaint(clock);
    }
 
    public abstract void doPaint(Clock clock);

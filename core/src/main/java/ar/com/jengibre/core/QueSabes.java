@@ -6,13 +6,11 @@ import static playn.core.PlayN.json;
 import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.pointer;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import playn.core.Game;
-import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.Json;
 import playn.core.Key;
@@ -22,11 +20,15 @@ import playn.core.Layer;
 import playn.core.Pointer;
 import playn.core.util.Clock;
 import pythagoras.f.Point;
+import tripleplay.anim.Flipbook;
+import tripleplay.util.PackedFrames;
 
 import com.dgis.input.evdev.EventDevice;
 import com.dgis.input.evdev.InputEvent;
 import com.dgis.input.evdev.InputListener;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class QueSabes extends Game.Default implements InputListener {
@@ -37,29 +39,29 @@ public class QueSabes extends Game.Default implements InputListener {
 
    private EventDevice mt;
 
-   // private Sector norte, sur, este, oeste;
+   private Sector s3;
 
-   private Sector sur;
+   // private Sector s1, s2, s3, s4;
 
    public static List<Pregunta> preguntas;
 
+   public static List<Personaje> personajes;
+
    public static Image bgIdle, bgRuleta, bgPregunta, bgBonus;
 
-   public static Image btnEmpezar, btnEsperando, pelota;
-
-   public static Image p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12;
+   public static Image pelota;
 
    public QueSabes() {
       super(UPDATE_RATE); // 24 FPS
 
-      try {
-         mt = new EventDevice("/dev/input/event18");
-         mt.addListener(this);
-      }
-      catch (IOException e) {
-         e.printStackTrace();
-         System.exit(1);
-      }
+      // try {
+      // mt = new EventDevice("/dev/input/event18");
+      // mt.addListener(this);
+      // }
+      // catch (IOException e) {
+      // e.printStackTrace();
+      // System.exit(1);
+      // }
    }
 
    @Override
@@ -70,9 +72,6 @@ public class QueSabes extends Game.Default implements InputListener {
       bgRuleta = assets().getImageSync("images/ruleta.png");
       bgPregunta = assets().getImageSync("images/pregunta.png");
       bgBonus = assets().getImageSync("images/bonus.png");
-
-      btnEmpezar = assets().getImageSync("images/btnEmpezar.png");
-      btnEsperando = assets().getImageSync("images/btnEsperando.png");
 
       pelota = assets().getImageSync("images/pelota.png");
 
@@ -99,42 +98,66 @@ public class QueSabes extends Game.Default implements InputListener {
          System.exit(1);
       }
 
-      p1 = assets().getImageSync("images/personaje1.png");
-      p2 = assets().getImageSync("images/personaje2.png");
-      p3 = assets().getImageSync("images/personaje3.png");
-      p4 = assets().getImageSync("images/personaje4.png");
-      p5 = assets().getImageSync("images/personaje5.png");
-      p6 = assets().getImageSync("images/personaje6.png");
-      p7 = assets().getImageSync("images/personaje7.png");
-      p8 = assets().getImageSync("images/personaje8.png");
-      p9 = assets().getImageSync("images/personaje9.png");
-      p10 = assets().getImageSync("images/personaje10.png");
-      p11 = assets().getImageSync("images/personaje11.png");
-      p12 = assets().getImageSync("images/personaje12.png");
+      // PERSONAJES
+      personajes = Lists.newArrayList();
+      try {
+         for (String path : Lists.newArrayList("ALFONSIN", "DEMIDI", "EVA", "GINOBILI", "MARADONA", "MENDEZ",
+               "PERON", "PUMA", "SELFIE")) {
 
-      // norte = new Sector();
-      sur = new Sector();
-      // este = new Sector();
-      // oeste = new Sector();
+            final Image ruleta = assets().getImageSync("ruleta/" + path + "/0.png");
 
-      // float gw = graphics().width();
-      // float gh = graphics().height();
+            if (path.equals("FIXME")) {
+               final Image gana = assets().getImageSync("ruleta/" + path + "/GANA.png");
+               final String ganaJson = assets().getTextSync("ruleta/" + path + "/GANA.json");
 
-      // GroupLayer lnorte = norte.layer();
-      // lnorte.setRotation(FloatMath.PI);
-      // graphics().rootLayer().addAt(lnorte, gw, gh / 2);
+               final Image pierde = assets().getImageSync("ruleta/" + path + "/PIERDE.png");
+               final String pierdeJson = assets().getTextSync("ruleta/" + path + "/PIERDE.json");
 
-      // GroupLayer loeste = oeste.layer();
-      // loeste.setRotation(FloatMath.PI / 2);
-      // graphics().rootLayer().addAt(loeste, gw / 2, 0);
+               final Image saluda = assets().getImageSync("ruleta/" + path + "/SALUDA.png");
+               final String saludaJson = assets().getTextSync("ruleta/" + path + "/SALUDA.json");
 
-      GroupLayer lsur = sur.layer();
-      // graphics().rootLayer().addAt(lsur, 0, gh / 2);
-      graphics().rootLayer().addAt(lsur, 0, 0);
+               personajes.add(new Personaje(ruleta,//
+                     new Flipbook(new PackedFrames(gana, json().parse(ganaJson)), 25),//
+                     new Flipbook(new PackedFrames(pierde, json().parse(pierdeJson)), 25),//
+                     new Flipbook(new PackedFrames(saluda, json().parse(saludaJson)), 25)//
 
-      // GroupLayer leste = este.layer();
-      // leste.setRotation(FloatMath.PI * 1.5F);
-      // graphics().rootLayer().addAt(leste, gw / 2, gh);
+                     // FIXME agregar tambien las preguntas
+                     ));
+            }
+
+            else {
+               personajes.add(new Personaje(ruleta, null, null, null));
+            }
+         }
+
+         personajes = ImmutableList.copyOf(personajes);
+      }
+      catch (Exception e) {
+         e.printStackTrace();
+         System.exit(1);
+      }
+      // FIN PERSONAJES
+
+      // arriba a la izq
+      // s1 = new Sector();
+      // graphics().rootLayer().addAt(s1.layer().setRotation(FloatMath.PI),
+      // graphics().width() / 2,
+      // graphics().height() / 2);
+
+      // arriba a la der
+      // s2 = new Sector();
+      // graphics().rootLayer().addAt(s2.layer().setRotation(FloatMath.PI),
+      // graphics().width(),
+      // graphics().height() / 2);
+
+      // abajo a la izq
+      s3 = new Sector();
+      graphics().rootLayer().addAt(s3.layer(), 0, /*graphics().height() / 2*/0);
+
+      // abajo a la der
+      // s4 = new Sector();
+      // graphics().rootLayer().addAt(s4.layer(), graphics().width() / 2,
+      // /*graphics().height() / 2*/0);
 
       // RELOAD HOOK
       keyboard().setListener(new Keyboard.Adapter() {
@@ -142,7 +165,11 @@ public class QueSabes extends Game.Default implements InputListener {
          public void onKeyUp(Event event) {
             if (event.key() == Key.R) {
                System.out.println("reload!");
-               init();
+
+               // s1.reload();
+               // s2.reload();
+               s3.reload();
+               // s4.reload();
             }
          }
       });
@@ -177,10 +204,10 @@ public class QueSabes extends Game.Default implements InputListener {
    public void update(int delta) {
       clock.update(delta);
 
-      // norte.update(delta);
-      sur.update(delta);
-      // este.update(delta);
-      // oeste.update(delta);
+      // s1.update(delta);
+      // s2.update(delta);
+      s3.update(delta);
+      // s4.update(delta);
 
       // controlador para el inicio del juego
       StartupLatch.update(delta);
@@ -190,29 +217,27 @@ public class QueSabes extends Game.Default implements InputListener {
    public void paint(float alpha) {
       clock.paint(alpha);
 
-      // norte.paint(clock);
-      sur.paint(clock);
-      // este.paint(clock);
-      // oeste.paint(clock);
+      // s1.paint(clock);
+      // s2.paint(clock);
+      s3.paint(clock);
+      // s4.paint(clock);
    }
 
    private Sector getSector(float x, float y) {
-      // if (x >= y) {
-      // if (Math.abs(x - graphics().width() / 2) >= Math.abs(y -
-      // graphics().height() / 2)) {
-      // return este;
+      // if (y < graphics().height() / 2) {
+      // if (x < graphics().width() / 2) {
+      // return s1;
       // }
       // else {
-      // return norte;
+      // return s2;
       // }
       // }
       // else {
-      // if (Math.abs(x - graphics().width() / 2) >= Math.abs(y -
-      // graphics().height() / 2)) {
-      // return oeste;
+      // if (x < graphics().width() / 2) {
+      return s3;
       // }
       // else {
-      return sur;
+      // return s4;
       // }
       // }
    }
@@ -260,7 +285,7 @@ public class QueSabes extends Game.Default implements InputListener {
    public void event(InputEvent e) {
       String code = EVENTS.get(e.code);
       if (e.type == 3 && code != null) {
-//         System.out.println(e.type + "," + code + "," + e.value);
+         // System.out.println(e.type + "," + code + "," + e.value);
 
          if (e.code == ABS_MT_SLOT) {
             currentSlot = e.value;
