@@ -18,6 +18,8 @@ import playn.core.Keyboard;
 import playn.core.Keyboard.Event;
 import playn.core.Layer;
 import playn.core.Pointer;
+import playn.core.Sound;
+import playn.core.util.Callback;
 import playn.core.util.Clock;
 import pythagoras.f.Point;
 import tripleplay.anim.Flipbook;
@@ -47,7 +49,11 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static List<Personaje> personajes;
 
-   public static Image bgIdle, bgRuleta, bgPregunta, bgBonus;
+   public static Flipbook papelitos;
+
+   public static Sound gana, pierde, saluda;
+
+   public static Image bgIdle, bgRuleta, bgBonus;
 
    public static Image pelota;
 
@@ -70,10 +76,29 @@ public class QueSabes extends Game.Default implements InputListener {
 
       bgIdle = assets().getImageSync("images/idle.png");
       bgRuleta = assets().getImageSync("images/ruleta.png");
-      bgPregunta = assets().getImageSync("images/pregunta.png");
-      bgBonus = assets().getImageSync("images/bonus.png");
+      bgBonus = assets().getImageSync("images/bgArquerito.jpg");
 
       pelota = assets().getImageSync("images/pelota.png");
+
+      Callback<Sound> sndCallback = new Callback<Sound>() {
+         @Override
+         public void onSuccess(Sound result) {
+            System.out.println("Cargado ok - " + result);
+         }
+
+         @Override
+         public void onFailure(Throwable cause) {
+            cause.printStackTrace();
+            System.exit(1);
+         }
+      };
+
+      gana = assets().getSound("sfx/gana");
+      gana.addCallback(sndCallback);
+      pierde = assets().getSound("sfx/pierde");
+      pierde.addCallback(sndCallback);
+      saluda = assets().getSound("sfx/saluda");
+      saluda.addCallback(sndCallback);
 
       try {
          preguntas = new ArrayList<>();
@@ -100,13 +125,18 @@ public class QueSabes extends Game.Default implements InputListener {
 
       // PERSONAJES
       personajes = Lists.newArrayList();
+
       try {
+         final Image imgPapelitos = assets().getImageSync("ruleta/papelitos.png");
+         final String jsonPapelitos = assets().getTextSync("ruleta/papelitos.json");
+         papelitos = new Flipbook(new PackedFrames(imgPapelitos, json().parse(jsonPapelitos)), 25);
+
          for (String path : Lists.newArrayList("ALFONSIN", "DEMIDI", "EVA", "GINOBILI", "MARADONA", "MENDEZ",
                "PERON", "PUMA", "SELFIE")) {
 
             final Image ruleta = assets().getImageSync("ruleta/" + path + "/0.png");
 
-            if (path.equals("FIXME")) {
+            if (path.equals("EVA")) { // FIXME
                final Image gana = assets().getImageSync("ruleta/" + path + "/GANA.png");
                final String ganaJson = assets().getTextSync("ruleta/" + path + "/GANA.json");
 
@@ -202,6 +232,12 @@ public class QueSabes extends Game.Default implements InputListener {
 
    @Override
    public void update(int delta) {
+      // if (delta != 40) {
+      // System.out.println("delta=" + delta);
+      // }
+
+      delta = 40; // TODO ???
+
       clock.update(delta);
 
       // s1.update(delta);
@@ -233,12 +269,14 @@ public class QueSabes extends Game.Default implements InputListener {
       // }
       // }
       // else {
+
       // if (x < graphics().width() / 2) {
       return s3;
       // }
       // else {
       // return s4;
       // }
+
       // }
    }
 

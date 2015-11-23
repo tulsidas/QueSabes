@@ -6,11 +6,9 @@ import static pythagoras.f.FloatMath.PI;
 import java.util.List;
 import java.util.Map;
 
-import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.ImageLayer;
 import playn.core.util.Clock;
-import tripleplay.util.Colors;
 import ar.com.jengibre.core.Personaje;
 import ar.com.jengibre.core.QueSabes;
 import ar.com.jengibre.core.Sector;
@@ -37,12 +35,6 @@ public class EtapaRuleta extends AbstractEtapa {
 
       layer.add(graphics().createImageLayer(QueSabes.bgRuleta));
 
-      // CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
-      // cImg.canvas().setFillColor(Colors.BLUE);
-      // cImg.canvas().fillRect(0, 0, Sector.WIDTH, Sector.HEIGHT);
-      // cImg.canvas().setFillColor(Colors.RED);
-      // cImg.canvas().drawText("BLA", 500, 200);
-      // flipbook = graphics().createImageLayer(cImg);
       flipbookGroup = graphics().createGroupLayer();
 
       List<ImageLayer> images = Lists.newArrayList();
@@ -112,9 +104,14 @@ public class EtapaRuleta extends AbstractEtapa {
 
          anim.addBarrier(500);
 
+         anim.play(QueSabes.saluda);
          anim.destroy(map.get(elegido)).then().add(layer, flipbookGroup).then()
-               .flipbook(flipbookGroup, elegido.saluda());
-         // .then().delay(500).then() .action(() -> sector.pregunta(elegido));
+               .flipbook(flipbookGroup, elegido.saluda()).then().delay(500).then().action(() -> {
+                  // destruyo todo lo agregado en esta etapa
+                     layer.destroyAll();
+
+                     sector.pregunta(elegido);
+                  });
       }
    }
 }

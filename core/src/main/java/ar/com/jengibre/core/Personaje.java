@@ -21,11 +21,11 @@ public class Personaje {
    }
 
    public Flipbook gana() {
-      return pierde;
+      return gana;
    }
 
    public Flipbook pierde() {
-      return gana;
+      return pierde;
    }
 
    public Flipbook saluda() {

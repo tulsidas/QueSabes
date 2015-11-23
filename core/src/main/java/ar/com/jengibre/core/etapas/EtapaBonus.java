@@ -18,14 +18,16 @@ public class EtapaBonus extends AbstractEtapa {
    public EtapaBonus(Sector sector) {
       super(sector);
 
-      // timeout que avanza el juego por si abandonan o tardan mucho
-      // anim.delay(TIMEOUT).then().action(() -> timeout = true);
+      layer.add(graphics().createImageLayer(QueSabes.bgRuleta));
 
       pelota = graphics().createImageLayer(QueSabes.pelota);
       pelota.setInteractive(true);
 
       layer.add(graphics().createImageLayer(QueSabes.bgBonus));
       layer.addAt(pelota, 500, 400);
+
+      // timeout que avanza el juego por si abandonan o tardan mucho
+      // anim.delay(TIMEOUT).then().action(() -> timeout = true);
    }
 
    @Override

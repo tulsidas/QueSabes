@@ -1,12 +1,12 @@
 package ar.com.jengibre.core.etapas;
 
-import static ar.com.jengibre.core.QueSabes.bgPregunta;
 import static playn.core.PlayN.graphics;
 
 import java.util.List;
 
 import playn.core.CanvasImage;
 import playn.core.Font;
+import playn.core.GroupLayer;
 import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.TextFormat;
@@ -15,41 +15,54 @@ import playn.core.util.Clock;
 import playn.core.util.TextBlock;
 import playn.core.util.TextBlock.Align;
 import pythagoras.f.Point;
+import tripleplay.anim.Flipbook;
 import tripleplay.util.Colors;
+import ar.com.jengibre.core.Personaje;
 import ar.com.jengibre.core.Pregunta;
 import ar.com.jengibre.core.QueSabes;
 import ar.com.jengibre.core.Sector;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 public class EtapaPregunta extends AbstractEtapa {
-   private ImageLayer respuesta1, respuesta2, respuesta3;
+   private ImageLayer preguntaLayer, respuesta1, respuesta2, respuesta3;
 
-   public EtapaPregunta(Sector sector, int personaje) {
+   private GroupLayer flipbookGroup, papelitosGroup; // flipbooks
+
+   private Personaje personaje;
+
+   public EtapaPregunta(Sector sector, Personaje personaje) {
       super(sector);
 
-      Pregunta pregunta = QueSabes.preguntas.get(personaje);
+      this.personaje = personaje;
+
+      flipbookGroup = graphics().createGroupLayer();
+      papelitosGroup = graphics().createGroupLayer();
+
+      layer.add(graphics().createImageLayer(QueSabes.bgRuleta));
+
+      // FIXME Pregunta pregunta = QueSabes.preguntas.get(personaje);
+      Pregunta pregunta = rnd.pick(QueSabes.preguntas, null);
 
       CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
-      cImg.canvas().drawImage(bgPregunta, 0, 0);
       cImg.canvas().setStrokeColor(Colors.YELLOW);
       cImg.canvas().setStrokeWidth(2);
       cImg.canvas().strokeRect(100, 80, 750, 375);
 
-      Font font = graphics().createFont("Benton", Font.Style.PLAIN, 30);
+      Font font = graphics().createFont("Benton", Font.Style.PLAIN, 24);
       TextFormat format = new TextFormat().withAntialias(true).withFont(font);
 
-      TextBlock texto = new TextBlock(graphics().layoutText(
-      /*pregunta.getPregunta()*/Strings.repeat("0", 296), format, new TextWrap(750)));
+      TextBlock texto = new TextBlock(graphics()
+            .layoutText(pregunta.getPregunta(), format, new TextWrap(750)));
       cImg.canvas().setFillColor(Colors.WHITE);
       texto.fill(cImg.canvas(), Align.CENTER, (Sector.WIDTH - texto.textWidth()) / 2, 100);
 
-      layer.add(graphics().createImageLayer(cImg));
+      preguntaLayer = graphics().createImageLayer(cImg);
+      layer.add(preguntaLayer);
 
       List<Point> posRespuestas = Lists.newArrayList(new Point(150, 350), new Point(300, 380), new Point(450,
             410));
-      rnd.shuffle(posRespuestas);
+      // FIXME rnd.shuffle(posRespuestas);
 
       TextWrap wrap = new TextWrap(400);
       respuesta1 = graphics().createImageLayer(
@@ -90,13 +103,38 @@ public class EtapaPregunta extends AbstractEtapa {
       Layer hit = layer.hitTest(new Point(x, y));
 
       if (hit == respuesta1) {
-         System.out.println("r1");
+         showAnim(personaje.gana(), true);
       }
-      else if (hit == respuesta2) {
-         System.out.println("r2");
+      else if (hit == respuesta2 || hit == respuesta3) {
+         showAnim(personaje.pierde(), false);
       }
-      else if (hit == respuesta3) {
-         System.out.println("r3");
+   }
+
+   private void showAnim(Flipbook flipbook, boolean papelitos) {
+      preguntaLayer.destroy();
+      respuesta1.destroy();
+      respuesta2.destroy();
+      respuesta3.destroy();
+
+      layer.add(flipbookGroup);
+      anim.flipbook(flipbookGroup, flipbook);
+
+      if (papelitos) {
+         anim.play(QueSabes.gana);
+         layer.add(papelitosGroup);
+         anim.flipbook(papelitosGroup, QueSabes.papelitos);
       }
+      else {
+         anim.play(QueSabes.pierde);
+      }
+
+      anim.addBarrier();
+
+      anim.action(() -> {
+         // destruyo todo lo agregado en esta etapa
+         layer.destroyAll();
+
+         sector.ruleta();
+      });
    }
 }
