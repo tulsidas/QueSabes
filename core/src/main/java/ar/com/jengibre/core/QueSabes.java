@@ -35,7 +35,9 @@ import com.google.common.collect.Maps;
 
 public class QueSabes extends Game.Default implements InputListener {
 
-   private static final int UPDATE_RATE = 40;
+   private static final int FPS = 25;
+
+   private static final int UPDATE_RATE = 1000 / FPS;
 
    private Clock.Source clock = new Clock.Source(UPDATE_RATE);
 
@@ -49,16 +51,16 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static List<Personaje> personajes;
 
-   public static Flipbook papelitos;
+   public static Flipbook papelitos, arquerito, pelota;
 
    public static Sound gana, pierde, saluda;
 
-   public static Image bgIdle, bgRuleta, bgBonus;
+   public static Image bgIdle, bgRuleta, bgArquerito;
 
-   public static Image pelota;
+   public static Image pelota0;
 
    public QueSabes() {
-      super(UPDATE_RATE); // 24 FPS
+      super(UPDATE_RATE); // 25 FPS
 
       // try {
       // mt = new EventDevice("/dev/input/event18");
@@ -76,14 +78,13 @@ public class QueSabes extends Game.Default implements InputListener {
 
       bgIdle = assets().getImageSync("images/idle.png");
       bgRuleta = assets().getImageSync("images/ruleta.png");
-      bgBonus = assets().getImageSync("images/bgArquerito.jpg");
+      bgArquerito = assets().getImageSync("images/bgArquerito.png");
 
-      pelota = assets().getImageSync("images/pelota.png");
+      pelota0 = assets().getImageSync("images/pelota0.png");
 
       Callback<Sound> sndCallback = new Callback<Sound>() {
          @Override
          public void onSuccess(Sound result) {
-            System.out.println("Cargado ok - " + result);
          }
 
          @Override
@@ -123,20 +124,24 @@ public class QueSabes extends Game.Default implements InputListener {
          System.exit(1);
       }
 
-      // PERSONAJES
-      personajes = Lists.newArrayList();
-
       try {
-         final Image imgPapelitos = assets().getImageSync("ruleta/papelitos.png");
-         final String jsonPapelitos = assets().getTextSync("ruleta/papelitos.json");
-         papelitos = new Flipbook(new PackedFrames(imgPapelitos, json().parse(jsonPapelitos)), 25);
+         papelitos = new Flipbook(new PackedFrames(assets().getImageSync("ruleta/papelitos.png"), json()
+               .parse(assets().getTextSync("ruleta/papelitos.json"))), FPS);
 
+         arquerito = new Flipbook(new PackedFrames(assets().getImageSync("images/arquerito.png"), json()
+               .parse(assets().getTextSync("images/arquerito.json"))), FPS * 3);
+
+         pelota = new Flipbook(new PackedFrames(assets().getImageSync("images/pelota.png"), json().parse(
+               assets().getTextSync("images/pelota.json"))), FPS * 3);
+
+         // PERSONAJES
+         personajes = Lists.newArrayList();
          for (String path : Lists.newArrayList("ALFONSIN", "DEMIDI", "EVA", "GINOBILI", "MARADONA", "MENDEZ",
                "PERON", "PUMA", "SELFIE")) {
 
             final Image ruleta = assets().getImageSync("ruleta/" + path + "/0.png");
 
-            if (path.equals("EVA")) { // FIXME
+            if (path.equals("X")) { // FIXME
                final Image gana = assets().getImageSync("ruleta/" + path + "/GANA.png");
                final String ganaJson = assets().getTextSync("ruleta/" + path + "/GANA.json");
 
@@ -147,9 +152,9 @@ public class QueSabes extends Game.Default implements InputListener {
                final String saludaJson = assets().getTextSync("ruleta/" + path + "/SALUDA.json");
 
                personajes.add(new Personaje(ruleta,//
-                     new Flipbook(new PackedFrames(gana, json().parse(ganaJson)), 25),//
-                     new Flipbook(new PackedFrames(pierde, json().parse(pierdeJson)), 25),//
-                     new Flipbook(new PackedFrames(saluda, json().parse(saludaJson)), 25)//
+                     new Flipbook(new PackedFrames(gana, json().parse(ganaJson)), FPS),//
+                     new Flipbook(new PackedFrames(pierde, json().parse(pierdeJson)), FPS),//
+                     new Flipbook(new PackedFrames(saluda, json().parse(saludaJson)), FPS)//
 
                      // FIXME agregar tambien las preguntas
                      ));

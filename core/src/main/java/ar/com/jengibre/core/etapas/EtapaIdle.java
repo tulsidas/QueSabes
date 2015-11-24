@@ -14,8 +14,6 @@ public class EtapaIdle extends AbstractEtapa {
 
       CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
       cImg.canvas().drawImage(bgIdle, 0, 0);
-      cImg.canvas().drawText("Tocá para empezar a jugar", 500, 200);
-
       layer.add(graphics().createImageLayer(cImg));
    }
 

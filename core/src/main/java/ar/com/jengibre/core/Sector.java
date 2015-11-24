@@ -4,6 +4,7 @@ import static playn.core.PlayN.graphics;
 import playn.core.GroupLayer;
 import playn.core.util.Clock;
 import ar.com.jengibre.core.etapas.AbstractEtapa;
+import ar.com.jengibre.core.etapas.EtapaBonus;
 import ar.com.jengibre.core.etapas.EtapaEsperandoOtros;
 import ar.com.jengibre.core.etapas.EtapaJugandoOtros;
 import ar.com.jengibre.core.etapas.EtapaPregunta;
@@ -32,10 +33,10 @@ public class Sector {
       }
 
       // etapa = new EtapaIdle(this);
-      etapa = new EtapaRuleta(this);
+      // etapa = new EtapaRuleta(this);
       // etapa = new EtapaPregunta(this, Randoms.with(new
       // Random()).getInRange(1, 9));
-      // etapa = new EtapaBonus(this);
+      etapa = new EtapaBonus(this);
       // etapa = new EtapaTest(this);
    }
 
