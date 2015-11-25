@@ -72,6 +72,9 @@ public class QueSabes extends Game.Default implements InputListener {
       // }
    }
 
+   /* (non-Javadoc)
+    * @see playn.core.Game#init()
+    */
    @Override
    public void init() {
       graphics().rootLayer().removeAll();
@@ -84,8 +87,7 @@ public class QueSabes extends Game.Default implements InputListener {
 
       Callback<Sound> sndCallback = new Callback<Sound>() {
          @Override
-         public void onSuccess(Sound result) {
-         }
+         public void onSuccess(Sound result) {}
 
          @Override
          public void onFailure(Throwable cause) {
@@ -141,7 +143,8 @@ public class QueSabes extends Game.Default implements InputListener {
 
             final Image ruleta = assets().getImageSync("ruleta/" + path + "/0.png");
 
-            if (path.equals("X")) { // FIXME
+            if (path.equals("EVA") || path.equals("PERON") || path.equals("ALFONSIN")
+                  || path.equals("MARADONA")) { // FIXME
                final Image gana = assets().getImageSync("ruleta/" + path + "/GANA.png");
                final String ganaJson = assets().getTextSync("ruleta/" + path + "/GANA.json");
 
@@ -155,11 +158,11 @@ public class QueSabes extends Game.Default implements InputListener {
                      new Flipbook(new PackedFrames(gana, json().parse(ganaJson)), FPS),//
                      new Flipbook(new PackedFrames(pierde, json().parse(pierdeJson)), FPS),//
                      new Flipbook(new PackedFrames(saluda, json().parse(saludaJson)), FPS)//
-
                      // FIXME agregar tambien las preguntas
                      ));
-            }
 
+               System.out.println("cargado: " + path);
+            }
             else {
                personajes.add(new Personaje(ruleta, null, null, null));
             }

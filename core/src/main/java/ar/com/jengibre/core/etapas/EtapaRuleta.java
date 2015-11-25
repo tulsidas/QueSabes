@@ -28,7 +28,7 @@ public class EtapaRuleta extends AbstractEtapa {
 
    boolean timeout = false;
 
-   final int DELAY = 250;
+   final int DELAY = 350;
 
    public EtapaRuleta(Sector sector) {
       super(sector);
@@ -62,8 +62,7 @@ public class EtapaRuleta extends AbstractEtapa {
    }
 
    @Override
-   public void doPaint(Clock clock) {
-   }
+   public void doPaint(Clock clock) {}
 
    @Override
    public void update(int delta) {
@@ -77,7 +76,7 @@ public class EtapaRuleta extends AbstractEtapa {
    public void onPointerEnd(float x, float y) {
       if (elegido == null) {
          // elegido = rnd.pick(map.keySet(), null);
-         elegido = map.keySet().stream().filter((p) -> p.saluda() != null).findFirst().get();
+         elegido = rnd.pick(map.keySet().stream().filter((p) -> p.saluda() != null).iterator(), null);
 
          anim.clear();
 
@@ -107,11 +106,8 @@ public class EtapaRuleta extends AbstractEtapa {
          anim.play(QueSabes.saluda);
          anim.destroy(map.get(elegido)).then().add(layer, flipbookGroup).then()
                .flipbook(flipbookGroup, elegido.saluda()).then().delay(500).then().action(() -> {
-                  // destruyo todo lo agregado en esta etapa
-                     layer.destroyAll();
-
-                     sector.pregunta(elegido);
-                  });
+                  sector.pregunta(elegido);
+               });
       }
    }
 }

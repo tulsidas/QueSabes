@@ -28,7 +28,8 @@ public class EtapaBonus extends AbstractEtapa {
       // custom Flip
       arco = graphics().createImageLayer();
       arqueritoLayer.add(arco);
-      anim.repeat(arqueritoLayer).flipbook(arqueritoLayer, QueSabes.arquerito); // add(new ObservableFlip(image, QueSabes.arquerito));
+      anim.repeat(arqueritoLayer).flipbook(arqueritoLayer, QueSabes.arquerito); // add(new ObservableFlip(image,
+                                                                                // QueSabes.arquerito));
       // custom Flip
 
       pelota = graphics().createImageLayer(QueSabes.pelota0);
@@ -43,8 +44,7 @@ public class EtapaBonus extends AbstractEtapa {
    }
 
    @Override
-   public void doPaint(Clock clock) {
-   }
+   public void doPaint(Clock clock) {}
 
    @Override
    public void update(int delta) {
@@ -52,16 +52,15 @@ public class EtapaBonus extends AbstractEtapa {
 
       // fue gol? se fue lejos?
       if (pelotaLayer.tx() < 0 || pelotaLayer.tx() > Sector.WIDTH || pelotaLayer.ty() > Sector.HEIGHT) {
-         System.out.println("se fue al cazzo");
-         layer.destroyAll();
+         sector.ruleta();
       }
       // else if (pelotaLayer.ty() < 0) {
       // System.out.println("¿gol?");
-      // layer.destroyAll();
       // }
       else if (pelotaLayer.ty() < 220) {
          dx = 0;
          dy = 0;
+         sector.ruleta();
       }
    }
 

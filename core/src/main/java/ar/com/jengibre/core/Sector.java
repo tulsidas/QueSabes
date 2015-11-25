@@ -6,6 +6,7 @@ import playn.core.util.Clock;
 import ar.com.jengibre.core.etapas.AbstractEtapa;
 import ar.com.jengibre.core.etapas.EtapaBonus;
 import ar.com.jengibre.core.etapas.EtapaEsperandoOtros;
+import ar.com.jengibre.core.etapas.EtapaIdle;
 import ar.com.jengibre.core.etapas.EtapaJugandoOtros;
 import ar.com.jengibre.core.etapas.EtapaPregunta;
 import ar.com.jengibre.core.etapas.EtapaRuleta;
@@ -32,11 +33,11 @@ public class Sector {
          layer.removeAll();
       }
 
-      // etapa = new EtapaIdle(this);
+      etapa = new EtapaIdle(this);
       // etapa = new EtapaRuleta(this);
       // etapa = new EtapaPregunta(this, Randoms.with(new
       // Random()).getInRange(1, 9));
-      etapa = new EtapaBonus(this);
+      // etapa = new EtapaBonus(this);
       // etapa = new EtapaTest(this);
    }
 
@@ -65,27 +66,38 @@ public class Sector {
     */
    public void empezarJuego() {
       StartupLatch.sectorListoParaEmpezar();
-      etapa = new EtapaEsperandoOtros(this);
+      setEtapa(new EtapaEsperandoOtros(this));
    }
 
    /**
     * EsperandoOtros -> Ruleta
     */
    public void ruleta() {
-      etapa = new EtapaRuleta(this);
+      setEtapa(new EtapaRuleta(this));
    }
 
    /**
     * EsperandoOtros -> JugandoOtros
     */
    public void jugandoOtros() {
-      etapa = new EtapaJugandoOtros(this);
+      setEtapa(new EtapaJugandoOtros(this));
    }
 
    /**
     * Ruleta -> Pregunta
     */
    public void pregunta(Personaje personaje) {
-      etapa = new EtapaPregunta(this, personaje);
+      setEtapa(new EtapaPregunta(this, personaje));
+   }
+
+   /**
+    * Pregunta -> Arquerito
+    */
+   public void arquerito() {
+      setEtapa(new EtapaBonus(this));
+   }
+
+   private void setEtapa(AbstractEtapa nueva) {
+      etapa = nueva;
    }
 }

@@ -91,12 +91,10 @@ public class EtapaPregunta extends AbstractEtapa {
    }
 
    @Override
-   public void doPaint(Clock clock) {
-   }
+   public void doPaint(Clock clock) {}
 
    @Override
-   public void update(int delta) {
-   }
+   public void update(int delta) {}
 
    @Override
    public void onPointerEnd(float x, float y) {
@@ -121,8 +119,8 @@ public class EtapaPregunta extends AbstractEtapa {
 
       if (papelitos) {
          anim.play(QueSabes.gana);
-         layer.add(papelitosGroup);
-         anim.flipbook(papelitosGroup, QueSabes.papelitos);
+         // layer.add(papelitosGroup);
+         // anim.flipbook(papelitosGroup, QueSabes.papelitos);
       }
       else {
          anim.play(QueSabes.pierde);
@@ -131,10 +129,7 @@ public class EtapaPregunta extends AbstractEtapa {
       anim.addBarrier();
 
       anim.action(() -> {
-         // destruyo todo lo agregado en esta etapa
-         layer.destroyAll();
-
-         sector.ruleta();
+         sector.arquerito();
       });
    }
 }

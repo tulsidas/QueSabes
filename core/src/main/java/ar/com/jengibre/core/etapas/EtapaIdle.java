@@ -5,7 +5,6 @@ import static playn.core.PlayN.graphics;
 import playn.core.CanvasImage;
 import playn.core.util.Clock;
 import ar.com.jengibre.core.Sector;
-import ar.com.jengibre.core.StartupLatch;
 
 public class EtapaIdle extends AbstractEtapa {
 
@@ -19,9 +18,9 @@ public class EtapaIdle extends AbstractEtapa {
 
    @Override
    public void update(int delta) {
-      if (StartupLatch.empezoElJuego()) {
-         sector.jugandoOtros();
-      }
+      // if (StartupLatch.empezoElJuego()) {
+      // sector.jugandoOtros();
+      // }
    }
 
    @Override
@@ -31,6 +30,7 @@ public class EtapaIdle extends AbstractEtapa {
 
    @Override
    public void onPointerEnd(float x, float y) {
-      sector.empezarJuego();
+      // sector.empezarJuego();
+      sector.ruleta();
    }
 }
