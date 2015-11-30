@@ -33,11 +33,11 @@ public class Sector {
          layer.removeAll();
       }
 
-      etapa = new EtapaIdle(this);
+      // etapa = new EtapaIdle(this);
       // etapa = new EtapaRuleta(this);
       // etapa = new EtapaPregunta(this, Randoms.with(new
       // Random()).getInRange(1, 9));
-      // etapa = new EtapaBonus(this);
+      etapa = new EtapaBonus(this);
       // etapa = new EtapaTest(this);
    }
 

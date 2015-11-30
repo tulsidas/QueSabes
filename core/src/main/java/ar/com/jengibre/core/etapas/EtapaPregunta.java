@@ -41,8 +41,7 @@ public class EtapaPregunta extends AbstractEtapa {
 
       layer.add(graphics().createImageLayer(QueSabes.bgRuleta));
 
-      // FIXME Pregunta pregunta = QueSabes.preguntas.get(personaje);
-      Pregunta pregunta = rnd.pick(QueSabes.preguntas, null);
+      Pregunta pregunta = rnd.pick(personaje.preguntas(), null);
 
       CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
       cImg.canvas().setStrokeColor(Colors.YELLOW);
@@ -91,20 +90,22 @@ public class EtapaPregunta extends AbstractEtapa {
    }
 
    @Override
-   public void doPaint(Clock clock) {}
+   public void doPaint(Clock clock) {
+   }
 
    @Override
-   public void update(int delta) {}
+   public void update(int delta) {
+   }
 
    @Override
    public void onPointerEnd(float x, float y) {
       Layer hit = layer.hitTest(new Point(x, y));
 
       if (hit == respuesta1) {
-         showAnim(personaje.gana(), true);
+         showAnim(personaje.fbGana(), true);
       }
       else if (hit == respuesta2 || hit == respuesta3) {
-         showAnim(personaje.pierde(), false);
+         showAnim(personaje.fbPierde(), false);
       }
    }
 
@@ -118,12 +119,12 @@ public class EtapaPregunta extends AbstractEtapa {
       anim.flipbook(flipbookGroup, flipbook);
 
       if (papelitos) {
-         anim.play(QueSabes.gana);
+         anim.play(personaje.soundGana());
          // layer.add(papelitosGroup);
          // anim.flipbook(papelitosGroup, QueSabes.papelitos);
       }
       else {
-         anim.play(QueSabes.pierde);
+         anim.play(personaje.soundPierde());
       }
 
       anim.addBarrier();

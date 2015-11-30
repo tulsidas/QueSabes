@@ -62,7 +62,8 @@ public class EtapaRuleta extends AbstractEtapa {
    }
 
    @Override
-   public void doPaint(Clock clock) {}
+   public void doPaint(Clock clock) {
+   }
 
    @Override
    public void update(int delta) {
@@ -76,7 +77,7 @@ public class EtapaRuleta extends AbstractEtapa {
    public void onPointerEnd(float x, float y) {
       if (elegido == null) {
          // elegido = rnd.pick(map.keySet(), null);
-         elegido = rnd.pick(map.keySet().stream().filter((p) -> p.saluda() != null).iterator(), null);
+         elegido = rnd.pick(map.keySet().stream().filter((p) -> p.fbSaluda() != null).iterator(), null);
 
          anim.clear();
 
@@ -103,9 +104,9 @@ public class EtapaRuleta extends AbstractEtapa {
 
          anim.addBarrier(500);
 
-         anim.play(QueSabes.saluda);
+         anim.play(elegido.soundSaluda());
          anim.destroy(map.get(elegido)).then().add(layer, flipbookGroup).then()
-               .flipbook(flipbookGroup, elegido.saluda()).then().delay(500).then().action(() -> {
+               .flipbook(flipbookGroup, elegido.fbSaluda()).then().delay(500).then().action(() -> {
                   sector.pregunta(elegido);
                });
       }

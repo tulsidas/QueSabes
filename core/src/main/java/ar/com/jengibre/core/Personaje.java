@@ -1,34 +1,64 @@
 package ar.com.jengibre.core;
 
+import java.util.List;
+
 import playn.core.Image;
+import playn.core.Sound;
 import tripleplay.anim.Flipbook;
+
+import com.google.common.collect.ImmutableList;
 
 public class Personaje {
 
    private Image ruleta;
 
-   private Flipbook saluda, pierde, gana;
+   private Flipbook fbGana, fbPierde, fbSaluda;
 
-   public Personaje(Image ruleta, Flipbook gana, Flipbook pierde, Flipbook saluda) {
+   private Sound soundGana, soundPierde, soundSaluda;
+
+   private ImmutableList<Pregunta> preguntas;
+
+   public Personaje(Image ruleta, Flipbook fbGana, Flipbook fbPierde, Flipbook fbSaluda, Sound soundGana,
+         Sound soundPierde, Sound soundSaluda, List<Pregunta> preguntas) {
       this.ruleta = ruleta;
-      this.gana = gana;
-      this.pierde = pierde;
-      this.saluda = saluda;
+      this.fbGana = fbGana;
+      this.fbPierde = fbPierde;
+      this.fbSaluda = fbSaluda;
+      this.soundGana = soundGana;
+      this.soundPierde = soundPierde;
+      this.soundSaluda = soundSaluda;
+      this.preguntas = ImmutableList.copyOf(preguntas);
    }
 
    public Image imgRuleta() {
       return ruleta;
    }
 
-   public Flipbook gana() {
-      return gana;
+   public Flipbook fbGana() {
+      return fbGana;
    }
 
-   public Flipbook pierde() {
-      return pierde;
+   public Flipbook fbPierde() {
+      return fbPierde;
    }
 
-   public Flipbook saluda() {
-      return saluda;
+   public Flipbook fbSaluda() {
+      return fbSaluda;
+   }
+
+   public Sound soundGana() {
+      return soundGana;
+   }
+
+   public Sound soundPierde() {
+      return soundPierde;
+   }
+
+   public Sound soundSaluda() {
+      return soundSaluda;
+   }
+
+   public ImmutableList<Pregunta> preguntas() {
+      return preguntas;
    }
 }

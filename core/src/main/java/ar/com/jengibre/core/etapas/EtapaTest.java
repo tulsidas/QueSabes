@@ -12,12 +12,12 @@ public class EtapaTest extends AbstractEtapa {
    public EtapaTest(Sector sector) {
       super(sector);
 
-      Personaje personaje = QueSabes.personajes.stream().filter((p) -> p.saluda() != null).findFirst().get();
+      Personaje personaje = QueSabes.personajes.stream().filter((p) -> p.fbSaluda() != null).findFirst().get();
 
       GroupLayer box = graphics().createGroupLayer();
       layer.addAt(box, 0, 0);
       anim.delay(1000).then().repeat(box)
-            .flipbook(box, personaje.saluda());
+            .flipbook(box, personaje.fbSaluda());
    }
 
    @Override

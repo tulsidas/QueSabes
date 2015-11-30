@@ -19,6 +19,7 @@ import playn.core.Keyboard.Event;
 import playn.core.Layer;
 import playn.core.Pointer;
 import playn.core.Sound;
+import playn.core.json.JsonParserException;
 import playn.core.util.Callback;
 import playn.core.util.Clock;
 import pythagoras.f.Point;
@@ -47,13 +48,9 @@ public class QueSabes extends Game.Default implements InputListener {
 
    // private Sector s1, s2, s3, s4;
 
-   public static List<Pregunta> preguntas;
-
    public static List<Personaje> personajes;
 
    public static Flipbook papelitos, arquerito, pelota;
-
-   public static Sound gana, pierde, saluda;
 
    public static Image bgIdle, bgRuleta, bgArquerito;
 
@@ -85,9 +82,11 @@ public class QueSabes extends Game.Default implements InputListener {
 
       pelota0 = assets().getImageSync("images/pelota0.png");
 
-      Callback<Sound> sndCallback = new Callback<Sound>() {
+      final Callback<Sound> sndCallback = new Callback<Sound>() {
          @Override
-         public void onSuccess(Sound result) {}
+         public void onSuccess(Sound result) {
+            result.prepare();
+         }
 
          @Override
          public void onFailure(Throwable cause) {
@@ -96,75 +95,40 @@ public class QueSabes extends Game.Default implements InputListener {
          }
       };
 
-      gana = assets().getSound("sfx/gana");
-      gana.addCallback(sndCallback);
-      pierde = assets().getSound("sfx/pierde");
-      pierde.addCallback(sndCallback);
-      saluda = assets().getSound("sfx/saluda");
-      saluda.addCallback(sndCallback);
-
       try {
-         preguntas = new ArrayList<>();
-         Json.Array arrayPreguntas = json().parseArray(assets().getTextSync("preguntas/preguntas.json"));
-
-         for (int i = 0; i < arrayPreguntas.length(); i++) {
-            Json.Object obj = arrayPreguntas.getObject(i);
-
-            String pregunta = obj.getString("pregunta");
-            Json.Array arrayRespuestas = obj.getArray("respuestas");
-            List<String> respuestas = new ArrayList<>();
-
-            for (int j = 0; j < arrayRespuestas.length(); j++) {
-               respuestas.add(arrayRespuestas.getString(j));
-            }
-
-            preguntas.add(new Pregunta(pregunta, respuestas));
-         }
-      }
-      catch (Exception e) {
-         System.err.println(e);
-         System.exit(1);
-      }
-
-      try {
-         papelitos = new Flipbook(new PackedFrames(assets().getImageSync("ruleta/papelitos.png"), json()
-               .parse(assets().getTextSync("ruleta/papelitos.json"))), FPS);
-
-         arquerito = new Flipbook(new PackedFrames(assets().getImageSync("images/arquerito.png"), json()
-               .parse(assets().getTextSync("images/arquerito.json"))), FPS * 3);
-
-         pelota = new Flipbook(new PackedFrames(assets().getImageSync("images/pelota.png"), json().parse(
-               assets().getTextSync("images/pelota.json"))), FPS * 3);
+         papelitos = cargarFlipbook("ruleta/papelitos", FPS);
+         arquerito = cargarFlipbook("images/arquerito", FPS * 3);
+         pelota = cargarFlipbook("images/pelota", FPS * 3);
 
          // PERSONAJES
          personajes = Lists.newArrayList();
-         for (String path : Lists.newArrayList("ALFONSIN", "DEMIDI", "EVA", "GINOBILI", "MARADONA", "MENDEZ",
-               "PERON", "PUMA", "SELFIE")) {
+         for (String path : Lists.newArrayList("ALFONSIN", "DEMIDI", "GINOBILI", "MARADONA", "MENDEZ",
+               "PERON", "PUMA", "VILAS", "FANGIO")) {
 
-            final Image ruleta = assets().getImageSync("ruleta/" + path + "/0.png");
+            final Image imgRuleta = assets().getImageSync("ruleta/" + path + "/0.png");
 
-            if (path.equals("EVA") || path.equals("PERON") || path.equals("ALFONSIN")
-                  || path.equals("MARADONA")) { // FIXME
-               final Image gana = assets().getImageSync("ruleta/" + path + "/GANA.png");
-               final String ganaJson = assets().getTextSync("ruleta/" + path + "/GANA.json");
+            Sound gana = assets().getSound("ruleta/" + path + "/GANA");
+            gana.addCallback(sndCallback);
+            Sound pierde = assets().getSound("ruleta/" + path + "/PIERDE");
+            pierde.addCallback(sndCallback);
+            Sound saluda = assets().getSound("ruleta/" + path + "/SALUDA");
+            saluda.addCallback(sndCallback);
 
-               final Image pierde = assets().getImageSync("ruleta/" + path + "/PIERDE.png");
-               final String pierdeJson = assets().getTextSync("ruleta/" + path + "/PIERDE.json");
-
-               final Image saluda = assets().getImageSync("ruleta/" + path + "/SALUDA.png");
-               final String saludaJson = assets().getTextSync("ruleta/" + path + "/SALUDA.json");
-
-               personajes.add(new Personaje(ruleta,//
-                     new Flipbook(new PackedFrames(gana, json().parse(ganaJson)), FPS),//
-                     new Flipbook(new PackedFrames(pierde, json().parse(pierdeJson)), FPS),//
-                     new Flipbook(new PackedFrames(saluda, json().parse(saludaJson)), FPS)//
-                     // FIXME agregar tambien las preguntas
-                     ));
+            // if (path.equals("PERON") || path.equals("GINOBILI") ||
+            // path.equals("ALFONSIN") || path.equals("DEMIDI") ||
+            // path.equals("MENDEZ")) { // FIXME
+            if (path.equals("XXX")) { // FIXME
+               personajes.add(new Personaje(imgRuleta,//
+                     cargarFlipbook("ruleta/" + path + "/GANA", FPS),//
+                     cargarFlipbook("ruleta/" + path + "/PIERDE", FPS),//
+                     cargarFlipbook("ruleta/" + path + "/SALUDA", FPS),//
+                     gana, pierde, saluda, cargarPreguntas(path)));
 
                System.out.println("cargado: " + path);
             }
             else {
-               personajes.add(new Personaje(ruleta, null, null, null));
+               personajes
+                     .add(new Personaje(imgRuleta, null, null, null, null, null, null, new ArrayList<>()));
             }
          }
 
@@ -244,7 +208,7 @@ public class QueSabes extends Game.Default implements InputListener {
       // System.out.println("delta=" + delta);
       // }
 
-      delta = 40; // TODO ???
+      // delta = 40; // TODO ???
 
       clock.update(delta);
 
@@ -265,6 +229,44 @@ public class QueSabes extends Game.Default implements InputListener {
       // s2.paint(clock);
       s3.paint(clock);
       // s4.paint(clock);
+   }
+
+   private Flipbook cargarFlipbook(String path, int fps) throws JsonParserException, Exception {
+      // obtengo imagen
+      Image img = assets().getImageSync(path + ".png");
+
+      // creo la textura
+      img.ensureTexture();
+
+      return new Flipbook(new PackedFrames(img, json().parse(assets().getTextSync(path + ".json"))), fps);
+   }
+
+   private List<Pregunta> cargarPreguntas(String path) {
+      List<Pregunta> preguntas = new ArrayList<>();
+      try {
+         Json.Array arrayPreguntas = json().parseArray(
+               assets().getTextSync("ruleta/" + path + "/preguntas.json"));
+
+         for (int i = 0; i < arrayPreguntas.length(); i++) {
+            Json.Object obj = arrayPreguntas.getObject(i);
+
+            String pregunta = obj.getString("pregunta");
+            Json.Array arrayRespuestas = obj.getArray("respuestas");
+            List<String> respuestas = new ArrayList<>();
+
+            for (int j = 0; j < arrayRespuestas.length(); j++) {
+               respuestas.add(arrayRespuestas.getString(j));
+            }
+
+            preguntas.add(new Pregunta(pregunta, respuestas));
+         }
+      }
+      catch (Exception e) {
+         System.err.println(e);
+         System.exit(1);
+      }
+
+      return preguntas;
    }
 
    private Sector getSector(float x, float y) {
