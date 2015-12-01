@@ -120,8 +120,8 @@ public class EtapaPregunta extends AbstractEtapa {
 
       if (papelitos) {
          anim.play(personaje.soundGana());
-         // layer.add(papelitosGroup);
-         // anim.flipbook(papelitosGroup, QueSabes.papelitos);
+         layer.add(papelitosGroup);
+         anim.flipbook(papelitosGroup, QueSabes.papelitos);
       }
       else {
          anim.play(personaje.soundPierde());
