@@ -5,16 +5,12 @@ import static playn.core.PlayN.graphics;
 import java.util.List;
 import java.util.Map;
 
-import playn.core.Canvas;
-import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.ImageLayer;
 import playn.core.util.Clock;
 import pythagoras.f.Circle;
 import pythagoras.f.Point;
 import pythagoras.f.Vector;
-import pythagoras.f.Vectors;
-import tripleplay.util.Colors;
 import ar.com.jengibre.core.QueSabes;
 import ar.com.jengibre.core.Sector;
 import ar.com.jengibre.core.util.ObservableFlip;
@@ -39,7 +35,7 @@ public class EtapaBonus extends AbstractEtapa {
 
    // //////////////////////////////////////////////////////
 
-   private CanvasImage bb;
+   // private CanvasImage bb;
 
    public EtapaBonus(Sector sector) {
       super(sector);
@@ -50,7 +46,6 @@ public class EtapaBonus extends AbstractEtapa {
       layer.add(arqueritoLayer);
 
       arco = graphics().createImageLayer();
-      // QueSabes.arquerito.frames.apply(17, arco);
       arcoFlip = anim.repeat(arqueritoLayer).add(new ObservableFlip(arco, QueSabes.arquerito));
       arqueritoLayer.add(arco);
 
@@ -64,20 +59,53 @@ public class EtapaBonus extends AbstractEtapa {
 
       // timeout que avanza el juego por si abandonan o tardan mucho
       // anim.delay(TIMEOUT).then().action(() -> timeout = true);
-      bb = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
-      layer.add(graphics().createImageLayer(bb));
+
+      // bb = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
+      // layer.add(graphics().createImageLayer(bb));
    }
 
    @Override
    public void doPaint(Clock clock) {
-      Canvas c = bb.canvas();
-      c.clear();
+      // Canvas c = bb.canvas();
+      // c.clear();
+      //
+      // c.setStrokeWidth(2);
+      // c.setStrokeColor(Colors.YELLOW);
+      // c.drawLine(350, 0, 350, Sector.HEIGHT);
+      // c.drawLine(620, 0, 620, Sector.HEIGHT);
+      // c.drawLine(0, 160, Sector.WIDTH, 160);
+   }
 
-      c.setStrokeWidth(2);
+   private boolean checkCollision(Circle c) {
+      float px = pelotaLayer.tx() + pw2;
+      float py = pelotaLayer.ty() + pw2;
 
+      // oc = arco
+      Vector dc = new Vector(px - c.x, py - c.y);
+      float dist2 = dc.x * dc.x + dc.y * dc.y;
+
+      if (dist2 < (c.radius + pw2) * (c.radius + pw2)) {
+         // Compute dot = dc.x*vx+dcy*vy and dot = dot/dist2
+         float dot = dc.x * dx + dc.y * dy;
+         dot = dot / dist2;
+
+         // Update vx = vx - 2*dot*dc.x, vy = vy - 2*dot*dc.y
+         dx = dx - 2 * dot * dc.x;
+         dy = dy - 2 * dot * dc.y;
+
+         pelotaLayer.setTranslation(pelotaLayer.tx() + dx, pelotaLayer.ty() + dy);
+
+         return true;
+      }
+      else {
+         return false;
+      }
+   }
+
+   @Override
+   public void update(int delta) {
       List<Circle> circles = Lists.newArrayList();
       int frame = arcoFlip.getFrame();
-      c.setFillColor(Colors.YELLOW);
       // palo izq
       if (frame < 11) {
          circles.add(new Circle(328, 210, 20));
@@ -102,91 +130,36 @@ public class EtapaBonus extends AbstractEtapa {
 
       // arquero
       for (Circle cir : circles) {
-         c.fillCircle(cir.x, cir.y, cir.radius);
-
          if (checkCollision(cir)) {
-            break;
+            break; // una colisión a lo sumo
          }
       }
 
-      // pelota
-      // c.setFillColor(Colors.GREEN);
-      // c.fillCircle(pelotaLayer.tx() + pw2, pelotaLayer.ty() + pw2, pw2);
-   }
-
-   private boolean checkCollision(Circle c) {
-      float px = pelotaLayer.tx() + pw2;
-      float py = pelotaLayer.ty() + pw2;
-
-      double distance = ((c.x - px) * (c.x - px)) + ((c.y - py) * (c.y - py));
-      if (distance < (c.radius + pw2) * (c.radius + pw2)) {
-         // balls have collided
-
-         float collisionPointX = ((c.x * pw2) + (px * c.radius)) / (c.radius + pw2);
-         float collisionPointY = ((c.y * pw2) + (py * c.radius)) / (c.radius + pw2);
-
-         bb.canvas().setFillColor(Colors.BLACK);
-         bb.canvas().fillCircle(collisionPointX, collisionPointY, 3);
-
-         float cmass = 5;
-         float pmass = 1;
-         float cspeedx = 1;
-         float cspeedy = 1;
-
-         float newVelX2 = (dx * (pmass - cmass) + (2 * cmass * cspeedx)) / (cmass + pmass);
-         float newVelY2 = (dy * (pmass - cmass) + (2 * cmass * cspeedy)) / (cmass + pmass);
-
-         dx = newVelX2;
-         dy = newVelY2;
-
-         pelotaLayer.setTranslation(pelotaLayer.tx() + dx, pelotaLayer.ty() + dy);
-
-         return true;
-      }
-      else {
-         return false;
-      }
-   }
-
-   @Override
-   public void update(int delta) {
       if (dx != 0 && dy != 0) {
          pelotaLayer.setTranslation(pelotaLayer.tx() + dx, pelotaLayer.ty() + dy);
 
-         // if (bbCollision()) {
-         // System.out.println("colisión!");
-         // dx = 0;
-         // dy = 0;
-         // }
+         float px = pelotaLayer.tx();
+         float py = pelotaLayer.ty();
 
-         /*
          // fue gol? se fue lejos?
-         if (pelotaLayer.tx() < 0 || pelotaLayer.tx() > Sector.WIDTH || pelotaLayer.ty() > Sector.HEIGHT) {
-            sector.ruleta();
-         }
-         // else if (pelotaLayer.ty() < 0) {
-         // System.out.println("¿gol?");
-         // }
-         else if (pelotaLayer.ty() < 220) {
+         if (px < 0 || px > Sector.WIDTH || py > Sector.HEIGHT) {
+            System.out.println("out");
             dx = 0;
             dy = 0;
-            // sector.ruleta();
-            sector.arquerito();
+
+            // TODO animacion + sfx
+
+            sector.ruleta();
          }
-         */
+         else if (py < 160 && px > 350 && px - pelota.width() < 620) {
+            System.out.println("gol");
+            dx = 0;
+            dy = 0;
 
-         // y entre 220 y 160 -> gol
-         // x entre 300 y 600 -> gol
+            // TODO animacion + sfx
 
-         // if (pelotaLayer.ty() < 160) {
-         // dx = 0;
-         // dy = 0;
-         // }
-         // else if (pelotaLayer.tx() < -pelota.width() || pelotaLayer.tx() >
-         // Sector.WIDTH) {
-         // dx = 0;
-         // dy = 0;
-         // }
+            sector.ruleta();
+         }
       }
    }
 
@@ -197,7 +170,7 @@ public class EtapaBonus extends AbstractEtapa {
       }
    }
 
-   private static final float MAX = 25 - 20; // FIXME
+   private static final float MAX = 25;
 
    @Override
    public void onPointerEnd(float x, float y) {
@@ -215,7 +188,6 @@ public class EtapaBonus extends AbstractEtapa {
 
          // ya no se puede volver a patear
          tocoPelota = false;
-         // pelota.destroy();
 
          // la pelota ahora gira en direccion a donde fue pateada
          // float angulo = (float) Math.atan2(dy, dx);
