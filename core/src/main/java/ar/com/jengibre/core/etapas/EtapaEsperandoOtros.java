@@ -18,7 +18,7 @@ public class EtapaEsperandoOtros extends AbstractEtapa {
    @Override
    public void update(int delta) {
       if (StartupLatch.empezoElJuego()) {
-         sector.ruleta();
+         sector.ruleta(false); // sin ganar medalla
       }
    }
 }

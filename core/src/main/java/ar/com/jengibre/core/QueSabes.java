@@ -52,9 +52,13 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static Flipbook papelitos, arquerito, pelota;
 
-   public static Image bgIdle, bgRuleta, bgArquerito;
+   public static Image bgIdle, bgRuleta, bgPregunta, bgArquerito;
 
-   public static Image pelota0;
+   public static Image pelota0, bonus, gol, medalla, gracias;
+
+   public static Image pulgarArriba, pulgarAbajo;
+
+   public static Sound nogol, gol1, gol2, palo, ruleta, tuc;
 
    public QueSabes() {
       super(UPDATE_RATE); // 25 FPS
@@ -69,18 +73,23 @@ public class QueSabes extends Game.Default implements InputListener {
       // }
    }
 
-   /* (non-Javadoc)
-    * @see playn.core.Game#init()
-    */
    @Override
    public void init() {
       graphics().rootLayer().removeAll();
 
-      bgIdle = assets().getImageSync("images/idle.png");
-      bgRuleta = assets().getImageSync("images/ruleta.png");
+      bgIdle = assets().getImageSync("images/bgIdle.png");
+      bgRuleta = assets().getImageSync("images/bgRuleta.png");
+      bgPregunta = assets().getImageSync("images/bgPregunta.png");
       bgArquerito = assets().getImageSync("images/bgArquerito.png");
 
       pelota0 = assets().getImageSync("images/pelota0.png");
+      bonus = assets().getImageSync("images/bonus.png");
+      gol = assets().getImageSync("images/gol.png");
+      medalla = assets().getImageSync("images/medalla.png");
+      gracias = assets().getImageSync("images/gracias.png");
+
+      // pulgarArriba = assets().getImageSync("images/pulgar_arriba.png");
+      pulgarAbajo = assets().getImageSync("images/pulgar_abajo.png");
 
       final Callback<Sound> sndCallback = new Callback<Sound>() {
          @Override
@@ -100,6 +109,19 @@ public class QueSabes extends Game.Default implements InputListener {
          arquerito = cargarFlipbook("images/arquerito", FPS * 3);
          pelota = cargarFlipbook("images/pelota", FPS * 3);
 
+         nogol = assets().getSound("sfx/nogol");
+         nogol.addCallback(sndCallback);
+         gol1 = assets().getSound("sfx/gol1");
+         gol1.addCallback(sndCallback);
+         gol2 = assets().getSound("sfx/gol2");
+         gol2.addCallback(sndCallback);
+         palo = assets().getSound("sfx/palo");
+         palo.addCallback(sndCallback);
+         ruleta = assets().getSound("sfx/ruleta");
+         ruleta.addCallback(sndCallback);
+         tuc = assets().getSound("sfx/tuc");
+         tuc.addCallback(sndCallback);
+
          // PERSONAJES
          personajes = Lists.newArrayList();
          for (String path : Lists.newArrayList("ALFONSIN", "DEMIDI", "GINOBILI", "MARADONA", "MENDEZ",
@@ -114,10 +136,9 @@ public class QueSabes extends Game.Default implements InputListener {
             Sound saluda = assets().getSound("ruleta/" + path + "/SALUDA");
             saluda.addCallback(sndCallback);
 
-            // if (path.equals("PERON") || path.equals("GINOBILI") ||
-            // path.equals("ALFONSIN") || path.equals("DEMIDI") ||
-            // path.equals("MENDEZ")) { // FIXME
-            if (path.equals("XXX")) { // FIXME
+            if (path.equals("ALFONSIN")) { // || path.equals("GINOBILI") ||
+                                           // path.equals("ALFONSIN")
+               // || path.equals("DEMIDI") || path.equals("MENDEZ")) { // FIXME
                personajes.add(new Personaje(imgRuleta,//
                      cargarFlipbook("ruleta/" + path + "/GANA", FPS),//
                      cargarFlipbook("ruleta/" + path + "/PIERDE", FPS),//

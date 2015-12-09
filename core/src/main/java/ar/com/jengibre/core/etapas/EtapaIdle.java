@@ -1,9 +1,8 @@
 package ar.com.jengibre.core.etapas;
 
-import static ar.com.jengibre.core.QueSabes.bgIdle;
 import static playn.core.PlayN.graphics;
-import playn.core.CanvasImage;
 import playn.core.util.Clock;
+import ar.com.jengibre.core.QueSabes;
 import ar.com.jengibre.core.Sector;
 
 public class EtapaIdle extends AbstractEtapa {
@@ -11,9 +10,7 @@ public class EtapaIdle extends AbstractEtapa {
    public EtapaIdle(Sector sector) {
       super(sector);
 
-      CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
-      cImg.canvas().drawImage(bgIdle, 0, 0);
-      layer.add(graphics().createImageLayer(cImg));
+      layer.add(graphics().createImageLayer(QueSabes.bgIdle));
    }
 
    @Override
@@ -30,7 +27,7 @@ public class EtapaIdle extends AbstractEtapa {
 
    @Override
    public void onPointerEnd(float x, float y) {
-      // sector.empezarJuego();
-      sector.ruleta();
+      sector.empezarJuego();
+      // sector.ruleta();
    }
 }

@@ -109,7 +109,7 @@ public class EtapaPregunta extends AbstractEtapa {
       }
    }
 
-   private void showAnim(Flipbook flipbook, boolean papelitos) {
+   private void showAnim(Flipbook flipbook, boolean ganoMedalla) {
       preguntaLayer.destroy();
       respuesta1.destroy();
       respuesta2.destroy();
@@ -118,7 +118,7 @@ public class EtapaPregunta extends AbstractEtapa {
       layer.add(flipbookGroup);
       anim.flipbook(flipbookGroup, flipbook);
 
-      if (papelitos) {
+      if (ganoMedalla) {
          anim.play(personaje.soundGana());
          layer.add(papelitosGroup);
          anim.flipbook(papelitosGroup, QueSabes.papelitos);
@@ -130,7 +130,7 @@ public class EtapaPregunta extends AbstractEtapa {
       anim.addBarrier();
 
       anim.action(() -> {
-         sector.arquerito();
+         sector.arquerito(ganoMedalla);
       });
    }
 }

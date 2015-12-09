@@ -21,6 +21,8 @@ public class Sector {
 
    public static final int HEIGHT = 540;
 
+   private int medallas;
+
    public Sector() {
       reload();
    }
@@ -33,11 +35,11 @@ public class Sector {
          layer.removeAll();
       }
 
-      // etapa = new EtapaIdle(this);
+      etapa = new EtapaIdle(this);
       // etapa = new EtapaRuleta(this);
       // etapa = new EtapaPregunta(this, Randoms.with(new
       // Random()).getInRange(1, 9));
-      etapa = new EtapaBonus(this);
+      // etapa = new EtapaBonus(this);
       // etapa = new EtapaTest(this);
    }
 
@@ -70,9 +72,13 @@ public class Sector {
    }
 
    /**
-    * EsperandoOtros -> Ruleta
+    * (EsperandoOtros|Arquerito) -> Ruleta
     */
-   public void ruleta() {
+   public void ruleta(boolean ganoMedalla) {
+      if (ganoMedalla) {
+         medallas++;
+      }
+
       setEtapa(new EtapaRuleta(this));
    }
 
@@ -93,11 +99,19 @@ public class Sector {
    /**
     * Pregunta -> Arquerito
     */
-   public void arquerito() {
+   public void arquerito(boolean ganoMedalla) {
+      if (ganoMedalla) {
+         medallas++;
+      }
+
       setEtapa(new EtapaBonus(this));
    }
 
    private void setEtapa(AbstractEtapa nueva) {
       etapa = nueva;
+   }
+
+   public int medallas() {
+      return medallas;
    }
 }

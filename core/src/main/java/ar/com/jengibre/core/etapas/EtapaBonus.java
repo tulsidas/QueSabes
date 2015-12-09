@@ -131,6 +131,8 @@ public class EtapaBonus extends AbstractEtapa {
       // arquero
       for (Circle cir : circles) {
          if (checkCollision(cir)) {
+            QueSabes.palo.play();
+
             break; // una colisión a lo sumo
          }
       }
@@ -142,23 +144,11 @@ public class EtapaBonus extends AbstractEtapa {
          float py = pelotaLayer.ty();
 
          // fue gol? se fue lejos?
-         if (px < 0 || px > Sector.WIDTH || py > Sector.HEIGHT) {
-            System.out.println("out");
-            dx = 0;
-            dy = 0;
-
-            // TODO animacion + sfx
-
-            sector.ruleta();
+         if (px < 0 || px > Sector.WIDTH || py > Sector.HEIGHT || py < 0) {
+            fuera();
          }
-         else if (py < 160 && px > 350 && px - pelota.width() < 620) {
-            System.out.println("gol");
-            dx = 0;
-            dy = 0;
-
-            // TODO animacion + sfx
-
-            sector.ruleta();
+         else if (py < 160 && px > 330 && px - pelota.width() < 630) {
+            gol();
          }
       }
    }
@@ -189,6 +179,8 @@ public class EtapaBonus extends AbstractEtapa {
          // ya no se puede volver a patear
          tocoPelota = false;
 
+         QueSabes.tuc.play();
+
          // la pelota ahora gira en direccion a donde fue pateada
          // float angulo = (float) Math.atan2(dy, dx);
          // pelota.setRotation(angulo);
@@ -196,7 +188,58 @@ public class EtapaBonus extends AbstractEtapa {
       }
    }
 
-   Map<Integer, List<Circle>> arquero = ImmutableMap
+   private void fuera() {
+      dx = 0;
+      dy = 0;
+
+      QueSabes.nogol.play();
+
+      arcoFlip.handle().cancel();
+
+      ImageLayer pulgares = graphics().createImageLayer(QueSabes.pulgarAbajo);
+      pulgares.setOrigin(pulgares.width() / 2, pulgares.height() / 2);
+      layer.addAt(pulgares, Sector.WIDTH / 2, Sector.HEIGHT / 2);
+
+      anim.tweenScale(pulgares).from(0).to(1).in(2000).easeOutElastic();
+      anim.tweenRotation(pulgares).from(0).to(-0.5F).in(500).easeOut().then().tweenRotation(pulgares)
+            .to(0.5F).in(500).easeOut().then().tweenRotation(pulgares).to(0).in(500).easeOut();
+
+      anim.delay(3500).then().action(
+      // () -> sector.arquerito(false)
+            () -> sector.ruleta(false) // sin medalla
+            );
+   }
+
+   private void gol() {
+      dx = 0;
+      dy = 0;
+
+      if (rnd.getBoolean()) {
+         QueSabes.gol1.play();
+      }
+      else {
+         QueSabes.gol2.play();
+      }
+
+      arcoFlip.handle().cancel();
+
+      ImageLayer gol = graphics().createImageLayer(QueSabes.gol);
+      gol.setOrigin(gol.width() / 2, gol.height() / 2);
+      layer.addAt(gol, Sector.WIDTH / 2, Sector.HEIGHT / 2);
+      ImageLayer medalla = graphics().createImageLayer(QueSabes.medalla);
+      medalla.setOrigin(medalla.width() / 2, medalla.height() / 2);
+
+      anim.tweenScale(gol).from(0).to(0.8F).in(2000).easeOutElastic().then()
+            .addAt(layer, medalla, Sector.WIDTH / 2, Sector.HEIGHT / 2).then().tweenScale(medalla).from(2)
+            .to(0.6F).in(500).easeOutBack();
+
+      anim.delay(3500).then().action(
+            // () -> sector.arquerito(false)
+            () -> sector.ruleta(true) // con medalla
+         );
+   }
+
+   private final Map<Integer, List<Circle>> arquero = ImmutableMap
          .<Integer, List<Circle>> builder()
          .put(0,
                ImmutableList.of(new Circle(475, 176, 14), new Circle(473, 198, 13), new Circle(472, 220, 13)))
