@@ -1,47 +1,71 @@
 package ar.com.jengibre.core;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 /**
- * todo estático, viene a ser un Object de Scala
+ * todo estático, viene a ser un object de Scala
  */
 public class StartupLatch {
 
-   private static int milisHastaElComienzo;
+   private static final int TIMEOUT = /*10*/3_000;
 
-   private static int sectoresListos;
+   private static Multimap<Integer, Sector> equipos;
+
+   // a qué equipo se unen los que tocan ahora
+   private static int equipoActual;
+
+   private static int counter = 0;
 
    static {
       reset();
    }
 
    public static void reset() {
-      milisHastaElComienzo = -1;
-      sectoresListos = 0;
+      equipos = HashMultimap.create();
+      equipoActual = 1;
    }
 
-   /**
-    * un sector tocó la pantalla y está listo para empezar, arranca el timer si
-    * es que no arrancó aún
-    */
-   public static void sectorListoParaEmpezar() {
-      sectoresListos++;
+   public static int sectorListoParaEmpezar(Sector sector) {
+      // se sumó uno al equipo actual
+      equipos.get(equipoActual).forEach(sectorActual -> sectorActual.sumoseUno());
 
-      if (milisHastaElComienzo == -1) {
-         // FIXME milisHastaElComienzo = 10_000;
-         milisHastaElComienzo = 2_000;
+      equipos.put(equipoActual, sector);
+
+      System.out.println(equipos);
+
+      // arranco el timer
+      if (counter <= 0) {
+         counter = TIMEOUT;
       }
-   }
 
-   public static int segundosHastaElComienzo() {
-      return (int) (milisHastaElComienzo / 1000);
-   }
-
-   public static boolean empezoElJuego() {
-      return sectoresListos == 4 || milisHastaElComienzo == 0;
+      // devuelvo cuántos hay en este equipo
+      return equipos.get(equipoActual).size();
    }
 
    public static void update(int delta) {
-      if (milisHastaElComienzo > 0) {
-         milisHastaElComienzo = Math.max(0, milisHastaElComienzo - delta);
+      if (counter > 0) {
+         counter -= delta;
+
+         if (counter <= 0) {
+            // aviso que arranquen los sectores de equipoActual
+            equipos.get(equipoActual).forEach(sector -> sector.ruleta());
+
+            // nuevo equipo
+            equipoActual++;
+
+            System.out.println("equipoActual = " + equipoActual);
+
+            counter = 0;
+         }
       }
+   }
+
+   public static int counter() {
+      return counter;
+   }
+
+   private static int lugaresDisponibles() {
+      return 4 - equipos.size();
    }
 }

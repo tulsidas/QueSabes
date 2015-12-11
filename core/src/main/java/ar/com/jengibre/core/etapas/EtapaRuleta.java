@@ -8,7 +8,6 @@ import java.util.Map;
 
 import playn.core.GroupLayer;
 import playn.core.ImageLayer;
-import playn.core.util.Clock;
 import ar.com.jengibre.core.Personaje;
 import ar.com.jengibre.core.QueSabes;
 import ar.com.jengibre.core.Sector;
@@ -18,15 +17,11 @@ import com.google.common.collect.Maps;
 
 public class EtapaRuleta extends AbstractEtapa {
 
-   static final int TIMEOUT = 10_000;
-
    Map<Personaje, ImageLayer> map = Maps.newHashMap();
 
    GroupLayer flipbookGroup; // aca va el flipbook
 
    Personaje elegido = null;
-
-   boolean timeout = false;
 
    final int DELAY = 350;
 
@@ -56,21 +51,11 @@ public class EtapaRuleta extends AbstractEtapa {
 
          anim.repeat(img).tweenRotation(img).to(2 * PI + img.rotation()).in(DELAY * images.size());
       }
-
-      // timeout que avanza el juego por si abandonan o tardan mucho
-      // anim.delay(TIMEOUT).then().action(() -> timeout = true);
    }
 
    @Override
-   public void doPaint(Clock clock) {
-   }
-
-   @Override
-   public void update(int delta) {
-      if (timeout) {
-         onPointerEnd(0, 0);
-         timeout = false;
-      }
+   public void timeout() {
+      onPointerEnd(0, 0);
    }
 
    @Override

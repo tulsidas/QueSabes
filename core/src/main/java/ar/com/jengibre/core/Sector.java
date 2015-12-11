@@ -7,7 +7,6 @@ import ar.com.jengibre.core.etapas.AbstractEtapa;
 import ar.com.jengibre.core.etapas.EtapaBonus;
 import ar.com.jengibre.core.etapas.EtapaEsperandoOtros;
 import ar.com.jengibre.core.etapas.EtapaIdle;
-import ar.com.jengibre.core.etapas.EtapaJugandoOtros;
 import ar.com.jengibre.core.etapas.EtapaPregunta;
 import ar.com.jengibre.core.etapas.EtapaRuleta;
 
@@ -21,9 +20,15 @@ public class Sector {
 
    public static final int HEIGHT = 540;
 
+   private String nombre;
+
+   // cuantas rondas (ruleta->pregunta->arquerito) completó
+   private int rondas;
+
    private int medallas;
 
-   public Sector() {
+   public Sector(String nombre) {
+      this.nombre = nombre;
       reload();
    }
 
@@ -35,10 +40,11 @@ public class Sector {
          layer.removeAll();
       }
 
+      rondas = 0;
+      medallas = 0;
+
       etapa = new EtapaIdle(this);
       // etapa = new EtapaRuleta(this);
-      // etapa = new EtapaPregunta(this, Randoms.with(new
-      // Random()).getInRange(1, 9));
       // etapa = new EtapaBonus(this);
       // etapa = new EtapaTest(this);
    }
@@ -67,26 +73,15 @@ public class Sector {
     * Idle -> EsperandoOtros
     */
    public void empezarJuego() {
-      StartupLatch.sectorListoParaEmpezar();
-      setEtapa(new EtapaEsperandoOtros(this));
+      int cuantos = StartupLatch.sectorListoParaEmpezar(this);
+      setEtapa(new EtapaEsperandoOtros(this, cuantos));
    }
 
    /**
     * (EsperandoOtros|Arquerito) -> Ruleta
     */
-   public void ruleta(boolean ganoMedalla) {
-      if (ganoMedalla) {
-         medallas++;
-      }
-
+   public void ruleta() {
       setEtapa(new EtapaRuleta(this));
-   }
-
-   /**
-    * EsperandoOtros -> JugandoOtros
-    */
-   public void jugandoOtros() {
-      setEtapa(new EtapaJugandoOtros(this));
    }
 
    /**
@@ -107,11 +102,44 @@ public class Sector {
       setEtapa(new EtapaBonus(this));
    }
 
-   private void setEtapa(AbstractEtapa nueva) {
-      etapa = nueva;
+   public void finArquerito(boolean ganoMedalla) {
+      if (ganoMedalla) {
+         medallas++;
+      }
+
+      // termino una ronda
+      rondas++;
+
+      if (rondas == 3) {
+         // FIXME esperandoFinOtros();
+         // FIXME medallero();
+         System.out.println("GAME OVER para " + nombre + " | " + medallas + " medallas");
+      }
+      else {
+         // a la ruleta
+         ruleta();
+      }
+   }
+
+   /**
+    * cuando se suma alguien a mi equipo en la etapa EsperandoOtros
+    */
+   public void sumoseUno() {
+      if (etapa instanceof EtapaEsperandoOtros) {
+         ((EtapaEsperandoOtros) etapa).sumoseUno();
+      }
    }
 
    public int medallas() {
       return medallas;
+   }
+
+   @Override
+   public String toString() {
+      return "[Sector] " + nombre;
+   }
+
+   private void setEtapa(AbstractEtapa nueva) {
+      etapa = nueva;
    }
 }

@@ -11,7 +11,6 @@ import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.TextFormat;
 import playn.core.TextWrap;
-import playn.core.util.Clock;
 import playn.core.util.TextBlock;
 import playn.core.util.TextBlock.Align;
 import pythagoras.f.Point;
@@ -39,28 +38,24 @@ public class EtapaPregunta extends AbstractEtapa {
       flipbookGroup = graphics().createGroupLayer();
       papelitosGroup = graphics().createGroupLayer();
 
-      layer.add(graphics().createImageLayer(QueSabes.bgRuleta));
+      layer.add(graphics().createImageLayer(QueSabes.bgPregunta));
 
       Pregunta pregunta = rnd.pick(personaje.preguntas(), null);
-
-      CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
-      cImg.canvas().setStrokeColor(Colors.YELLOW);
-      cImg.canvas().setStrokeWidth(2);
-      cImg.canvas().strokeRect(100, 80, 750, 375);
 
       Font font = graphics().createFont("Benton", Font.Style.PLAIN, 24);
       TextFormat format = new TextFormat().withAntialias(true).withFont(font);
 
       TextBlock texto = new TextBlock(graphics()
             .layoutText(pregunta.getPregunta(), format, new TextWrap(750)));
+      CanvasImage cImg = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
       cImg.canvas().setFillColor(Colors.WHITE);
       texto.fill(cImg.canvas(), Align.CENTER, (Sector.WIDTH - texto.textWidth()) / 2, 100);
 
       preguntaLayer = graphics().createImageLayer(cImg);
       layer.add(preguntaLayer);
 
-      List<Point> posRespuestas = Lists.newArrayList(new Point(150, 350), new Point(300, 380), new Point(450,
-            410));
+      List<Point> posRespuestas = Lists.newArrayList(new Point(150, 350), new Point(350, 400), new Point(550,
+            450));
       // FIXME rnd.shuffle(posRespuestas);
 
       TextWrap wrap = new TextWrap(400);
@@ -84,17 +79,13 @@ public class EtapaPregunta extends AbstractEtapa {
       respuesta3.setInteractive(true);
       p = posRespuestas.remove(0);
       layer.addAt(respuesta3, p.x, p.y);
-
-      // timeout que avanza el juego por si abandonan o tardan mucho
-      // anim.delay(TIMEOUT).then().action(() -> timeout = true);
    }
 
    @Override
-   public void doPaint(Clock clock) {
-   }
-
-   @Override
-   public void update(int delta) {
+   public void timeout() {
+      if (!fin) {
+         showAnim(personaje.fbPierde(), false);
+      }
    }
 
    @Override
@@ -109,28 +100,34 @@ public class EtapaPregunta extends AbstractEtapa {
       }
    }
 
+   private boolean fin = false;
+
    private void showAnim(Flipbook flipbook, boolean ganoMedalla) {
-      preguntaLayer.destroy();
-      respuesta1.destroy();
-      respuesta2.destroy();
-      respuesta3.destroy();
+      if (!fin) {
+         fin = true;
 
-      layer.add(flipbookGroup);
-      anim.flipbook(flipbookGroup, flipbook);
+         preguntaLayer.destroy();
+         respuesta1.destroy();
+         respuesta2.destroy();
+         respuesta3.destroy();
 
-      if (ganoMedalla) {
-         anim.play(personaje.soundGana());
-         layer.add(papelitosGroup);
-         anim.flipbook(papelitosGroup, QueSabes.papelitos);
+         layer.add(flipbookGroup);
+         anim.flipbook(flipbookGroup, flipbook);
+
+         if (ganoMedalla) {
+            anim.play(personaje.soundGana());
+            layer.add(papelitosGroup);
+            anim.flipbook(papelitosGroup, QueSabes.papelitos);
+         }
+         else {
+            anim.play(personaje.soundPierde());
+         }
+
+         anim.addBarrier(1_000);
+
+         anim.action(() -> {
+            sector.arquerito(ganoMedalla);
+         });
       }
-      else {
-         anim.play(personaje.soundPierde());
-      }
-
-      anim.addBarrier();
-
-      anim.action(() -> {
-         sector.arquerito(ganoMedalla);
-      });
    }
 }

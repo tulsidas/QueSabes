@@ -1,24 +1,41 @@
 package ar.com.jengibre.core.etapas;
 
+import static playn.core.PlayN.graphics;
+import playn.core.ImageLayer;
+import ar.com.jengibre.core.QueSabes;
 import ar.com.jengibre.core.Sector;
-import ar.com.jengibre.core.StartupLatch;
 
 public class EtapaEsperandoOtros extends AbstractEtapa {
-   public EtapaEsperandoOtros(Sector sector) {
+   private ImageLayer il;
+
+   private int cuantos;
+
+   public EtapaEsperandoOtros(Sector sector, int cuantos) {
       super(sector);
 
-      // c.drawImage(bgIdle, 0, 0);
-      // c.drawImageCentered(btnEsperando, 400, 200);
-      // c.drawText("" + StartupLatch.segundosHastaElComienzo(), 300, 300);
+      this.cuantos = cuantos;
+
+      il = graphics().createImageLayer();
+      layer.add(il);
+
+      updateImage();
    }
 
-   public void doPaint(playn.core.util.Clock clock) {
+   public void sumoseUno() {
+      cuantos++;
+      updateImage();
+   }
+
+   public void timeout() {
+      // nada
    }
 
    @Override
-   public void update(int delta) {
-      if (StartupLatch.empezoElJuego()) {
-         sector.ruleta(false); // sin ganar medalla
-      }
+   public void doUpdate(int delta) {
+      // TODO actualizar y mostrar cuenta regresiva
+   }
+
+   private void updateImage() {
+      il.setImage(QueSabes.esperando.get(cuantos - 1));
    }
 }

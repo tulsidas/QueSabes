@@ -11,7 +11,7 @@ public class QueSabesJava {
       JavaPlatform.Config config = new JavaPlatform.Config();
 
       // config.fullscreen = true;
-      config.width = 960 * 1;
+      config.width = 960 * 2;
       config.height = 540;
       // config.width = 1920;
       // config.height = 1080;

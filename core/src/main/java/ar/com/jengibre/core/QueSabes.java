@@ -44,9 +44,7 @@ public class QueSabes extends Game.Default implements InputListener {
 
    private EventDevice mt;
 
-   private Sector s3;
-
-   // private Sector s1, s2, s3, s4;
+   private Sector /*s1, s2,*/s3, s4;
 
    public static List<Personaje> personajes;
 
@@ -56,7 +54,11 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static Image pelota0, bonus, gol, medalla, gracias;
 
-   public static Image pulgarArriba, pulgarAbajo;
+   public static Image pulgarAbajo;
+
+   public static Image botonUp, botonDn;
+
+   public static ImmutableList<Image> esperando;
 
    public static Sound nogol, gol1, gol2, palo, ruleta, tuc;
 
@@ -88,8 +90,14 @@ public class QueSabes extends Game.Default implements InputListener {
       medalla = assets().getImageSync("images/medalla.png");
       gracias = assets().getImageSync("images/gracias.png");
 
-      // pulgarArriba = assets().getImageSync("images/pulgar_arriba.png");
       pulgarAbajo = assets().getImageSync("images/pulgar_abajo.png");
+
+      botonUp = assets().getImageSync("images/boton_up.png");
+      botonDn = assets().getImageSync("images/boton_dn.png");
+
+      esperando = ImmutableList.of(assets().getImageSync("images/esperando1.png"),
+            assets().getImageSync("images/esperando2.png"), assets().getImageSync("images/esperando3.png"),
+            assets().getImageSync("images/esperando4.png"));
 
       final Callback<Sound> sndCallback = new Callback<Sound>() {
          @Override
@@ -125,7 +133,7 @@ public class QueSabes extends Game.Default implements InputListener {
          // PERSONAJES
          personajes = Lists.newArrayList();
          for (String path : Lists.newArrayList("ALFONSIN", "DEMIDI", "GINOBILI", "MARADONA", "MENDEZ",
-               "PERON", "PUMA", "VILAS", "FANGIO")) {
+               "PERON", "PUMA", "VILAS", "FANGIO", "SELFIE")) {
 
             final Image imgRuleta = assets().getImageSync("ruleta/" + path + "/0.png");
 
@@ -162,25 +170,24 @@ public class QueSabes extends Game.Default implements InputListener {
       // FIN PERSONAJES
 
       // arriba a la izq
-      // s1 = new Sector();
+      // s1 = new Sector("s1");
       // graphics().rootLayer().addAt(s1.layer().setRotation(FloatMath.PI),
       // graphics().width() / 2,
       // graphics().height() / 2);
 
       // arriba a la der
-      // s2 = new Sector();
+      // s2 = new Sector("s2");
       // graphics().rootLayer().addAt(s2.layer().setRotation(FloatMath.PI),
       // graphics().width(),
       // graphics().height() / 2);
 
       // abajo a la izq
-      s3 = new Sector();
-      graphics().rootLayer().addAt(s3.layer(), 0, /*graphics().height() / 2*/0);
+      s3 = new Sector("s3");
+      graphics().rootLayer().addAt(s3.layer(), 0, /*FIXME*/0 * graphics().height() / 2);
 
       // abajo a la der
-      // s4 = new Sector();
-      // graphics().rootLayer().addAt(s4.layer(), graphics().width() / 2,
-      // /*graphics().height() / 2*/0);
+      s4 = new Sector("s4");
+      graphics().rootLayer().addAt(s4.layer(), graphics().width() / 2, /*FIXME*/0 * graphics().height() / 2);
 
       // RELOAD HOOK
       keyboard().setListener(new Keyboard.Adapter() {
@@ -189,10 +196,12 @@ public class QueSabes extends Game.Default implements InputListener {
             if (event.key() == Key.R) {
                System.out.println("reload!");
 
+               StartupLatch.reset();
+
                // s1.reload();
                // s2.reload();
                s3.reload();
-               // s4.reload();
+               s4.reload();
             }
          }
       });
@@ -229,14 +238,14 @@ public class QueSabes extends Game.Default implements InputListener {
       // System.out.println("delta=" + delta);
       // }
 
-      // delta = 40; // TODO ???
+      delta = 40; // TODO ???
 
       clock.update(delta);
 
       // s1.update(delta);
       // s2.update(delta);
       s3.update(delta);
-      // s4.update(delta);
+      s4.update(delta);
 
       // controlador para el inicio del juego
       StartupLatch.update(delta);
@@ -249,7 +258,7 @@ public class QueSabes extends Game.Default implements InputListener {
       // s1.paint(clock);
       // s2.paint(clock);
       s3.paint(clock);
-      // s4.paint(clock);
+      s4.paint(clock);
    }
 
    private Flipbook cargarFlipbook(String path, int fps) throws JsonParserException, Exception {
@@ -300,14 +309,12 @@ public class QueSabes extends Game.Default implements InputListener {
       // }
       // }
       // else {
-
-      // if (x < graphics().width() / 2) {
-      return s3;
-      // }
-      // else {
-      // return s4;
-      // }
-
+      if (x < graphics().width() / 2) {
+         return s3;
+      }
+      else {
+         return s4;
+      }
       // }
    }
 

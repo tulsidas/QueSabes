@@ -23,6 +23,8 @@ public class EtapaBonus extends AbstractEtapa {
 
    private boolean tocoPelota = false;
 
+   private boolean pateo = false;
+
    private ImageLayer arco, pelota;
 
    private GroupLayer arqueritoLayer, pelotaLayer;
@@ -34,8 +36,6 @@ public class EtapaBonus extends AbstractEtapa {
    private ObservableFlip arcoFlip;
 
    // //////////////////////////////////////////////////////
-
-   // private CanvasImage bb;
 
    public EtapaBonus(Sector sector) {
       super(sector);
@@ -57,23 +57,14 @@ public class EtapaBonus extends AbstractEtapa {
       pelotaLayer.add(pelota);
       layer.addAt(pelotaLayer, 400, 400);
 
-      // timeout que avanza el juego por si abandonan o tardan mucho
-      // anim.delay(TIMEOUT).then().action(() -> timeout = true);
-
-      // bb = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
-      // layer.add(graphics().createImageLayer(bb));
+      ImageLayer bonus = graphics().createImageLayer(QueSabes.bonus);
+      layer.addAt(bonus, 0, Sector.HEIGHT);
+      anim.tweenY(bonus).to(0).in(400).easeOut().then().delay(400).then().tweenY(bonus).to(-Sector.HEIGHT)
+            .in(400).easeIn();
    }
 
    @Override
    public void doPaint(Clock clock) {
-      // Canvas c = bb.canvas();
-      // c.clear();
-      //
-      // c.setStrokeWidth(2);
-      // c.setStrokeColor(Colors.YELLOW);
-      // c.drawLine(350, 0, 350, Sector.HEIGHT);
-      // c.drawLine(620, 0, 620, Sector.HEIGHT);
-      // c.drawLine(0, 160, Sector.WIDTH, 160);
    }
 
    private boolean checkCollision(Circle c) {
@@ -103,7 +94,8 @@ public class EtapaBonus extends AbstractEtapa {
    }
 
    @Override
-   public void update(int delta) {
+   public void doUpdate(int delta) {
+
       List<Circle> circles = Lists.newArrayList();
       int frame = arcoFlip.getFrame();
       // palo izq
@@ -154,8 +146,16 @@ public class EtapaBonus extends AbstractEtapa {
    }
 
    @Override
+   public void timeout() {
+      if (!pateo) {
+         // XXX revisar que no esté cortando la jugada ni que se superponga
+         fuera();
+      }
+   }
+
+   @Override
    public void onPointerStart(float x, float y) {
-      if (!tocoPelota) {
+      if (!pateo) {
          tocoPelota = pelota == layer.hitTest(new Point(x, y));
       }
    }
@@ -164,7 +164,7 @@ public class EtapaBonus extends AbstractEtapa {
 
    @Override
    public void onPointerEnd(float x, float y) {
-      if (tocoPelota) {
+      if (tocoPelota && !pateo) {
          dx = x - (pelotaLayer.tx() + pw2);
          dy = y - (pelotaLayer.ty() + pw2);
 
@@ -177,7 +177,8 @@ public class EtapaBonus extends AbstractEtapa {
          }
 
          // ya no se puede volver a patear
-         tocoPelota = false;
+         pelota.setInteractive(false);
+         pateo = true;
 
          QueSabes.tuc.play();
 
@@ -204,10 +205,7 @@ public class EtapaBonus extends AbstractEtapa {
       anim.tweenRotation(pulgares).from(0).to(-0.5F).in(500).easeOut().then().tweenRotation(pulgares)
             .to(0.5F).in(500).easeOut().then().tweenRotation(pulgares).to(0).in(500).easeOut();
 
-      anim.delay(3500).then().action(
-      // () -> sector.arquerito(false)
-            () -> sector.ruleta(false) // sin medalla
-            );
+      anim.delay(3500).then().action(() -> sector.finArquerito(false));
    }
 
    private void gol() {
@@ -233,10 +231,8 @@ public class EtapaBonus extends AbstractEtapa {
             .addAt(layer, medalla, Sector.WIDTH / 2, Sector.HEIGHT / 2).then().tweenScale(medalla).from(2)
             .to(0.6F).in(500).easeOutBack();
 
-      anim.delay(3500).then().action(
-            // () -> sector.arquerito(false)
-            () -> sector.ruleta(true) // con medalla
-         );
+      // con medalla
+      anim.delay(3500).then().action(() -> sector.finArquerito(true));
    }
 
    private final Map<Integer, List<Circle>> arquero = ImmutableMap
