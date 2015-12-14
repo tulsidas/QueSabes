@@ -50,7 +50,7 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static Flipbook papelitos, arquerito, pelota;
 
-   public static Image bgIdle, bgRuleta, bgPregunta, bgArquerito;
+   public static Image bgIdle, bgRuleta, bgPregunta, bgArquerito, bgEsperandoFin, bgMedallero;
 
    public static Image pelota0, bonus, gol, medalla, gracias;
 
@@ -58,7 +58,7 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static Image botonUp, botonDn;
 
-   public static ImmutableList<Image> esperando;
+   public static ImmutableList<Image> bgEsperando;
 
    public static Sound nogol, gol1, gol2, palo, ruleta, tuc;
 
@@ -83,6 +83,8 @@ public class QueSabes extends Game.Default implements InputListener {
       bgRuleta = assets().getImageSync("images/bgRuleta.png");
       bgPregunta = assets().getImageSync("images/bgPregunta.png");
       bgArquerito = assets().getImageSync("images/bgArquerito.png");
+      bgEsperandoFin = assets().getImageSync("images/bgEsperandoFin.png");
+      bgMedallero = assets().getImageSync("images/bgMedallero.jpg");
 
       pelota0 = assets().getImageSync("images/pelota0.png");
       bonus = assets().getImageSync("images/bonus.png");
@@ -95,7 +97,7 @@ public class QueSabes extends Game.Default implements InputListener {
       botonUp = assets().getImageSync("images/boton_up.png");
       botonDn = assets().getImageSync("images/boton_dn.png");
 
-      esperando = ImmutableList.of(assets().getImageSync("images/esperando1.png"),
+      bgEsperando = ImmutableList.of(assets().getImageSync("images/esperando1.png"),
             assets().getImageSync("images/esperando2.png"), assets().getImageSync("images/esperando3.png"),
             assets().getImageSync("images/esperando4.png"));
 

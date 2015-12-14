@@ -1,5 +1,8 @@
 package ar.com.jengibre.core;
 
+import java.util.Collection;
+import java.util.Map;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -8,7 +11,7 @@ import com.google.common.collect.Multimap;
  */
 public class StartupLatch {
 
-   private static final int TIMEOUT = /*10*/3_000;
+   private static final int TIMEOUT = 10_000;
 
    private static Multimap<Integer, Sector> equipos;
 
@@ -26,21 +29,51 @@ public class StartupLatch {
       equipoActual = 1;
    }
 
-   public static int sectorListoParaEmpezar(Sector sector) {
+   public synchronized static int sectorListoParaEmpezar(Sector sector) {
       // se sumó uno al equipo actual
       equipos.get(equipoActual).forEach(sectorActual -> sectorActual.sumoseUno());
-
       equipos.put(equipoActual, sector);
 
       System.out.println(equipos);
 
-      // arranco el timer
-      if (counter <= 0) {
-         counter = TIMEOUT;
+      if (lugaresDisponibles() == 0) {
+         // arranco sin esperar
+         empiezaSector();
+      }
+      else {
+         // arranco el timer
+         if (counter <= 0) {
+            counter = TIMEOUT;
+         }
       }
 
       // devuelvo cuántos hay en este equipo
       return equipos.get(equipoActual).size();
+   }
+
+   public synchronized static void sectorTermino(Sector sector) {
+      int equipo = equipo(sector);
+
+      boolean todosTerminaron = equipos.get(equipo).stream().allMatch(s -> s.termino());
+
+      if (todosTerminaron) {
+         Collection<Sector> sectores = equipos.get(equipo);
+
+         int _medallas = 0;
+         for (Sector s : sectores) {
+            _medallas += s.medallas();
+         }
+
+         final int medallas = _medallas; // puaj
+
+         sectores.forEach(s -> s.medallero(medallas));
+
+         // chau chau adios
+         equipos.removeAll(equipo);
+      }
+      else {
+         sector.esperarFinOtros();
+      }
    }
 
    public static void update(int delta) {
@@ -48,15 +81,7 @@ public class StartupLatch {
          counter -= delta;
 
          if (counter <= 0) {
-            // aviso que arranquen los sectores de equipoActual
-            equipos.get(equipoActual).forEach(sector -> sector.ruleta());
-
-            // nuevo equipo
-            equipoActual++;
-
-            System.out.println("equipoActual = " + equipoActual);
-
-            counter = 0;
+            empiezaSector();
          }
       }
    }
@@ -67,5 +92,26 @@ public class StartupLatch {
 
    private static int lugaresDisponibles() {
       return 4 - equipos.size();
+   }
+
+   private static void empiezaSector() {
+      // aviso que arranquen los sectores de equipoActual
+      equipos.get(equipoActual).forEach(sector -> sector.ruleta());
+
+      // nuevo equipo
+      equipoActual++;
+      counter = 0;
+   }
+
+   private static int equipo(Sector sector) {
+      // busco el equipo del sector
+      for (Map.Entry<Integer, Sector> entry : equipos.entries()) {
+         if (entry.getValue() == sector) {
+            return entry.getKey();
+         }
+      }
+
+      System.err.println("Sector " + sector + " sin equipo");
+      return -1;
    }
 }

@@ -5,8 +5,10 @@ import playn.core.GroupLayer;
 import playn.core.util.Clock;
 import ar.com.jengibre.core.etapas.AbstractEtapa;
 import ar.com.jengibre.core.etapas.EtapaBonus;
+import ar.com.jengibre.core.etapas.EtapaEsperandoFinOtros;
 import ar.com.jengibre.core.etapas.EtapaEsperandoOtros;
 import ar.com.jengibre.core.etapas.EtapaIdle;
+import ar.com.jengibre.core.etapas.EtapaMedallero;
 import ar.com.jengibre.core.etapas.EtapaPregunta;
 import ar.com.jengibre.core.etapas.EtapaRuleta;
 
@@ -40,13 +42,7 @@ public class Sector {
          layer.removeAll();
       }
 
-      rondas = 0;
-      medallas = 0;
-
-      etapa = new EtapaIdle(this);
-      // etapa = new EtapaRuleta(this);
-      // etapa = new EtapaBonus(this);
-      // etapa = new EtapaTest(this);
+      reset();
    }
 
    public GroupLayer layer() {
@@ -69,12 +65,28 @@ public class Sector {
       etapa.paint(clock);
    }
 
+   public void reset() {
+      rondas = 0;
+      medallas = 0;
+
+      etapa = new EtapaIdle(this);
+   }
+
    /**
     * Idle -> EsperandoOtros
     */
    public void empezarJuego() {
       int cuantos = StartupLatch.sectorListoParaEmpezar(this);
       setEtapa(new EtapaEsperandoOtros(this, cuantos));
+   }
+
+   /**
+    * cuando se suma alguien a mi equipo en la etapa EsperandoOtros
+    */
+   public void sumoseUno() {
+      if (etapa instanceof EtapaEsperandoOtros) {
+         ((EtapaEsperandoOtros) etapa).sumoseUno();
+      }
    }
 
    /**
@@ -110,10 +122,8 @@ public class Sector {
       // termino una ronda
       rondas++;
 
-      if (rondas == 3) {
-         // FIXME esperandoFinOtros();
-         // FIXME medallero();
-         System.out.println("GAME OVER para " + nombre + " | " + medallas + " medallas");
+      if (termino()) {
+         StartupLatch.sectorTermino(this);
       }
       else {
          // a la ruleta
@@ -121,13 +131,16 @@ public class Sector {
       }
    }
 
-   /**
-    * cuando se suma alguien a mi equipo en la etapa EsperandoOtros
-    */
-   public void sumoseUno() {
-      if (etapa instanceof EtapaEsperandoOtros) {
-         ((EtapaEsperandoOtros) etapa).sumoseUno();
-      }
+   public void esperarFinOtros() {
+      setEtapa(new EtapaEsperandoFinOtros(this));
+   }
+
+   public void medallero(int medallas) {
+      setEtapa(new EtapaMedallero(this, medallas));
+   }
+
+   public boolean termino() {
+      return rondas == 3;
    }
 
    public int medallas() {
@@ -136,7 +149,7 @@ public class Sector {
 
    @Override
    public String toString() {
-      return "[Sector] " + nombre;
+      return nombre;
    }
 
    private void setEtapa(AbstractEtapa nueva) {

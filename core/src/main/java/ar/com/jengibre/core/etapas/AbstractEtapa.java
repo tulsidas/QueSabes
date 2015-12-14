@@ -16,7 +16,7 @@ public abstract class AbstractEtapa {
    protected Sector sector;
 
    protected Animator anim;
-   
+
    private Animator timeoutAnim;
 
    protected Randoms rnd = Randoms.with(new Random());
@@ -28,11 +28,11 @@ public abstract class AbstractEtapa {
    public AbstractEtapa(Sector sector) {
       this.sector = sector;
       this.layer = sector.layer();
-      layer.removeAll(); // TODO chequear
+      layer.removeAll();
 
       anim = new Animator();
 
-      // timeout que avanza el juego por si abandonan o tardan mucho 
+      // timeout que avanza el juego por si abandonan o tardan mucho
       // (en otro Animator para que no moleste al del juego)
       timeoutAnim = new Animator();
       timeoutAnim.delay(TIMEOUT).then().action(() -> {

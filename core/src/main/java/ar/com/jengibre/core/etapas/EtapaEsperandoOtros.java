@@ -1,12 +1,17 @@
 package ar.com.jengibre.core.etapas;
 
 import static playn.core.PlayN.graphics;
+import playn.core.Canvas;
+import playn.core.CanvasImage;
 import playn.core.ImageLayer;
 import ar.com.jengibre.core.QueSabes;
 import ar.com.jengibre.core.Sector;
+import ar.com.jengibre.core.StartupLatch;
 
 public class EtapaEsperandoOtros extends AbstractEtapa {
    private ImageLayer il;
+
+   private CanvasImage img;
 
    private int cuantos;
 
@@ -15,15 +20,14 @@ public class EtapaEsperandoOtros extends AbstractEtapa {
 
       this.cuantos = cuantos;
 
-      il = graphics().createImageLayer();
-      layer.add(il);
+      img = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
 
-      updateImage();
+      il = graphics().createImageLayer(img);
+      layer.add(il);
    }
 
    public void sumoseUno() {
       cuantos++;
-      updateImage();
    }
 
    public void timeout() {
@@ -32,10 +36,12 @@ public class EtapaEsperandoOtros extends AbstractEtapa {
 
    @Override
    public void doUpdate(int delta) {
-      // TODO actualizar y mostrar cuenta regresiva
-   }
+      int falta = StartupLatch.counter();
 
-   private void updateImage() {
-      il.setImage(QueSabes.esperando.get(cuantos - 1));
+      Canvas c = img.canvas();
+      c.clear();
+      c.drawImage(QueSabes.bgEsperando.get(cuantos - 1), 0, 0);
+      c.drawText("" + falta, 100, 100);
+      // FIXME cambiar por imagenes con numeritos
    }
 }
