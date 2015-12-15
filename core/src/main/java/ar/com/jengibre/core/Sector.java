@@ -3,6 +3,7 @@ package ar.com.jengibre.core;
 import static playn.core.PlayN.graphics;
 import playn.core.GroupLayer;
 import playn.core.util.Clock;
+import pythagoras.f.FloatMath;
 import ar.com.jengibre.core.etapas.AbstractEtapa;
 import ar.com.jengibre.core.etapas.EtapaBonus;
 import ar.com.jengibre.core.etapas.EtapaEsperandoFinOtros;
@@ -15,6 +16,8 @@ import ar.com.jengibre.core.etapas.EtapaRuleta;
 public class Sector {
 
    private AbstractEtapa etapa;
+
+   private GroupLayer.Clipped topLayer;
 
    private GroupLayer layer;
 
@@ -29,20 +32,26 @@ public class Sector {
 
    private int medallas;
 
-   public Sector(String nombre) {
+   public Sector(String nombre, boolean flipped) {
       this.nombre = nombre;
-      reload();
-   }
 
-   public void reload() {
-      if (layer == null) {
-         layer = graphics().createGroupLayer(WIDTH, HEIGHT);
+      topLayer = graphics().createGroupLayer(WIDTH, HEIGHT);
+
+      layer = graphics().createGroupLayer();
+
+      if (flipped) {
+         layer.setRotation(FloatMath.PI);
+         topLayer.addAt(layer, WIDTH, HEIGHT);
       }
       else {
-         layer.removeAll();
+         topLayer.add(layer);
       }
 
       reset();
+   }
+
+   public GroupLayer.Clipped topLayer() {
+      return topLayer;
    }
 
    public GroupLayer layer() {
@@ -77,7 +86,13 @@ public class Sector {
     */
    public void empezarJuego() {
       int cuantos = StartupLatch.sectorListoParaEmpezar(this);
-      setEtapa(new EtapaEsperandoOtros(this, cuantos));
+      if (cuantos == -1) {
+         // todo listo, ir directo a ruleta
+         ruleta();
+      }
+      else {
+         setEtapa(new EtapaEsperandoOtros(this, cuantos));
+      }
    }
 
    /**

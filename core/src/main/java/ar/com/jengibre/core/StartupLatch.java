@@ -11,7 +11,7 @@ import com.google.common.collect.Multimap;
  */
 public class StartupLatch {
 
-   private static final int TIMEOUT = 10_000;
+   private static final int TIMEOUT = /*10*/5_000;
 
    private static Multimap<Integer, Sector> equipos;
 
@@ -31,7 +31,7 @@ public class StartupLatch {
 
    public synchronized static int sectorListoParaEmpezar(Sector sector) {
       // se sumó uno al equipo actual
-      equipos.get(equipoActual).forEach(sectorActual -> sectorActual.sumoseUno());
+      equipos.get(equipoActual).forEach(s -> s.sumoseUno());
       equipos.put(equipoActual, sector);
 
       System.out.println(equipos);
@@ -39,6 +39,7 @@ public class StartupLatch {
       if (lugaresDisponibles() == 0) {
          // arranco sin esperar
          empiezaSector();
+         return -1;
       }
       else {
          // arranco el timer

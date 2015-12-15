@@ -44,7 +44,7 @@ public class QueSabes extends Game.Default implements InputListener {
 
    private EventDevice mt;
 
-   private Sector /*s1, s2,*/s3, s4;
+   private Sector s1, s2, s3, s4;
 
    public static List<Personaje> personajes;
 
@@ -171,39 +171,12 @@ public class QueSabes extends Game.Default implements InputListener {
       }
       // FIN PERSONAJES
 
-      // arriba a la izq
-      // s1 = new Sector("s1");
-      // graphics().rootLayer().addAt(s1.layer().setRotation(FloatMath.PI),
-      // graphics().width() / 2,
-      // graphics().height() / 2);
-
-      // arriba a la der
-      // s2 = new Sector("s2");
-      // graphics().rootLayer().addAt(s2.layer().setRotation(FloatMath.PI),
-      // graphics().width(),
-      // graphics().height() / 2);
-
-      // abajo a la izq
-      s3 = new Sector("s3");
-      graphics().rootLayer().addAt(s3.layer(), 0, /*FIXME*/0 * graphics().height() / 2);
-
-      // abajo a la der
-      s4 = new Sector("s4");
-      graphics().rootLayer().addAt(s4.layer(), graphics().width() / 2, /*FIXME*/0 * graphics().height() / 2);
-
       // RELOAD HOOK
       keyboard().setListener(new Keyboard.Adapter() {
          @Override
          public void onKeyUp(Event event) {
             if (event.key() == Key.R) {
-               System.out.println("reload!");
-
-               StartupLatch.reset();
-
-               // s1.reload();
-               // s2.reload();
-               s3.reload();
-               s4.reload();
+               reload();
             }
          }
       });
@@ -216,8 +189,7 @@ public class QueSabes extends Game.Default implements InputListener {
             float y = event.y();
             Sector sector = getSector(x, y);
 
-            Layer layer = sector.layer();
-            Point tf = layer.transform().inverseTransform(new Point(x, y), new Point());
+            Point tf = Layer.Util.screenToLayer(sector.layer(), x, y);
             sector.onPointerStart(tf.x, tf.y);
          }
 
@@ -227,25 +199,47 @@ public class QueSabes extends Game.Default implements InputListener {
             float y = event.y();
             Sector sector = getSector(x, y);
 
-            Layer layer = sector.layer();
-            Point tf = layer.transform().inverseTransform(new Point(x, y), new Point());
+            Point tf = Layer.Util.screenToLayer(sector.layer(), x, y);
             sector.onPointerEnd(tf.x, tf.y);
          }
       });
+
+      reload();
+      System.out.println("listo");
+   }
+
+   private void reload() {
+      System.out.println("reload!");
+
+      StartupLatch.reset();
+
+      graphics().rootLayer().removeAll();
+
+      // arriba a la izq
+      s1 = new Sector("S1", true);
+      graphics().rootLayer().addAt(s1.topLayer(), 0, 0);
+
+      // arriba a la der
+      s2 = new Sector("S2", true);
+      graphics().rootLayer().addAt(s2.topLayer(), Sector.WIDTH, 0);
+
+      // abajo a la izq
+      s3 = new Sector("S3", false);
+      graphics().rootLayer().addAt(s3.topLayer(), 0, Sector.HEIGHT);
+
+      // abajo a la der
+      s4 = new Sector("S4", false);
+      graphics().rootLayer().addAt(s4.topLayer(), Sector.WIDTH, Sector.HEIGHT);
    }
 
    @Override
    public void update(int delta) {
-      // if (delta != 40) {
-      // System.out.println("delta=" + delta);
-      // }
-
-      delta = 40; // TODO ???
+      // delta = 40; // TODO ???
 
       clock.update(delta);
 
-      // s1.update(delta);
-      // s2.update(delta);
+      s1.update(delta);
+      s2.update(delta);
       s3.update(delta);
       s4.update(delta);
 
@@ -257,8 +251,8 @@ public class QueSabes extends Game.Default implements InputListener {
    public void paint(float alpha) {
       clock.paint(alpha);
 
-      // s1.paint(clock);
-      // s2.paint(clock);
+      s1.paint(clock);
+      s2.paint(clock);
       s3.paint(clock);
       s4.paint(clock);
    }
@@ -302,22 +296,22 @@ public class QueSabes extends Game.Default implements InputListener {
    }
 
    private Sector getSector(float x, float y) {
-      // if (y < graphics().height() / 2) {
-      // if (x < graphics().width() / 2) {
-      // return s1;
-      // }
-      // else {
-      // return s2;
-      // }
-      // }
-      // else {
-      if (x < graphics().width() / 2) {
-         return s3;
+      if (y < graphics().height() / 2) {
+         if (x < graphics().width() / 2) {
+            return s1;
+         }
+         else {
+            return s2;
+         }
       }
       else {
-         return s4;
+         if (x < graphics().width() / 2) {
+            return s3;
+         }
+         else {
+            return s4;
+         }
       }
-      // }
    }
 
    // ////////////////////////////////////////////////////////////////
