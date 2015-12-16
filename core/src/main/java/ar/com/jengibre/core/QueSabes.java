@@ -48,15 +48,19 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static List<Personaje> personajes;
 
-   public static Flipbook papelitos, arquerito, pelota;
+   public static Flipbook papelitos, arquerito, pelota, bgEsperandoFin;
 
-   public static Image bgIdle, bgRuleta, bgPregunta, bgArquerito, bgEsperandoFin, bgMedallero;
+   public static Image bgIdle, bgRuleta, bgPregunta, bgArquerito, bgMedallero;
 
    public static Image pelota0, bonus, gol, medalla, gracias;
 
    public static Image pulgarAbajo;
 
    public static Image botonUp, botonDn;
+
+   public static ImmutableList<Image> numMedallas;
+
+   public static ImmutableList<Image> reloj;
 
    public static ImmutableList<Image> bgEsperando;
 
@@ -83,8 +87,7 @@ public class QueSabes extends Game.Default implements InputListener {
       bgRuleta = assets().getImageSync("images/bgRuleta.png");
       bgPregunta = assets().getImageSync("images/bgPregunta.png");
       bgArquerito = assets().getImageSync("images/bgArquerito.png");
-      bgEsperandoFin = assets().getImageSync("images/bgEsperandoFin.png");
-      bgMedallero = assets().getImageSync("images/bgMedallero.jpg");
+      bgMedallero = assets().getImageSync("images/bgMedallero.png");
 
       pelota0 = assets().getImageSync("images/pelota0.png");
       bonus = assets().getImageSync("images/bonus.png");
@@ -96,6 +99,19 @@ public class QueSabes extends Game.Default implements InputListener {
 
       botonUp = assets().getImageSync("images/boton_up.png");
       botonDn = assets().getImageSync("images/boton_dn.png");
+
+      List<Image> _num = Lists.newArrayList();
+      for (int i = 1; i <= 24; i++) {
+         _num.add(assets().getImage("images/x" + i + ".png"));
+      }
+      numMedallas = ImmutableList.copyOf(_num);
+
+      reloj = ImmutableList.of(assets().getImageSync("images/reloj0.png"),
+            assets().getImageSync("images/reloj1.png"), assets().getImageSync("images/reloj2.png"), assets()
+                  .getImageSync("images/reloj3.png"), assets().getImageSync("images/reloj4.png"), assets()
+                  .getImageSync("images/reloj5.png"), assets().getImageSync("images/reloj6.png"), assets()
+                  .getImageSync("images/reloj7.png"), assets().getImageSync("images/reloj8.png"), assets()
+                  .getImageSync("images/reloj9.png"), assets().getImageSync("images/reloj10.png"));
 
       bgEsperando = ImmutableList.of(assets().getImageSync("images/esperando1.png"),
             assets().getImageSync("images/esperando2.png"), assets().getImageSync("images/esperando3.png"),
@@ -118,6 +134,7 @@ public class QueSabes extends Game.Default implements InputListener {
          papelitos = cargarFlipbook("ruleta/papelitos", FPS);
          arquerito = cargarFlipbook("images/arquerito", FPS * 3);
          pelota = cargarFlipbook("images/pelota", FPS * 3);
+         bgEsperandoFin = cargarFlipbook("images/esperandoFin", 1000);
 
          nogol = assets().getSound("sfx/nogol");
          nogol.addCallback(sndCallback);

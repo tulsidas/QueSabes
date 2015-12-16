@@ -11,7 +11,7 @@ import com.google.common.collect.Multimap;
  */
 public class StartupLatch {
 
-   private static final int TIMEOUT = /*10*/5_000;
+   private static final int TIMEOUT = 10_000;
 
    private static Multimap<Integer, Sector> equipos;
 

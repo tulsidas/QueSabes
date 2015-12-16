@@ -1,17 +1,15 @@
 package ar.com.jengibre.core.etapas;
 
 import static playn.core.PlayN.graphics;
-import playn.core.Canvas;
-import playn.core.CanvasImage;
 import playn.core.ImageLayer;
 import ar.com.jengibre.core.QueSabes;
 import ar.com.jengibre.core.Sector;
 import ar.com.jengibre.core.StartupLatch;
 
 public class EtapaEsperandoOtros extends AbstractEtapa {
-   private ImageLayer il;
+   private ImageLayer fondo;
 
-   private CanvasImage img;
+   private ImageLayer reloj;
 
    private int cuantos;
 
@@ -20,10 +18,11 @@ public class EtapaEsperandoOtros extends AbstractEtapa {
 
       this.cuantos = cuantos;
 
-      img = graphics().createImage(Sector.WIDTH, Sector.HEIGHT);
+      fondo = graphics().createImageLayer();
+      layer.add(fondo);
 
-      il = graphics().createImageLayer(img);
-      layer.add(il);
+      reloj = graphics().createImageLayer();
+      layer.addAt(reloj, 760, 200);
    }
 
    public void sumoseUno() {
@@ -36,12 +35,9 @@ public class EtapaEsperandoOtros extends AbstractEtapa {
 
    @Override
    public void doUpdate(int delta) {
-      int falta = StartupLatch.counter();
+      fondo.setImage(QueSabes.bgEsperando.get(cuantos - 1));
 
-      Canvas c = img.canvas();
-      c.clear();
-      c.drawImage(QueSabes.bgEsperando.get(cuantos - 1), 0, 0);
-      c.drawText("" + falta, 100, 100);
-      // FIXME cambiar por imagenes con numeritos
+      int falta = StartupLatch.counter() / 1000;
+      reloj.setImage(QueSabes.reloj.get(falta));
    }
 }
