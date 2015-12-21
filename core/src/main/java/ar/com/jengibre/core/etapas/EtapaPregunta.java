@@ -56,7 +56,7 @@ public class EtapaPregunta extends AbstractEtapa {
 
       List<Point> posRespuestas = Lists.newArrayList(new Point(150, 350), new Point(350, 400), new Point(550,
             450));
-      // FIXME rnd.shuffle(posRespuestas);
+      rnd.shuffle(posRespuestas);
 
       TextWrap wrap = new TextWrap(400);
       respuesta1 = graphics().createImageLayer(
