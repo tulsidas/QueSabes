@@ -1,154 +1,26 @@
 [
   {
-    "pregunta": "El 14 de setiembre de 1923, en el estadio Polo Grounds, de Nueva York, el boxeador argentino Luis Ángel Firpo sacó del ring con un derechazo al campeón mundial de los pesados Jack Dempsey, en el primer round de la pelea por el título. Dempsey estuvo 17 segundos fuera del cuadrilátero, pero el árbitro inició tarde la cuenta y le permitió regresar. En el segundo round Dempsey noqueó a Firpo en la llamada “pelea del siglo”. ¿Cómo le decían a Firpo?",
-    "respuestas": [
-      "El Toro salvaje de las pampas",
-      "El mortero de Rufino",
-      "La Locomotora"
-    ]
-  },
-  {
-    "pregunta": "Maria Eva Duarte, actriz, política, casada con el general Juan Domingo Perón, presidenta de la Fundación Eva Perón, fue llamada, “la abanderada de los humildes”. Nació en Los Toldos, provincia de Buenos Aires el 7 de mayo de 1919  y murió en Buenos Aires a los 33 años, el 26 de julio de 1952. En el año en que nació, Boca salió del torneo de fútbol local. ¿Quién salió campeón el año en que murió?",
-    "respuestas": [
-      "River",
-      "Boca",
-      "Racing"
-    ]
-  },
-  {
-    "pregunta": "El 30 de octubre de 1983 Raúl Alfonsín se impuso en las elecciones presidenciales que marcaron la recuperación de la democracia tras siete años de dictadura militar. El candidato radical consiguió cerca del 52 por ciento de los votos. Alfonsín, muy aficionado al fútbol, tuvo una segunda satisfacción a poco de asumir el 10 de diciembre: su equipo se coronó campeón del torneo local. ¿De quién era hincha?",
-    "respuestas": [
-      "Independiente",
-      "Racing",
-      "Boca"
-    ]
-  },
-  {
-    "pregunta": "Domingo Cavallo, ministro de Economía de los gobiernos de Carlos Menem y de Fernando de la Rúa provocó en 2001 la crisis que  que impidió a los ahorristas retirar sus fondos depositados en los bancos. Hubo movilizaciones populares y represión, con decenas de muertos. Cayó Cavallo, primero, y De la Rúa, después. Con ese telón de fondo, un equipo de fútbol logró el título local después de 35 años. ¿Cuál era?",
+    "pregunta": "¿El estadio de qué equipo de fútbol lleva el nombre de quien fuera tres veces presidente de la nación?",
     "respuestas": [
       "Racing",
-      "River",
-      "Vélez Sarsfield"
+      "Vélez",
+      "Lanus"
     ]
   },
   {
-    "pregunta": "Alumni fue el gran equipo argentino de la era amateurs: entre 1900 y 1911 (año de su disolución) ganó diez campeonatos locales. La mayoría de quienes jugaban en él eran de origen británico. Una familia de esa raíz aportó siete hermanos y un primo a las formaciones. ¿Cuál era el apellido?",
+    "pregunta": "¿En que deporte se destacó Perón en sus primeros años como militar?",
     "respuestas": [
-      "Brown",
-      "Mac Allister",
-      "Brookes"
+      "Esgrima",
+      "Atletismo",
+      "Lucha"
     ]
   },
   {
-    "pregunta": "El 7 de agosto de 1948 Delfo Cabrera ganó en Londres la maratón olímpica. Fue el segundo argentino en conseguir esa victoria, después que lo hiciera Juan Carlos Zabala en 1932. Cabrera era de origen humilde, nacido en Armstrong, provincia de Santa Fe. ¿Cuál era la actividad con que se ganaba la vida?",
+    "pregunta": "¿En qué Juegos Olímpicos estuvo Perón a punto de participar?",
     "respuestas": [
-      "Bombero",
-      "Policía",
-      "Cartero"
-    ]
-  },
-  {
-    "pregunta": "Juan Manuel Fangio fue el más exitoso automovilista deportivo argentino de la historia: ganó cinco veces el título mundial de la Fórmula Uno. Corrió sus primeras competencias en rutas de la provincia de Buenos Aires. ¿En que ciudad había nacido?",
-    "respuestas": [
-      "Balcarce",
-      "Olavarría",
-      "Junín"
-    ]
-  },
-  {
-    "pregunta": "El remero Alberto Demiddi participó en tres finales olímpicas en la especialidad un par de remos cortos. En dos de ellas ganó medallas: de bronce, primero, y de plata, después. El subcampeonato lo obtuvo en 1972. ¿Dónde ocurrió eso?",
-    "respuestas": [
-      "Munich",
-      "Tokio",
-      "Montreal"
-    ]
-  },
-  {
-    "pregunta": "El 1° de marzo de 1948, el gobierno de Juan Domingo Perón anuncia la nacionalización de los ferrocarriles, hasta entonces en su mayoría en manos de capitales británicos. Ese año, la Argentina envía a los Juegos de Londres a la mayor delegación olímpica de su historia: 242 atletas. A la medalla de oro conseguida por el maratonista Delfo Cabrera se le agregan dos más del mismo metal en boxeo: una del peso pesado Rafael Iglesias. ¿Quién obtuvo la otra?",
-    "respuestas": [
-      "Pascual Pérez",
-      "Horacio Accavallo",
-      "Eduardo Lausse"
-    ]
-  },
-  {
-    "pregunta": "Durante los años noventa del siglo pasado, la ola de privatizaciones de empresas públicas alcanza al área de los servicios de trenes. Los ferrocarriles, nacionalizados por el Gobierno de Juan Domingo Perón en 1948 vuelven a la órbita privada. Durante esa década se enviaron delegaciones argentinos a los Juegos Olímpicos de Barcelona (1992) y Atlanta (1996). Sumados ambos, ¿cuántas medallas de oro se obtuvieron?",
-    "respuestas": [
-      "Ninguna",
-      "Una",
-      "Dos"
-    ]
-  },
-  {
-    "pregunta": "El 2 de abril de 1982 se produjo el desembarco de tropas argentinas en las Islas Malvinas. El Reino Unido contraatacó enviando fuerzas con el propósito de recuperarlas. La guerra resultó particularmente cruenta para los soldados de nuestro país, escasos de instrucción y mal equipados. La dictadura militar procuró ocultar la realidad amordazando a la prensa, valiéndose de la complicidad de los medios adictos. En ese contexto, la selección argentina de fútbol participaba del campeonato mundial ¿Dónde tuvo lugar esa competencia?",
-    "respuestas": [
-      "España",
-      "Italia",
-      "Alemania"
-    ]
-  },
-  {
-    "pregunta": "La selección argentina de fútbol se coronó campeona del mundo, en México, con una notable actuación de Diego Armando Maradona, fundamentalmente en los cuartos de final, cuando para batir a los ingleses anotó el gol más bonito de la historia de los mundiales, además de uno ilícito: “la mano de Dios”, lo llamó él mismo. ¿Quién gobernaba por ese entonces en el país?",
-    "respuestas": [
-      "Raúl Alfonsín",
-      "Carlos Menem",
-      "Eduardo Duhalde"
-    ]
-  },
-  {
-    "pregunta": "Jorge Mario Bergoglio fue elegido Papa el 13 de abril de 2013. Francisco, nombre que lleva desde aquel día, nació en el barrio porteño de Flores el 17 de diciembre de 1936 y recibió el bautismo una semana después en la Basílica de María Auxiliadora y San Carlos, a solo veinte cuadras de la antigua cancha de San Lorenzo de Almagro, club del que se hizo hincha. ¿Cómo llamaban a ese estadio que ya no existe?",
-    "respuestas": [
-      "El Gasómetro",
-      "El Fortín",
-      "El Cilindro"
-    ]
-  },
-  {
-    "pregunta": "En los tiempos en que se constituyó en Buenos Aires el primer gobierno autónomo, el 25 de mayo de 1810, ya existía una incipiente actividad deportiva en diversos sitios del Virreinato del Río de la Plata. En uno de los escenarios establecidos treinta años antes de entonces, precisamente, estaba dedicado a uno de las tres especialidades que se pasan a mencionar. ¿Cuál era?",
-    "respuestas": [
-      "Pelota",
-      "Gimnasia",
-      "Cricket"
-    ]
-  },
-  {
-    "pregunta": "A fines de 1974, Guillermo Vilas ganó en Australia el Torneo Masters, certamen que habitualmente cierra la temporada regular del tenis internacional, en el que participan los ocho mejores jugadores del ranking mundial. Ese fue uno de los primeros grandes logros de su carrera deportiva. Al retirarse, en 1992, ¿cuántos torneos había ganado?",
-    "respuestas": [
-      "62",
-      "48",
-      "55"
-    ]
-  },
-  {
-    "pregunta": "La Primera Guerra Mundial, comenzada en 1914, produjo 17 millones de muertos. Llegó a su fin cuando el Imperio Alemán solicitó un armisticio, el 11 de noviembre de 1918. En el mes de abril de ese mismo año nació en Yapeyú, Corrientes, un destacado atleta que en 1952 se consagró subcampeón olímpico de la maratón. ¿Quién fue?",
-    "respuestas": [
-      "Reinaldo Gorno",
-      "Alberto Triulzi",
-      "Walter Lemos"
-    ]
-  },
-  {
-    "pregunta": "El 17 de octubre de 1945 tuvo lugar en la Argentina la primera gran movilización popular por motivos políticos del siglo XX cuando miles de trabajadores marcharon hacia la Casa Rosada a exigir la libertad de Juan Domingo Perón, detenido por entonces en la isla Martín García. La jornada quedó inmortalizada con la foto de manifestantes refrescándose en las fuentes de la Plaza de Mayo. Ese año, un club de fútbol obtenía su sexto título de la era profesional. ¿Cuál era?",
-    "respuestas": [
-      "River",
-      "Boca",
-      "Independiente"
-    ]
-  },
-  {
-    "pregunta": "El 19 de junio de 1965 la selección argentina de rugby venció por 11 a 6 en Johannesburgo al segundo seleccionado sudafricano, los Junior Springboks, en el marco de una gira que comprendió 16 partidos en 44 días. Ese día quedó inmortalizado por el vuelo del centro Marcelo Pascual para marcar uno de los tres tries anotados por los argentinos y porque un periodista local bautizó para siempre a la selección argentina: nacía el mote de Los Pumas. ¿En que equipo jugaba Pascual?",
-    "respuestas": [
-      "Pucará",
-      "Pueyrredón",
-      "Los Tilos"
-    ]
-  },
-  {
-    "pregunta": "Exactamente veintiocho años después del golpe militar de 1976, el presidente Néstor Kirchner ordenó al jefe del Ejército de entonces, general Roberto Bendini, descolgar los cuadros de los dictadores Jorge Rafael Videla y de Reynaldo Bignone en una de las galerías del Colegio Militar de la Nación, en El Palomar, fijados allí por haber sido directores de ese establecimiento. Era el año 2004, cuando la Argentina ganaba sendas medallas de oro olímpicas, a través de las selecciones de fútbol y de básquet. ¿Cuánto tiempo había transcurrido desde la última conquista de ese nivel?",
-    "respuestas": [
-      "52 años",
-      "48 años",
-      "44 años"
+      "París 1924",
+      "Estocolmo 1928",
+      "Los Ángeles 1932"
     ]
   }
 ]
