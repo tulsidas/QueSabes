@@ -1,6 +1,11 @@
 package ar.com.jengibre.core;
 
 import static playn.core.PlayN.graphics;
+
+import java.util.Set;
+
+import com.google.common.collect.Sets;
+
 import playn.core.GroupLayer;
 import playn.core.util.Clock;
 import pythagoras.f.FloatMath;
@@ -31,6 +36,9 @@ public class Sector {
    private int rondas;
 
    private int medallas;
+
+   // los personajes que ya salieron en la ruleta, para no repetir
+   private Set<Personaje> personajes;
 
    public Sector(String nombre, boolean flipped) {
       this.nombre = nombre;
@@ -78,9 +86,19 @@ public class Sector {
       rondas = 0;
       medallas = 0;
 
+      personajes = Sets.newHashSet();
+
       etapa = new EtapaIdle(this);
    }
 
+   public Set<Personaje> personajesQueSalieron() {
+      return personajes;
+   }
+   
+   public void salioPersonaje(Personaje p) {
+      personajes.add(p);
+   }
+   
    /**
     * Idle -> EsperandoOtros
     */
@@ -155,7 +173,7 @@ public class Sector {
    }
 
    public boolean termino() {
-      return rondas == 3;
+      return rondas == 11; /* FIXME */
    }
 
    public int medallas() {

@@ -61,8 +61,12 @@ public class EtapaRuleta extends AbstractEtapa {
    @Override
    public void onPointerEnd(float x, float y) {
       if (elegido == null) {
-         // elegido = rnd.pick(map.keySet(), null);
-         elegido = rnd.pick(map.keySet().stream().filter((p) -> p.fbSaluda() != null).iterator(), null);
+         // obtengo de los que NO salieron aún para el sector
+         elegido = rnd.pick(map.keySet().stream().filter(p -> !sector.personajesQueSalieron().contains(p))
+               .iterator(), null);
+
+         // lo agrego al sector para que no vuelva a salir en otra ronda
+         sector.salioPersonaje(elegido);
 
          anim.clear();
 
