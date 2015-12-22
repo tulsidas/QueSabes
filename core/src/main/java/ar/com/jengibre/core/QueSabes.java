@@ -163,21 +163,13 @@ public class QueSabes extends Game.Default implements InputListener {
             Sound saluda = assets().getSound("ruleta/" + path + "/SALUDA");
             saluda.addCallback(sndCallback);
 
-            if (path.equals("ALFONSIN")) { // || path.equals("GINOBILI") ||
-                                           // path.equals("ALFONSIN")
-               // || path.equals("DEMIDI") || path.equals("MENDEZ")) { // FIXME
-               personajes.add(new Personaje(imgRuleta,//
-                     cargarFlipbook("ruleta/" + path + "/GANA", FPS),//
-                     cargarFlipbook("ruleta/" + path + "/PIERDE", FPS),//
-                     cargarFlipbook("ruleta/" + path + "/SALUDA", FPS),//
-                     gana, pierde, saluda, cargarPreguntas(path)));
+            personajes.add(new Personaje(imgRuleta,//
+                  cargarFlipbook("ruleta/" + path + "/GANA", FPS),//
+                  cargarFlipbook("ruleta/" + path + "/PIERDE", FPS),//
+                  cargarFlipbook("ruleta/" + path + "/SALUDA", FPS),//
+                  gana, pierde, saluda, cargarPreguntas(path)));
 
-               System.out.println("cargado: " + path);
-            }
-            else {
-               personajes
-                     .add(new Personaje(imgRuleta, null, null, null, null, null, null, new ArrayList<>()));
-            }
+            System.out.println("cargado: " + path);
          }
 
          personajes = ImmutableList.copyOf(personajes);
