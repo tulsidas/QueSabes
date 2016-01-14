@@ -7,6 +7,7 @@ import java.util.List;
 import playn.core.CanvasImage;
 import playn.core.Font;
 import playn.core.GroupLayer;
+import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Layer;
 import playn.core.TextFormat;
@@ -29,6 +30,10 @@ public class EtapaPregunta extends AbstractEtapa {
    private GroupLayer flipbookGroup, papelitosGroup; // flipbooks
 
    private Personaje personaje;
+
+   private ImageLayer reloj;
+
+   private int falta;
 
    public EtapaPregunta(Sector sector, Personaje personaje) {
       super(sector);
@@ -54,31 +59,27 @@ public class EtapaPregunta extends AbstractEtapa {
       preguntaLayer = graphics().createImageLayer(cImg);
       layer.add(preguntaLayer);
 
-      List<Point> posRespuestas = Lists.newArrayList(new Point(150, 350), new Point(350, 400), new Point(550,
-            450));
-      rnd.shuffle(posRespuestas);
+      List<Float> posRespuestas = Lists.newArrayList(200F, 290F, 380F);
 
       TextWrap wrap = new TextWrap(400);
-      respuesta1 = graphics().createImageLayer(
-            new TextBlock(graphics().layoutText("· " + pregunta.getRespuestas().get(0), format, wrap))
-                  .toImage(Align.CENTER, Colors.WHITE));
+      respuesta1 = pad(new TextBlock(graphics().layoutText("· " + pregunta.getRespuestas().get(0), format,
+            wrap)).toImage(Align.CENTER, Colors.WHITE));
       respuesta1.setInteractive(true);
-      Point p = posRespuestas.remove(0);
-      layer.addAt(respuesta1, p.x, p.y);
+      layer.addAt(respuesta1, (Sector.WIDTH - respuesta1.width()) / 2, rnd.pluck(posRespuestas, 0F));
 
-      respuesta2 = graphics().createImageLayer(
-            new TextBlock(graphics().layoutText("· " + pregunta.getRespuestas().get(1), format, wrap))
-                  .toImage(Align.CENTER, Colors.WHITE));
+      respuesta2 = pad(new TextBlock(graphics().layoutText("· " + pregunta.getRespuestas().get(1), format,
+            wrap)).toImage(Align.CENTER, Colors.WHITE));
       respuesta2.setInteractive(true);
-      p = posRespuestas.remove(0);
-      layer.addAt(respuesta2, p.x, p.y);
+      layer.addAt(respuesta2, (Sector.WIDTH - respuesta2.width()) / 2, rnd.pluck(posRespuestas, 0F));
 
-      respuesta3 = graphics().createImageLayer(
-            new TextBlock(graphics().layoutText("· " + pregunta.getRespuestas().get(2), format, wrap))
-                  .toImage(Align.CENTER, Colors.WHITE));
+      respuesta3 = pad(new TextBlock(graphics().layoutText("· " + pregunta.getRespuestas().get(2), format,
+            wrap)).toImage(Align.CENTER, Colors.WHITE));
       respuesta3.setInteractive(true);
-      p = posRespuestas.remove(0);
-      layer.addAt(respuesta3, p.x, p.y);
+      layer.addAt(respuesta3, (Sector.WIDTH - respuesta3.width()) / 2, rnd.pluck(posRespuestas, 0F));
+
+      this.falta = TIMEOUT;
+      reloj = graphics().createImageLayer();
+      layer.addAt(reloj, 760, 200);
    }
 
    @Override
@@ -86,6 +87,12 @@ public class EtapaPregunta extends AbstractEtapa {
       if (!fin) {
          showAnim(personaje.fbPierde(), false);
       }
+   }
+
+   @Override
+   public void doUpdate(int delta) {
+      falta -= delta;
+      reloj.setImage(QueSabes.reloj.get(Math.max(falta, 0) / 1000));
    }
 
    @Override
@@ -98,6 +105,21 @@ public class EtapaPregunta extends AbstractEtapa {
       else if (hit == respuesta2 || hit == respuesta3) {
          showAnim(personaje.fbPierde(), false);
       }
+   }
+
+   // mete una imagen dentro de otra con más espacio (para darle lugar a las
+   // preguntas
+   private ImageLayer pad(Image orig) {
+      float pad = 25;
+      CanvasImage image = graphics().createImage(orig.width() + 2 * pad, orig.height() + 2 * pad);
+
+      // TODO darle un marco a la respuesta
+      // image.canvas().setFillColor(Colors.YELLOW);
+      // image.canvas().fillRect(0, 0, image.width(), image.height());
+
+      image.canvas().drawImage(orig, pad, pad);
+
+      return graphics().createImageLayer(image);
    }
 
    private boolean fin = false;

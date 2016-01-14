@@ -7,7 +7,6 @@ import java.util.Map;
 
 import playn.core.GroupLayer;
 import playn.core.ImageLayer;
-import playn.core.util.Clock;
 import pythagoras.f.Circle;
 import pythagoras.f.Point;
 import pythagoras.f.Vector;
@@ -28,6 +27,10 @@ public class EtapaBonus extends AbstractEtapa {
    private ImageLayer arco, pelota;
 
    private GroupLayer arqueritoLayer, pelotaLayer;
+
+   private ImageLayer reloj;
+
+   private int falta;
 
    private float dx, dy; // la velocidad de la pelota
 
@@ -61,10 +64,10 @@ public class EtapaBonus extends AbstractEtapa {
       layer.addAt(bonus, 0, Sector.HEIGHT);
       anim.tweenY(bonus).to(0).in(400).easeOut().then().delay(400).then().tweenY(bonus).to(-Sector.HEIGHT)
             .in(400).easeIn();
-   }
 
-   @Override
-   public void doPaint(Clock clock) {
+      this.falta = TIMEOUT;
+      reloj = graphics().createImageLayer();
+      layer.addAt(reloj, 760, 330);
    }
 
    private boolean checkCollision(Circle c) {
@@ -95,6 +98,9 @@ public class EtapaBonus extends AbstractEtapa {
 
    @Override
    public void doUpdate(int delta) {
+      // actualizo reloj
+      falta -= delta;
+      reloj.setImage(QueSabes.reloj.get(Math.max(falta, 0) / 1000));
 
       List<Circle> circles = Lists.newArrayList();
       int frame = arcoFlip.getFrame();
@@ -148,6 +154,8 @@ public class EtapaBonus extends AbstractEtapa {
    @Override
    public void timeout() {
       if (!pateo) {
+         pateo = true;
+
          // XXX revisar que no esté cortando la jugada ni que se superponga
          fuera();
       }
