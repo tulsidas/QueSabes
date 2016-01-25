@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 
 public class Personaje {
 
-   private Image ruleta;
+   private Image ruleta, ruletaBN;
 
    private Flipbook fbGana, fbPierde, fbSaluda;
 
@@ -18,9 +18,10 @@ public class Personaje {
 
    private ImmutableList<Pregunta> preguntas;
 
-   public Personaje(Image ruleta, Flipbook fbGana, Flipbook fbPierde, Flipbook fbSaluda, Sound soundGana,
-         Sound soundPierde, Sound soundSaluda, List<Pregunta> preguntas) {
+   public Personaje(Image ruleta, Image ruletaBN, Flipbook fbGana, Flipbook fbPierde, Flipbook fbSaluda,
+         Sound soundGana, Sound soundPierde, Sound soundSaluda, List<Pregunta> preguntas) {
       this.ruleta = ruleta;
+      this.ruletaBN = ruletaBN;
       this.fbGana = fbGana;
       this.fbPierde = fbPierde;
       this.fbSaluda = fbSaluda;
@@ -32,6 +33,10 @@ public class Personaje {
 
    public Image imgRuleta() {
       return ruleta;
+   }
+
+   public Image imgRuletaBN() {
+      return ruletaBN;
    }
 
    public Flipbook fbGana() {

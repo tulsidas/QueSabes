@@ -173,7 +173,7 @@ public class Sector {
    }
 
    public boolean termino() {
-      return rondas == 11; /* FIXME */
+      return rondas == 3;
    }
 
    public int medallas() {

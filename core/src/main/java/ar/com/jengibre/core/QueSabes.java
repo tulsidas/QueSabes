@@ -46,7 +46,7 @@ public class QueSabes extends Game.Default implements InputListener {
 
    private Sector s1, s2, s3, s4;
 
-   public static List<Personaje> personajes;
+   public static ImmutableList<Personaje> personajes;
 
    public static Flipbook papelitos, arquerito, pelota, bgEsperandoFin;
 
@@ -150,11 +150,12 @@ public class QueSabes extends Game.Default implements InputListener {
          tuc.addCallback(sndCallback);
 
          // PERSONAJES
-         personajes = Lists.newArrayList();
+         List<Personaje> _personajes = Lists.newArrayList();
          for (String path : Lists.newArrayList("ALFONSIN", "DEMIDI", "GINOBILI", "MARADONA", "MENDEZ",
                "PERON", "PUMA", "VILAS", "FANGIO", "SELFIE")) {
 
             final Image imgRuleta = assets().getImageSync("ruleta/" + path + "/0.png");
+            final Image imgRuletaBN = assets().getImageSync("ruleta/" + path + "/1.png");
 
             Sound gana = assets().getSound("ruleta/" + path + "/GANA");
             gana.addCallback(sndCallback);
@@ -163,16 +164,19 @@ public class QueSabes extends Game.Default implements InputListener {
             Sound saluda = assets().getSound("ruleta/" + path + "/SALUDA");
             saluda.addCallback(sndCallback);
 
-            personajes.add(new Personaje(imgRuleta,//
-                  cargarFlipbook("ruleta/" + path + "/GANA", FPS),//
-                  cargarFlipbook("ruleta/" + path + "/PIERDE", FPS),//
-                  cargarFlipbook("ruleta/" + path + "/SALUDA", FPS),//
+            _personajes.add(new Personaje(imgRuleta, imgRuletaBN,//
+                  null, // FIXME cargarFlipbook("ruleta/" + path + "/GANA",
+                        // FPS),//
+                  null, // FIXME cargarFlipbook("ruleta/" + path + "/PIERDE",
+                        // FPS),//
+                  null, // FIXME cargarFlipbook("ruleta/" + path + "/SALUDA",
+                        // FPS),//
                   gana, pierde, saluda, cargarPreguntas(path)));
 
             System.out.println("cargado: " + path);
          }
 
-         personajes = ImmutableList.copyOf(personajes);
+         personajes = ImmutableList.copyOf(_personajes);
       }
       catch (Exception e) {
          e.printStackTrace();
@@ -218,14 +222,14 @@ public class QueSabes extends Game.Default implements InputListener {
    }
 
    private void reload() {
-      System.out.println("reload!");
+      // System.out.println("reload!");
 
       StartupLatch.reset();
 
       graphics().rootLayer().removeAll();
 
       // arriba a la izq
-      s1 = new Sector("S1", true);
+      s1 = new Sector("S1", false /* FIXME true*/);
       graphics().rootLayer().addAt(s1.topLayer(), 0, 0);
 
       // arriba a la der
@@ -248,9 +252,9 @@ public class QueSabes extends Game.Default implements InputListener {
       clock.update(delta);
 
       s1.update(delta);
-      s2.update(delta);
-      s3.update(delta);
-      s4.update(delta);
+      // FIXME s2.update(delta);
+      // FIXME s3.update(delta);
+      // FIXME s4.update(delta);
 
       // controlador para el inicio del juego
       StartupLatch.update(delta);
@@ -261,9 +265,9 @@ public class QueSabes extends Game.Default implements InputListener {
       clock.paint(alpha);
 
       s1.paint(clock);
-      s2.paint(clock);
-      s3.paint(clock);
-      s4.paint(clock);
+      // FIXME s2.paint(clock);
+      // FIXME s3.paint(clock);
+      // FIXME s4.paint(clock);
    }
 
    private Flipbook cargarFlipbook(String path, int fps) throws JsonParserException, Exception {

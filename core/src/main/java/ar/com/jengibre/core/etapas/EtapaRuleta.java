@@ -1,16 +1,17 @@
 package ar.com.jengibre.core.etapas;
 
 import static playn.core.PlayN.graphics;
-import static pythagoras.f.FloatMath.PI;
 
 import java.util.List;
 import java.util.Map;
 
 import playn.core.GroupLayer;
+import playn.core.Image;
 import playn.core.ImageLayer;
 import ar.com.jengibre.core.Personaje;
 import ar.com.jengibre.core.QueSabes;
 import ar.com.jengibre.core.Sector;
+import ar.com.jengibre.core.util._Action;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -23,39 +24,55 @@ public class EtapaRuleta extends AbstractEtapa {
 
    Personaje elegido = null;
 
-   final int DELAY = 350;
-
    public EtapaRuleta(Sector sector) {
       super(sector);
 
-      layer.add(graphics().createImageLayer(QueSabes.bgRuleta));
+      ImageLayer fondo = graphics().createImageLayer(QueSabes.bgRuleta);
+      fondo.setDepth(Short.MIN_VALUE);
+      layer.add(fondo);
 
       flipbookGroup = graphics().createGroupLayer();
 
+      final int TIME = 200;
       List<ImageLayer> images = Lists.newArrayList();
-      for (Personaje pje : QueSabes.personajes) {
-         ImageLayer img = graphics().createImageLayer(pje.imgRuleta());
-         images.add(img);
+      int numPersonajes = QueSabes.personajes.size();
+      for (int i = 0; i < numPersonajes; i++) {
+         Personaje pje = QueSabes.personajes.get(i);
+
+         Image color = pje.imgRuleta();
+         Image bn = pje.imgRuletaBN();
+
+         ImageLayer img = graphics().createImageLayer(color);
+         img.setOrigin(img.width() / 2, img.height() / 2);
 
          map.put(pje, img);
-      }
+         images.add(img);
 
-      final float ANGLE = PI * 2 / images.size();
-      for (int i = 0; i < images.size(); i++) {
-         ImageLayer img = images.get(i);
+         // offscreen para que no moleste
+         layer.addAt(img, -Sector.WIDTH, Sector.HEIGHT / 2);
 
-         img.setTranslation(img.width() / 2, -img.height());
-         img.setOrigin(img.width() / 2, -img.height());
-         img.setRotation(ANGLE * i);
-         layer.add(img);
+         anim.delay(i * TIME).then().repeat(img).tweenScale(img).from(0.4F).to(1).in(TIME).easeOut().then()
+               .tweenScale(img).to(0.4F).in(TIME).easeIn().then().delay((numPersonajes - 2) * TIME);
 
-         anim.repeat(img).tweenRotation(img).to(2 * PI + img.rotation()).in(DELAY * images.size());
+         anim.delay(i * TIME).then().repeat(img).add(new _Action(() -> {
+            img.setDepth(50);
+            img.setImage(color);
+         })).then().tweenX(img).from(Sector.WIDTH).to(Sector.WIDTH / 2).in(TIME).then().tweenX(img).to(0)
+               .in(TIME).then()
+               // viaja por atrás
+               .add(new _Action(() -> {
+                  img.setDepth(0);
+                  img.setImage(bn);
+               })).then().tweenX(img).to(Sector.WIDTH).in((numPersonajes - 2) * TIME);
+
+         anim.delay(i * TIME).then().repeat(img).tweenAlpha(img).from(0.5F).to(1).in(TIME).easeOut().then()
+               .tweenAlpha(img).to(0.5F).in(TIME).easeIn().then().delay((numPersonajes - 2) * TIME);
       }
    }
 
    @Override
    public void timeout() {
-      onPointerEnd(0, 0);
+      // FIXME onPointerEnd(0, 0);
    }
 
    @Override
@@ -70,34 +87,34 @@ public class EtapaRuleta extends AbstractEtapa {
 
          anim.clear();
 
-         // el elegido tiene que terminar en 0
-         // el resto donde corresponda
-         float rotation = map.get(elegido).rotation();
-
-         float hasta2PI = rotation > 2 * PI ? 4 * PI - rotation : 2 * PI - rotation;
-
-         // 2PI -> DELAY * personajes.size()
-         float duration = hasta2PI * DELAY * map.size() / (2 * PI);
+         final int TIME_OUT = 3000;
 
          for (Map.Entry<Personaje, ImageLayer> entry : map.entrySet()) {
-            Personaje p = entry.getKey();
             ImageLayer img = entry.getValue();
 
-            anim.tweenRotation(img).to(img.rotation() + hasta2PI).in(duration).easeOutBack();
+            if (entry.getKey() == elegido) {
+               // pongo la color
+               img.setImage(elegido.imgRuleta());
 
-            if (p != elegido) {
-               anim.tweenAlpha(img).to(0).in(duration).easeOut().then().destroy(img);
+               anim.tweenAlpha(img).to(1).in(TIME_OUT).easeOut();
+               anim.delay(TIME_OUT / 2).then().tweenScale(img).to(1).in(TIME_OUT).easeOutElastic();
+               anim.delay(TIME_OUT / 2).then().tweenX(img).to(Sector.WIDTH / 2).easeOutElastic().in(TIME_OUT);
             }
-
+            else {
+               anim.tweenAlpha(img).to(0).in(TIME_OUT / 2).easeOut();
+               anim.delay(TIME_OUT).then().destroy(img);
+            }
          }
 
          anim.addBarrier(500);
 
          anim.play(elegido.soundSaluda());
+         /* FIXME 
          anim.destroy(map.get(elegido)).then().add(layer, flipbookGroup).then()
                .flipbook(flipbookGroup, elegido.fbSaluda()).then().delay(500).then().action(() -> {
                   sector.pregunta(elegido);
                });
+         */
       }
    }
 }
