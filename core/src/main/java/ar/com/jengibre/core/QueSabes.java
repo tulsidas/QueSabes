@@ -58,6 +58,8 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static Image botonUp, botonDn;
 
+   public static Image zocalo, zocaloAlto;
+
    public static ImmutableList<Image> numMedallas;
 
    public static ImmutableList<Image> reloj;
@@ -99,6 +101,9 @@ public class QueSabes extends Game.Default implements InputListener {
 
       botonUp = assets().getImageSync("images/boton_up.png");
       botonDn = assets().getImageSync("images/boton_dn.png");
+
+      zocalo = assets().getImageSync("images/zocalo.png");
+      zocaloAlto = assets().getImageSync("images/zocaloalto.png");
 
       List<Image> _num = Lists.newArrayList();
       for (int i = 1; i <= 24; i++) {
