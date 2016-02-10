@@ -162,7 +162,7 @@ public class EtapaBonus extends AbstractEtapa {
    }
 
    @Override
-   public void onPointerStart(float x, float y) {
+   public void touchStart(float x, float y) {
       if (!pateo) {
          tocoPelota = pelota == layer.hitTest(new Point(x, y));
       }
@@ -171,7 +171,7 @@ public class EtapaBonus extends AbstractEtapa {
    private static final float MAX = 25;
 
    @Override
-   public void onPointerEnd(float x, float y) {
+   public void touchEnd(float x, float y) {
       if (tocoPelota && !pateo) {
          dx = x - (pelotaLayer.tx() + pw2);
          dy = y - (pelotaLayer.ty() + pw2);

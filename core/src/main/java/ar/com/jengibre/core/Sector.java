@@ -4,8 +4,6 @@ import static playn.core.PlayN.graphics;
 
 import java.util.Set;
 
-import com.google.common.collect.Sets;
-
 import playn.core.GroupLayer;
 import playn.core.util.Clock;
 import pythagoras.f.FloatMath;
@@ -17,6 +15,8 @@ import ar.com.jengibre.core.etapas.EtapaIdle;
 import ar.com.jengibre.core.etapas.EtapaMedallero;
 import ar.com.jengibre.core.etapas.EtapaPregunta;
 import ar.com.jengibre.core.etapas.EtapaRuleta;
+
+import com.google.common.collect.Sets;
 
 public class Sector {
 
@@ -66,12 +66,12 @@ public class Sector {
       return layer;
    }
 
-   public void onPointerStart(float x, float y) {
-      etapa.onPointerStart(x, y);
+   public void touchStart(float x, float y) {
+      etapa.touchStart(x, y);
    }
 
-   public void onPointerEnd(float x, float y) {
-      etapa.onPointerEnd(x, y);
+   public void touchEnd(float x, float y) {
+      etapa.touchEnd(x, y);
    }
 
    public void update(int delta) {
@@ -94,11 +94,11 @@ public class Sector {
    public Set<Personaje> personajesQueSalieron() {
       return personajes;
    }
-   
+
    public void salioPersonaje(Personaje p) {
       personajes.add(p);
    }
-   
+
    /**
     * Idle -> EsperandoOtros
     */

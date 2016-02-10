@@ -39,6 +39,7 @@ public class EtapaPregunta extends AbstractEtapa {
       super(sector);
 
       this.personaje = personaje;
+      personaje.cargarSonidos();
 
       flipbookGroup = graphics().createGroupLayer();
       papelitosGroup = graphics().createGroupLayer();
@@ -98,7 +99,7 @@ public class EtapaPregunta extends AbstractEtapa {
    }
 
    @Override
-   public void onPointerEnd(float x, float y) {
+   public void touchEnd(float x, float y) {
       Layer hit = layer.hitTest(new Point(x, y));
 
       if (hit == respuesta1) {
@@ -147,6 +148,7 @@ public class EtapaPregunta extends AbstractEtapa {
          anim.addBarrier(1_000);
 
          anim.action(() -> {
+            personaje.liberarSonidos();
             sector.arquerito(ganoMedalla);
          });
       }

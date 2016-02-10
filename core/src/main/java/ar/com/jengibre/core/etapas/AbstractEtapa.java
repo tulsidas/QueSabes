@@ -68,11 +68,11 @@ public abstract class AbstractEtapa {
       // por default NOOP
    }
 
-   public void onPointerStart(float x, float y) {
+   public void touchStart(float x, float y) {
       // por default NOOP
    }
 
-   public void onPointerEnd(float x, float y) {
+   public void touchEnd(float x, float y) {
       // por default NOOP
    }
 }

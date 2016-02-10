@@ -27,7 +27,7 @@ public class EtapaIdle extends AbstractEtapa {
    }
 
    @Override
-   public void onPointerEnd(float x, float y) {
+   public void touchEnd(float x, float y) {
       sector.empezarJuego();
    }
 }
