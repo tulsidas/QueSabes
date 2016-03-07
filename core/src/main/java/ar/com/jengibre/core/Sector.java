@@ -9,6 +9,7 @@ import playn.core.util.Clock;
 import pythagoras.f.FloatMath;
 import ar.com.jengibre.core.etapas.AbstractEtapa;
 import ar.com.jengibre.core.etapas.EtapaBonus;
+import ar.com.jengibre.core.etapas.EtapaEmpezamos;
 import ar.com.jengibre.core.etapas.EtapaEsperandoFinOtros;
 import ar.com.jengibre.core.etapas.EtapaEsperandoOtros;
 import ar.com.jengibre.core.etapas.EtapaIdle;
@@ -105,12 +106,19 @@ public class Sector {
    public void empezarJuego() {
       int cuantos = StartupLatch.sectorListoParaEmpezar(this);
       if (cuantos == -1) {
-         // todo listo, ir directo a ruleta
-         ruleta();
+         // todo listo, empieza el juego
+         setEtapa(new EtapaEmpezamos(this));
       }
       else {
          setEtapa(new EtapaEsperandoOtros(this, cuantos));
       }
+   }
+
+   /**
+    * EsperandoOtros -> Empezamos
+    */
+   public void empezamos() {
+      setEtapa(new EtapaEmpezamos(this));
    }
 
    /**

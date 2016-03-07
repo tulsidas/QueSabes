@@ -48,7 +48,7 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static ImmutableList<Personaje> personajes;
 
-   public static Flipbook papelitos, arquerito, pelota, bgEsperandoFin;
+   public static Flipbook papelitos, arquerito, pelota, empezamos, bgEsperandoFin;
 
    public static Image bgIdle, bgRuleta, bgPregunta, bgArquerito, bgMedallero;
 
@@ -84,7 +84,6 @@ public class QueSabes extends Game.Default implements InputListener {
    @Override
    public void init() {
       graphics().rootLayer().removeAll();
-
       bgIdle = assets().getImageSync("images/bgIdle.png");
       bgRuleta = assets().getImageSync("images/bgRuleta.png");
       bgPregunta = assets().getImageSync("images/bgPregunta.png");
@@ -140,6 +139,7 @@ public class QueSabes extends Game.Default implements InputListener {
          papelitos = cargarFlipbook("ruleta/papelitos", FPS);
          arquerito = cargarFlipbook("images/arquerito", FPS * 3);
          pelota = cargarFlipbook("images/pelota", FPS * 3);
+         empezamos = cargarFlipbook("images/empezamos", 500);
          bgEsperandoFin = cargarFlipbook("images/esperandoFin", 1000);
 
          nogol = assets().getSound("sfx/nogol");
@@ -376,10 +376,10 @@ public class QueSabes extends Game.Default implements InputListener {
             }
          }
          else if (e.code == ABS_MT_POSITION_X) {
-            getCurrentPoint(currentSlot).x = e.value;
+            getCurrentPoint(currentSlot).x = mapX(e.value);
          }
          else if (e.code == ABS_MT_POSITION_Y) {
-            getCurrentPoint(currentSlot).y = e.value;
+            getCurrentPoint(currentSlot).y = mapY(e.value);
          }
          else if (e.code == SYN_REPORT) {
             for (Map.Entry<Integer, Point> entry : slotPoints.entrySet()) {
@@ -398,6 +398,24 @@ public class QueSabes extends Game.Default implements InputListener {
             }
          }
       }
+   }
+
+   private float mapX(float val) {
+      return map(val, graphics().width());
+   }
+
+   private float mapY(float val) {
+      return map(val, graphics().height());
+   }
+
+   /**
+    * @param val
+    *           : valor entre [0, 4096]
+    * @param top
+    * @return val mapeado a [0, top]
+    */
+   private static float map(float val, float top) {
+      return (val / 4096F) * top;
    }
 
    private Point getCurrentPoint(int slot) {

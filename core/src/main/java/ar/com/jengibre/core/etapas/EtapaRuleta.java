@@ -33,7 +33,7 @@ public class EtapaRuleta extends AbstractEtapa {
 
       flipbookGroup = graphics().createGroupLayer();
 
-      final int TIME = 200;
+      final int TIME = 500;
       List<ImageLayer> images = Lists.newArrayList();
       int numPersonajes = QueSabes.personajes.size();
       for (int i = 0; i < numPersonajes; i++) {
@@ -72,7 +72,7 @@ public class EtapaRuleta extends AbstractEtapa {
 
    @Override
    public void timeout() {
-      // FIXME onPointerEnd(0, 0);
+      touchEnd(0, 0);
    }
 
    @Override
@@ -109,12 +109,10 @@ public class EtapaRuleta extends AbstractEtapa {
          anim.addBarrier(500);
 
          anim.play(elegido.soundSaluda());
-         /* FIXME 
          anim.destroy(map.get(elegido)).then().add(layer, flipbookGroup).then()
                .flipbook(flipbookGroup, elegido.fbSaluda()).then().delay(500).then().action(() -> {
                   sector.pregunta(elegido);
                });
-         */
       }
    }
 }

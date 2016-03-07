@@ -156,7 +156,6 @@ public class EtapaBonus extends AbstractEtapa {
       if (!pateo) {
          pateo = true;
 
-         // XXX revisar que no esté cortando la jugada ni que se superponga
          fuera();
       }
    }
@@ -190,9 +189,6 @@ public class EtapaBonus extends AbstractEtapa {
 
          QueSabes.tuc.play();
 
-         // la pelota ahora gira en direccion a donde fue pateada
-         // float angulo = (float) Math.atan2(dy, dx);
-         // pelota.setRotation(angulo);
          anim.repeat(pelotaLayer).flipbook(pelotaLayer, QueSabes.pelota);
       }
    }

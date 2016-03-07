@@ -3,6 +3,8 @@ package ar.com.jengibre.core;
 import java.util.Collection;
 import java.util.Map;
 
+import ar.com.jengibre.core.etapas.EtapaEmpezamos;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -97,7 +99,7 @@ public class StartupLatch {
 
    private static void empiezaSector() {
       // aviso que arranquen los sectores de equipoActual
-      equipos.get(equipoActual).forEach(sector -> sector.ruleta());
+      equipos.get(equipoActual).forEach(sector -> sector.empezamos());
 
       // nuevo equipo
       equipoActual++;
