@@ -28,7 +28,7 @@ public class EtapaMedallero extends AbstractEtapa {
       for (int i = 1; i <= medallas; i++) {
          final int ufa = i - 1;
          animb = animb.action(() -> cuantas.setImage(QueSabes.numMedallas.get(ufa)))
-         // .then().tweenScale(cuantas).from(0.7F).to(1.3F).in(300).easeOutElastic()
+               .then().play(QueSabes.sndMedalla)
                .then().shake(cuantas).in(Math.max(shake, 100)).then().delay(Math.max(delay, 50)).then();
 
          shake -= 30;

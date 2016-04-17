@@ -28,6 +28,7 @@ public class EtapaIdle extends AbstractEtapa {
 
    @Override
    public void touchEnd(float x, float y) {
+      QueSabes.tic.play();
       sector.empezarJuego();
    }
 }

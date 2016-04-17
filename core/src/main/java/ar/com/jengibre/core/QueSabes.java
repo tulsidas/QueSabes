@@ -33,6 +33,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.base.Stopwatch;
 
 public class QueSabes extends Game.Default implements InputListener {
 
@@ -48,7 +49,9 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static ImmutableList<Personaje> personajes;
 
-   public static Flipbook papelitos, arquerito, pelota, empezamos, bgEsperandoFin;
+   //public static Flipbook papelitos;
+
+   public static Flipbook arquerito, pelota, empezamos, bgEsperandoFin;
 
    public static Image bgIdle, bgRuleta, bgPregunta, bgArquerito, bgMedallero;
 
@@ -66,13 +69,15 @@ public class QueSabes extends Game.Default implements InputListener {
 
    public static ImmutableList<Image> bgEsperando;
 
-   public static Sound nogol, gol1, gol2, palo, ruleta, tuc;
+   public static Sound nogol, gol1, gol2, palo, ruleta, tic, tuc, sndMedalla;
+
+   public boolean listo;
 
    public QueSabes() {
       super(UPDATE_RATE); // 25 FPS
 
       try {
-         mt = new EventDevice("/dev/input/event17");
+         mt = new EventDevice("/dev/input/event2");
          mt.addListener(this);
       }
       catch (IOException e) {
@@ -81,8 +86,29 @@ public class QueSabes extends Game.Default implements InputListener {
       }
    }
 
+   private class SoundCallback implements Callback<Sound> {
+      private String nombre;
+
+      SoundCallback(String nombre) {
+         this.nombre = nombre;
+      }
+
+      public void onSuccess(Sound result) {
+         System.out.println("cargado sonido " + nombre);
+         result.prepare();
+      }
+
+      public void onFailure(Throwable cause) {
+         System.out.println("fallo la carga del sonido " + nombre);
+         cause.printStackTrace();
+         System.exit(1);
+      }
+   };
+
    @Override
    public void init() {
+	Stopwatch sw = Stopwatch.createStarted();
+
       graphics().rootLayer().removeAll();
       bgIdle = assets().getImageSync("images/bgIdle.png");
       bgRuleta = assets().getImageSync("images/bgRuleta.png");
@@ -121,55 +147,56 @@ public class QueSabes extends Game.Default implements InputListener {
             assets().getImageSync("images/esperando2.png"), assets().getImageSync("images/esperando3.png"),
             assets().getImageSync("images/esperando4.png"));
 
-      final Callback<Sound> sndCallback = new Callback<Sound>() {
-
-         @Override
-         public void onSuccess(Sound result) {
-            result.prepare();
-         }
-
-         @Override
-         public void onFailure(Throwable cause) {
-            cause.printStackTrace();
-            System.exit(1);
-         }
-      };
-
       try {
-         papelitos = cargarFlipbook("ruleta/papelitos", FPS);
+         //papelitos = cargarFlipbook("ruleta/papelitos", FPS);
          arquerito = cargarFlipbook("images/arquerito", FPS * 3);
          pelota = cargarFlipbook("images/pelota", FPS * 3);
          empezamos = cargarFlipbook("images/empezamos", 500);
          bgEsperandoFin = cargarFlipbook("images/esperandoFin", 1000);
 
          nogol = assets().getSound("sfx/nogol");
-         nogol.addCallback(sndCallback);
+         nogol.addCallback(new SoundCallback("nogol"));
          gol1 = assets().getSound("sfx/gol1");
-         gol1.addCallback(sndCallback);
+         gol1.addCallback(new SoundCallback("gol1"));
          gol2 = assets().getSound("sfx/gol2");
-         gol2.addCallback(sndCallback);
+         gol2.addCallback(new SoundCallback("gol2"));
          palo = assets().getSound("sfx/palo");
-         palo.addCallback(sndCallback);
+         palo.addCallback(new SoundCallback("palo"));
          ruleta = assets().getSound("sfx/ruleta");
-         ruleta.addCallback(sndCallback);
+         ruleta.addCallback(new SoundCallback("ruleta"));
+         tic = assets().getSound("sfx/tic");
+         tic.addCallback(new SoundCallback("tic"));
          tuc = assets().getSound("sfx/tuc");
-         tuc.addCallback(sndCallback);
+         tuc.addCallback(new SoundCallback("tuc"));
+         sndMedalla = assets().getSound("sfx/medalla1");
+         sndMedalla.addCallback(new SoundCallback("medalla"));
+
+         Sound saluda = assets().getSound("ruleta/ALFONSIN/SALUDA");
+         saluda.addCallback(new SoundCallback("SALUDA"));
+         Sound gana = assets().getSound("ruleta/ALFONSIN/GANA");
+         gana.addCallback(new SoundCallback("GANA"));
+         Sound pierde = assets().getSound("ruleta/ALFONSIN/PIERDE");
+         pierde.addCallback(new SoundCallback("PIERDE"));
 
          // PERSONAJES
          List<Personaje> _personajes = Lists.newArrayList();
-         for (String path : Lists.newArrayList("ALFONSIN", "DEMIDI", "GINOBILI", "MARADONA", "MENDEZ",
-               "PERON", "PUMA", "VILAS", "FANGIO", "SELFIE")) {
+         for (String path : Lists.newArrayList(
+		"ALFONSIN", "DEMIDI", "GINOBILI" 
+		,"MARADONA", "PERON", "FANGIO", "VILAS", "SELFIE"
+		//,"MENDEZ", "PUMA"
+		)) {
 
             final Image imgRuleta = assets().getImageSync("ruleta/" + path + "/0.png");
             final Image imgRuletaBN = assets().getImageSync("ruleta/" + path + "/1.png");
 
-            Sound saluda = assets().getSound("ruleta/" + path + "/SALUDA");
-            saluda.addCallback(sndCallback);
+            //Sound saluda = assets().getSound("ruleta/" + path + "/SALUDA");
+            //saluda.addCallback(sndCallback);
 
             _personajes.add(new Personaje(path, imgRuleta, imgRuletaBN,//
                   cargarFlipbook("ruleta/" + path + "/GANA", FPS),//
                   cargarFlipbook("ruleta/" + path + "/PIERDE", FPS),//
                   cargarFlipbook("ruleta/" + path + "/SALUDA", FPS),//
+			gana, pierde,
                   saluda, cargarPreguntas(path)));
 
             System.out.println("cargado: " + path);
@@ -183,7 +210,7 @@ public class QueSabes extends Game.Default implements InputListener {
       }
       // FIN PERSONAJES
 
-      // RELOAD HOOK
+      /* RELOAD HOOK
       keyboard().setListener(new Keyboard.Adapter() {
          @Override
          public void onKeyUp(Keyboard.Event event) {
@@ -192,8 +219,10 @@ public class QueSabes extends Game.Default implements InputListener {
             }
          }
       });
+	*/
       // RELOAD HOOK
 
+/*
       pointer().setListener(new Pointer.Adapter() {
          @Override
          public void onPointerStart(playn.core.Pointer.Event event) {
@@ -205,23 +234,34 @@ public class QueSabes extends Game.Default implements InputListener {
             touchEnd(event.x(), event.y());
          }
       });
+*/
 
       reload();
-      System.out.println("listo");
+
+      System.gc();
+
+      listo = true;
+      System.out.println("listo / " + sw);
    }
 
    private void touchStart(float x, float y) {
-      Sector sector = getSector(x, y);
+	//System.out.println("touchStart: " + x + ", " + y);
+      if (listo && x > 0 && y > 0) {
+         Sector sector = getSector(x, y);
 
-      Point tf = Layer.Util.screenToLayer(sector.layer(), x, y);
-      sector.touchStart(tf.x, tf.y);
+         Point tf = Layer.Util.screenToLayer(sector.layer(), x, y);
+         sector.touchStart(tf.x, tf.y);
+      }
    }
 
    private void touchEnd(float x, float y) {
-      Sector sector = getSector(x, y);
+	//System.out.println("touchEnd: " + x + ", " + y);
+      if (listo && x > 0 && y > 0) {
+         Sector sector = getSector(x, y);
 
-      Point tf = Layer.Util.screenToLayer(sector.layer(), x, y);
-      sector.touchEnd(tf.x, tf.y);
+         Point tf = Layer.Util.screenToLayer(sector.layer(), x, y);
+         sector.touchEnd(tf.x, tf.y);
+      }
    }
 
    private void reload() {
@@ -415,7 +455,7 @@ public class QueSabes extends Game.Default implements InputListener {
     * @return val mapeado a [0, top]
     */
    private static float map(float val, float top) {
-      return (val / 4096F) * top;
+      return (val / 32768F) * top;
    }
 
    private Point getCurrentPoint(int slot) {

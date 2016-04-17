@@ -59,7 +59,7 @@ public class EtapaPregunta extends AbstractEtapa {
 
       List<Float> posRespuestas = Lists.newArrayList(200F, 290F, 380F);
       float y = rnd.pluck(posRespuestas, 0F);
-      TextWrap wrap = new TextWrap(400);
+      TextWrap wrap = new TextWrap(800);
       respuesta1 = pad(new TextBlock(graphics().layoutText(pregunta.getRespuestas().get(0), format, wrap))
             .toImage(Align.CENTER, Colors.WHITE));
       respuesta1.setInteractive(true);
@@ -114,9 +114,9 @@ public class EtapaPregunta extends AbstractEtapa {
    // preguntas
    private ImageLayer pad(Image orig) {
       float pad = 25;
-      CanvasImage image = graphics().createImage(orig.width() + 2 * pad, orig.height() + 2 * pad);
+      CanvasImage image = graphics().createImage(orig.width() + 20 * pad, orig.height() + 2 * pad);
 
-      image.canvas().drawImage(orig, pad, pad);
+      image.canvas().drawImage(orig, 10 * pad, pad);
 
       return graphics().createImageLayer(image);
    }
@@ -136,10 +136,18 @@ public class EtapaPregunta extends AbstractEtapa {
          layer.add(flipbookGroup);
          anim.flipbook(flipbookGroup, flipbook);
 
+         anim.addBarrier();
+
          if (ganoMedalla) {
             anim.play(personaje.soundGana());
-            layer.add(papelitosGroup);
-            anim.flipbook(papelitosGroup, QueSabes.papelitos);
+            //layer.add(papelitosGroup);
+            //anim.flipbook(papelitosGroup, QueSabes.papelitos);
+
+            ImageLayer medalla = graphics().createImageLayer(QueSabes.medalla);
+            medalla.setOrigin(medalla.width() / 2, medalla.height() / 2);
+
+            anim.addAt(layer, medalla, Sector.WIDTH / 2, Sector.HEIGHT / 2).then().tweenScale(medalla).from(2)
+               .to(0.6F).in(500).easeOutBack();
          }
          else {
             anim.play(personaje.soundPierde());

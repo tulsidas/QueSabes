@@ -7,6 +7,7 @@ import java.util.Set;
 import playn.core.GroupLayer;
 import playn.core.util.Clock;
 import pythagoras.f.FloatMath;
+import pythagoras.f.Point;
 import ar.com.jengibre.core.etapas.AbstractEtapa;
 import ar.com.jengibre.core.etapas.EtapaBonus;
 import ar.com.jengibre.core.etapas.EtapaEmpezamos;
@@ -32,6 +33,8 @@ public class Sector {
    public static final int HEIGHT = 540;
 
    private String nombre;
+
+   private Point touchStart, touchEnd;
 
    // cuantas rondas (ruleta->pregunta->arquerito) completó
    private int rondas;
@@ -68,14 +71,26 @@ public class Sector {
    }
 
    public void touchStart(float x, float y) {
-      etapa.touchStart(x, y);
+      //etapa.touchStart(x, y);
+      touchStart = new Point(x, y);
    }
 
    public void touchEnd(float x, float y) {
-      etapa.touchEnd(x, y);
+      //etapa.touchEnd(x, y);
+      touchEnd = new Point(x, y);
    }
 
    public void update(int delta) {
+      if (touchStart != null) {
+         etapa.touchStart(touchStart.x, touchStart.y);
+         touchStart = null;
+      }
+
+      if (touchEnd != null) {
+         etapa.touchEnd(touchEnd.x, touchEnd.y);
+         touchEnd = null;
+      }
+
       etapa.update(delta);
    }
 

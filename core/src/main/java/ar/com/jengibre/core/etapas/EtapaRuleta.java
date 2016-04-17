@@ -78,6 +78,8 @@ public class EtapaRuleta extends AbstractEtapa {
    @Override
    public void touchEnd(float x, float y) {
       if (elegido == null) {
+         QueSabes.tic.play();
+
          // obtengo de los que NO salieron aún para el sector
          elegido = rnd.pick(map.keySet().stream().filter(p -> !sector.personajesQueSalieron().contains(p))
                .iterator(), null);

@@ -23,15 +23,17 @@ public class Personaje {
    private ImmutableList<Pregunta> preguntas;
 
    public Personaje(String path, Image ruleta, Image ruletaBN, Flipbook fbGana, Flipbook fbPierde,
-         Flipbook fbSaluda, Sound soundSaluda, List<Pregunta> preguntas) {
+         Flipbook fbSaluda, Sound soundGana, Sound soundPierde, Sound soundSaluda, List<Pregunta> preguntas) {
       this.path = path;
       this.ruleta = ruleta;
       this.ruletaBN = ruletaBN;
       this.fbGana = fbGana;
       this.fbPierde = fbPierde;
       this.fbSaluda = fbSaluda;
-      this.soundGana = new Sound.Silence();
-      this.soundPierde = new Sound.Silence();
+      //this.soundGana = new Sound.Silence();
+      //this.soundPierde = new Sound.Silence();
+	this.soundGana = soundGana;
+	this.soundPierde = soundPierde;
       this.soundSaluda = soundSaluda;
       this.preguntas = ImmutableList.copyOf(preguntas);
    }
@@ -73,6 +75,7 @@ public class Personaje {
    }
 
    public synchronized void cargarSonidos() {
+/*
       // si no están cargados (tal vez por otro jugador)
       if (soundGana instanceof Sound.Silence) {
          soundGana = assets().getSound("ruleta/" + path + "/GANA");
@@ -81,13 +84,16 @@ public class Personaje {
       if (soundPierde instanceof Sound.Silence) {
          soundPierde = assets().getSound("ruleta/" + path + "/PIERDE");
       }
+*/
    }
 
    public synchronized void liberarSonidos() {
+/*
       soundGana.release();
       soundGana = new Sound.Silence();
 
       soundPierde.release();
       soundPierde = new Sound.Silence();
+*/
    }
 }
