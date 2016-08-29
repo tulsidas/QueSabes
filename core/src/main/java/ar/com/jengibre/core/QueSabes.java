@@ -7,6 +7,7 @@ import static playn.core.PlayN.keyboard;
 import static playn.core.PlayN.pointer;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import tripleplay.util.PackedFrames;
 import com.dgis.input.evdev.EventDevice;
 import com.dgis.input.evdev.InputEvent;
 import com.dgis.input.evdev.InputListener;
+import com.google.common.io.CharStreams;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -76,8 +78,32 @@ public class QueSabes extends Game.Default implements InputListener {
    public QueSabes() {
       super(UPDATE_RATE); // 25 FPS
 
+		String eventFile = null;
+
+		try {
+			Process proc = new ProcessBuilder("lsinput").start();
+			proc.waitFor();
+
+			String[] lines = CharStreams.toString(new InputStreamReader(proc.getInputStream())).split("\n");
+
+			for (int i=0; i < lines.length; i++) {
+				//System.out.println(lines[i]);
+				if (lines[i].contains("Touch__KiT")) {
+					eventFile = lines[i-5].trim();
+				}
+			}
+		}
+		catch (Exception e) {
+			System.err.println(e);
+		}
+
+		if (eventFile == null) {
+			System.err.println("No se pudo encontrar controlador multitouch enchufado");
+			System.exit(1);
+		}
+
       try {
-         mt = new EventDevice("/dev/input/event2");
+         mt = new EventDevice(eventFile);
          mt.addListener(this);
       }
       catch (IOException e) {
